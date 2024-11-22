@@ -1,17 +1,24 @@
 import { Feature } from "@/types";
+import { useState } from "react";
 
 const FeatureItem = ({ feature }: { feature: Feature }) => {
+  const [isExpanded, setIsExpanded] = useState(false);
+
+  const toggleReadMore = () => {
+    setIsExpanded(!isExpanded);
+  };
+
   return (
     <>
       <div className="overflow-hidden bg-white shadow-sm sm:rounded-lg dark:bg-gray-800">
         <div className="p-6 flex gap-8 text-gray-900 dark:text-gray-100">
-          <div className="flex flex-col">
+          <div className="flex flex-col items-center">
             <button>
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 viewBox="0 0 24 24"
                 fill="currentColor"
-                className="size-6"
+                className="size-12"
               >
                 <path
                   fillRule="evenodd"
@@ -20,13 +27,13 @@ const FeatureItem = ({ feature }: { feature: Feature }) => {
                 />
               </svg>
             </button>
-            <span className="grid place-items-center">12</span>
+            <span className="text-2xl font-semibold">12</span>
             <button>
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 viewBox="0 0 24 24"
                 fill="currentColor"
-                className="size-6"
+                className="size-12"
               >
                 <path
                   fillRule="evenodd"
@@ -38,7 +45,17 @@ const FeatureItem = ({ feature }: { feature: Feature }) => {
           </div>
           <div className="flex-1">
             <h2 className="text-2xl mb-2">{feature.name}</h2>
-            <p>{feature.description}</p>
+            <p>
+              {isExpanded
+                ? feature.description
+                : feature.description.slice(0, 200) + "..."}
+            </p>
+            <button
+              className="mt-4 bg-gray-900 rounded-md px-2 py-1"
+              onClick={toggleReadMore}
+            >
+              {isExpanded ? "Read Less" : "Read More"}
+            </button>
           </div>
         </div>
       </div>
