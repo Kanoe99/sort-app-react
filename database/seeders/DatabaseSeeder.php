@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 use App\Enum\PermissionsEnum;
 use App\Models\User;
+use App\Models\Feature;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Spatie\Permission\Models\Role;
@@ -58,5 +59,7 @@ class DatabaseSeeder extends Seeder
             'email' => 'user@example.com',
             'password' => '11111111a',
         ])->assignRole((RolesEnum::User));
+
+        Feature::factory(100)->create();
     }
 }
