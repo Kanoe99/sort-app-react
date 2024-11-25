@@ -1,5 +1,6 @@
 <?php
 
+use \App\Http\Controllers\UpvoteController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
@@ -29,6 +30,11 @@ Route::middleware('auth')->group(function () {
         })->name('dashboard');
 
         Route::resource('feature', FeatureController::class);
+
+        Route::post('/feature/{feature}/upvote', [UpvoteController::class, 'store'])->name('upvote.store');
+
+
+        Route::delete('/upvote/{feature}', [UpvoteController::class, 'destroy'])->name('upvote.destroy');
     });
 });
 

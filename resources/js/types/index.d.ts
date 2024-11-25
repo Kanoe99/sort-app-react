@@ -20,6 +20,9 @@ type Feature = {
   description: string | null;
   user: User;
   created_at: string;
+  upvote_count: number;
+  user_has_upvoted: boolean;
+  user_has_downvoted: boolean;
 };
 
 type PageProps<T extends Record<string, unknown> = Record<string, unknown>> =
