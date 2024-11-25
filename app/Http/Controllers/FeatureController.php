@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Resources\FeatureResource;
+use App\Http\Resources\FeatureListResource;
 use App\Models\Feature;
 use App\Models\Upvote;
 use Illuminate\Http\Request;
@@ -32,7 +33,7 @@ class FeatureController extends Controller
                 ])->paginate(10);
 
         return Inertia::render('Feature/Index', [
-            'features' => FeatureResource::collection($paginated)
+            'features' => FeatureListResource::collection($paginated)
         ]);
     }
 

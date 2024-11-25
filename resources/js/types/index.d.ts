@@ -14,6 +14,13 @@ type PaginatedData<T = any> = {
   links: Record<string, string>;
 };
 
+type Comment = {
+  id: number;
+  comment: string;
+  created_at: string;
+  user: User;
+};
+
 type Feature = {
   id: number;
   name: string;
@@ -23,6 +30,7 @@ type Feature = {
   upvote_count: number;
   user_has_upvoted: boolean;
   user_has_downvoted: boolean;
+  comments: Comment[];
 };
 
 type PageProps<T extends Record<string, unknown> = Record<string, unknown>> =
@@ -33,4 +41,4 @@ type PageProps<T extends Record<string, unknown> = Record<string, unknown>> =
     ziggy: Config & { location: string };
   };
 
-export { User, PaginatedData, PageProps, Feature };
+export { User, PaginatedData, PageProps, Feature, Comment };

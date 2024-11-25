@@ -28,7 +28,7 @@ const FeatureItem = ({ feature }: { feature: Feature }) => {
                     (feature.description !== null ? "..." : "no description")}
               </p>
               <button
-                className="mt-4 bg-gray-900 rounded-md px-2 py-1"
+                className="py-[2px] pr-2 text-amber-500 border-b border-dashed border-amber-500 mb-4"
                 onClick={toggleReadMore}
               >
                 {isExpanded ? "Read Less" : "Read More"}
@@ -37,6 +37,14 @@ const FeatureItem = ({ feature }: { feature: Feature }) => {
           ) : (
             feature.description
           )}
+          <div>
+            <Link
+              href={route("feature.show", feature)}
+              className="inline-flex items-center rounded-md border border-gray-300 bg-white px-4 py-2 text-xs font-semibold uppercase tracking-widest text-gray-700 shadow-sm transition duration-150 ease-in-out hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 disabled:opacity-25 dark:border-gray-500 dark:bg-gray-800 dark:text-gray-300 dark:hover:bg-gray-700 dark:focus:ring-offset-gray-800"
+            >
+              Comments
+            </Link>
+          </div>
         </div>
         <div>
           <FeatureActionsDropdown feature={feature} />

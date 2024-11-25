@@ -6,6 +6,7 @@ use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 use \App\Http\Controllers\FeatureController;
+use \App\Http\Controllers\CommentController;
 
 Route::get('/', function () {
     return Inertia::render('Welcome', [
@@ -35,6 +36,11 @@ Route::middleware('auth')->group(function () {
 
 
         Route::delete('/upvote/{feature}', [UpvoteController::class, 'destroy'])->name('upvote.destroy');
+
+        Route::post('/feature/{feature}/comments', [CommentController::class, 'store']);
+
+        Route::delete('/comment/{comment}', [CommentController::class, 'destroy']);
+
     });
 });
 
