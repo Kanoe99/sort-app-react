@@ -60,6 +60,7 @@ class DatabaseSeeder extends Seeder
             'password' => '11111111a',
         ])->assignRole((RolesEnum::User));
 
+
         Feature::factory(100)->create();
     }
 }
