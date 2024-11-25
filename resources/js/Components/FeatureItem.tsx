@@ -45,19 +45,27 @@ const FeatureItem = ({ feature }: { feature: Feature }) => {
         </div>
         <div className="flex-1">
           <h2 className="text-2xl mb-2">
+            yt
             <Link href={route("feature.show", feature)}>{feature.name}</Link>
           </h2>
-          <p>
-            {isExpanded
-              ? feature.description
-              : feature.description.slice(0, 200) + "..."}
-          </p>
-          <button
-            className="mt-4 bg-gray-900 rounded-md px-2 py-1"
-            onClick={toggleReadMore}
-          >
-            {isExpanded ? "Read Less" : "Read More"}
-          </button>
+          {(feature.description || "").length > 200 ? (
+            <>
+              <p>
+                {isExpanded
+                  ? feature.description ?? ""
+                  : (feature.description ?? "").slice(0, 200) +
+                    (feature.description !== null ? "..." : "no description")}
+              </p>
+              <button
+                className="mt-4 bg-gray-900 rounded-md px-2 py-1"
+                onClick={toggleReadMore}
+              >
+                {isExpanded ? "Read Less" : "Read More"}
+              </button>
+            </>
+          ) : (
+            feature.description
+          )}
         </div>
       </div>
     </div>

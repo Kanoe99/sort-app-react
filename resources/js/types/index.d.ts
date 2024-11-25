@@ -17,7 +17,7 @@ type PaginatedData<T = any> = {
 type Feature = {
   id: number;
   name: string;
-  description: string;
+  description: string | null;
   user: User;
   created_at: string;
 };
