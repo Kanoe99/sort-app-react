@@ -28,7 +28,7 @@ const CommentItem = ({ comment }: { comment: Comment }) => {
           />
         </svg>
       </div>
-      <div>
+      <div className="">
         <h3 className="font-bold mt-1">
           {comment.user.name}
           <span className="text-gray-500 text-xs ml-4">

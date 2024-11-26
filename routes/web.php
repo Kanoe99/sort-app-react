@@ -37,9 +37,9 @@ Route::middleware('auth')->group(function () {
 
         Route::delete('/upvote/{feature}', [UpvoteController::class, 'destroy'])->name('upvote.destroy');
 
-        Route::post('/feature/{feature}/comments', [CommentController::class, 'store']);
+        Route::post('/feature/{feature}/comments', [CommentController::class, 'store'])->name('comment.store');
 
-        Route::delete('/comment/{comment}', [CommentController::class, 'destroy']);
+        Route::delete('/comment/{comment}', [CommentController::class, 'destroy'])->name('comment.destroy');
 
     });
 });

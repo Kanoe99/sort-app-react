@@ -26,7 +26,7 @@ export default function Show({ feature }: { feature: Feature }) {
             <div className="mt-8">
               <NewComponentForm feature={feature} />
               {feature.comments.map((comment) => (
-                <CommentItem comment={comment} key={comment.id}/>
+                <CommentItem comment={comment} key={comment.id} />
               ))}
             </div>
           </div>
