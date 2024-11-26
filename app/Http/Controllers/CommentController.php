@@ -23,6 +23,11 @@ class CommentController extends Controller
     }
     public function destroy(Comment $comment)
     {
+
+        if ($comment->user_id !== auth()->id()) {
+            abort(403);
+        }
+
         $featureId = $comment->feature->id;
         $comment->delete();
 

@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 use \App\Http\Controllers\FeatureController;
 use \App\Http\Controllers\CommentController;
+use \App\Enum\PermissionsEnum;
 
 Route::get('/', function () {
     return Inertia::render('Welcome', [
@@ -30,16 +31,19 @@ Route::middleware('auth')->group(function () {
             return Inertia::render('Dashboard');
         })->name('dashboard');
 
-        Route::resource('feature', FeatureController::class);
+        Route::resource('feature', FeatureController::class)->except(['index', 'show'])->middleware('can:' . PermissionsEnum::ManageFeatures->value);
+
+        Route::get('/feature', [FeatureController::class, 'index'])->name('feature.index');
+        Route::get('/feature/{feature}', [FeatureController::class, 'show'])->name('feature.show');
 
         Route::post('/feature/{feature}/upvote', [UpvoteController::class, 'store'])->name('upvote.store');
 
 
         Route::delete('/upvote/{feature}', [UpvoteController::class, 'destroy'])->name('upvote.destroy');
 
-        Route::post('/feature/{feature}/comments', [CommentController::class, 'store'])->name('comment.store');
+        Route::post('/feature/{feature}/comments', [CommentController::class, 'store'])->name('comment.store')->middleware('can:' . PermissionsEnum::ManageComments->value);
 
-        Route::delete('/comment/{comment}', [CommentController::class, 'destroy'])->name('comment.destroy');
+        Route::delete('/comment/{comment}', [CommentController::class, 'destroy'])->name('comment.destroy')->middleware('can:' . PermissionsEnum::ManageComments->value);
 
     });
 });
