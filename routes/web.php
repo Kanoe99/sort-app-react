@@ -1,5 +1,6 @@
 <?php
 
+use App\Enum\RolesEnum;
 use \App\Http\Controllers\UpvoteController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Foundation\Application;
@@ -26,7 +27,7 @@ Route::middleware('auth')->group(function () {
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
-    Route::middleware(['verified'])->group(function () {
+    Route::middleware(['verified', 'role:' . RolesEnum::User->value])->group(function () {
         Route::get('/dashboard', function () {
             return Inertia::render('Dashboard');
         })->name('dashboard');
@@ -37,8 +38,6 @@ Route::middleware('auth')->group(function () {
         Route::get('/feature/{feature}', [FeatureController::class, 'show'])->name('feature.show');
 
         Route::post('/feature/{feature}/upvote', [UpvoteController::class, 'store'])->name('upvote.store');
-
-
         Route::delete('/upvote/{feature}', [UpvoteController::class, 'destroy'])->name('upvote.destroy');
 
         Route::post('/feature/{feature}/comments', [CommentController::class, 'store'])->name('comment.store')->middleware('can:' . PermissionsEnum::ManageComments->value);
