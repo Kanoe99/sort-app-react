@@ -9,6 +9,7 @@ use App\Models\Upvote;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Illuminate\Support\Facades\DB;
+use \App\Http\Resources\UserResource;
 
 class FeatureController extends Controller
 {
@@ -75,8 +76,21 @@ class FeatureController extends Controller
 
         $feature->user_has_downvoted = Upvote::where('feature_id', $feature->id)->where('user_id', auth()->id())->where('upvote', 0)->exists();
 
+        sleep(5);
+
+
         return Inertia::render('Feature/Show', [
-            'feature' => new FeatureResource($feature)
+            'feature' => new FeatureResource($feature),
+            'comments' => Inertia::defer(function () use ($feature) {
+                return $feature->comments->map(function ($comment) {
+                    return [
+                        'id' => $comment->id,
+                        'comment' => $comment->comment,
+                        'created_at' => $comment->created_at->format('Y-m-d H:i:s'),
+                        'user' => new UserResource($comment->user),
+                    ];
+                });
+            })
         ]);
     }
 

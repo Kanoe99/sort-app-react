@@ -36,6 +36,7 @@ export default function Authenticated({
                   Dashboard
                 </NavLink>
                 <NavLink
+                  prefetch
                   href={route("feature.index")}
                   active={route().current("feature.index")}
                 >
