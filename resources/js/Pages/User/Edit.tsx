@@ -1,46 +1,61 @@
-import { FeatureItem } from "@/Components/FeatureItem";
 import InputError from "@/Components/InputError";
 import InputLabel from "@/Components/InputLabel";
 import PrimaryButton from "@/Components/PrimaryButton";
-import TextAreaInput from "@/Components/TextAreaInput";
+import Radio from "@/Components/Radio";
 import TextInput from "@/Components/TextInput";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
-import { Feature } from "@/types";
+import { User } from "@/types";
 import { Head, useForm } from "@inertiajs/react";
-import { FormEventHandler } from "react";
+import { FormEventHandler, ChangeEvent } from "react";
 
-export default function Edit({ feature }: { feature: Feature }) {
+export default function Edit({
+  roles,
+  user,
+  roleLabels,
+}: {
+  roles: any;
+  user: User;
+  roleLabels: Record<string, string>;
+}) {
   const { data, setData, errors, put, processing } = useForm({
-    name: feature.name,
-    description: feature.description,
+    name: user.name,
+    email: user.email,
+    roles: user.roles,
   });
 
-  const updateFeature: FormEventHandler = (e) => {
+  const updateUser: FormEventHandler = (e) => {
     e.preventDefault();
 
-    put(route("feature.update", feature.id), {
+    put(route("user.update", user.id), {
       preserveScroll: true,
     });
+  };
+
+  const handleRoleChange = (e: ChangeEvent<HTMLInputElement>) => {
+    if (e.target.checked) {
+      setData("roles", [e.target.value]);
+    }
   };
 
   return (
     <AuthenticatedLayout
       header={
         <h2 className="text-xl font-semibold leading-tight text-gray-800 dark:text-gray-200">
-          Edit Feature <b className="underline">{feature.name}</b>
+          Edit User <b className="underline">{user.name}</b>
         </h2>
       }
     >
-      <Head title={"Edit Feature " + feature.name} />
+      <Head title={"Edit User " + user.name} />
       <div className="overflow-hidden bg-white shadow-sm sm:rounded-lg dark:bg-gray-800">
         <div className="p-6 flex gap-8 text-gray-900 dark:text-gray-100">
-          <form onSubmit={updateFeature} className="w-full flex flex-col gap-8">
+          <form onSubmit={updateUser} className="w-full flex flex-col gap-8">
             <div>
               <InputLabel htmlFor="name" value="Name" />
 
               <TextInput
+                disabled
                 id="name"
-                className="mt-1 block w-full"
+                className="mt-1 block w-full !bg-gray-800 !text-gray-500"
                 value={data.name}
                 onChange={(e) => setData("name", e.target.value)}
                 required
@@ -51,16 +66,35 @@ export default function Edit({ feature }: { feature: Feature }) {
               <InputError className="mt-2" message={errors.name} />
             </div>
             <div>
-              <InputLabel htmlFor="description" value="Description" />
+              <InputLabel htmlFor="email" value="Email" />
 
-              <TextAreaInput
-                id="description"
+              <TextInput
+                id="email"
                 className="mt-1 block w-full"
-                value={data.description ?? ""}
-                onChange={(e) => setData("description", e.target.value)}
+                value={data.email}
+                onChange={(e) => setData("email", e.target.value)}
+                required
+                autoComplete="email"
               />
 
-              <InputError className="mt-2" message={errors.description} />
+              <InputError className="mt-2" message={errors.email} />
+            </div>
+            <div className="mb-8">
+              <InputLabel value="Role" />
+              {roles.map((role: any, index: number) => (
+                <label className="flex items-center" key={role.id}>
+                  <Radio
+                    className="my-1"
+                    value={role.name}
+                    checked={data.roles.includes(role.name)}
+                    name="roles"
+                    onChange={handleRoleChange}
+                  />
+                  <span className="ms-2 text-sm text-gray-600 dark:text-gray-400">
+                    {roleLabels[role.name]}
+                  </span>
+                </label>
+              ))}
             </div>
             <div className="flex items-center gap-4">
               <PrimaryButton disabled={processing}>Save</PrimaryButton>
