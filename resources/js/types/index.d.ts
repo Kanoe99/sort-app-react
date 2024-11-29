@@ -1,45 +1,44 @@
-import { Config } from "ziggy-js";
+import {Config} from 'ziggy-js';
 
-interface User {
+export interface User {
   id: number;
   name: string;
   email: string;
   email_verified_at?: string;
   created_at: string;
   permissions: string[];
-  roles: string[];
+  roles: string[]
 }
 
-type PaginatedData<T = any> = {
+export type PaginatedData<T = any> = {
   data: T[];
-  links: Record<string, string>;
-};
+  links: Record<string, string>
+}
 
-type Comment = {
+export type Comment = {
   id: number;
   comment: string;
   created_at: string;
-  user: User;
-};
+  user: User
+}
 
-type Feature = {
+export type Feature = {
   id: number;
   name: string;
-  description: string | null;
+  description: string;
   user: User;
   created_at: string;
   upvote_count: number;
   user_has_upvoted: boolean;
   user_has_downvoted: boolean;
-  comments: Comment[];
-};
+  comments: Comment[]
+}
 
-type PageProps<T extends Record<string, unknown> = Record<string, unknown>> =
-  T & {
-    auth: {
-      user: User;
-    };
-    ziggy: Config & { location: string };
+export type PageProps<
+  T extends Record<string, unknown> = Record<string, unknown>,
+> = T & {
+  auth: {
+    user: User;
   };
-
-export { User, PaginatedData, PageProps, Feature, Comment };
+  ziggy: Config & { location: string };
+};

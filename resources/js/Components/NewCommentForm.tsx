@@ -1,48 +1,50 @@
-import { Feature } from "@/types";
-import TextAreaInput from "./TextAreaInput";
-import { useForm, usePage } from "@inertiajs/react";
-import { FormEventHandler } from "react";
-import PrimaryButton from "./PrimaryButton";
-import { can } from "@/helpers";
+import {Feature} from "@/types";
+import TextAreaInput from "@/Components/TextAreaInput";
+import {useForm, usePage} from "@inertiajs/react";
+import {FormEventHandler} from "react";
+import PrimaryButton from "@/Components/PrimaryButton";
+import {can} from "@/helpers";
 
-const NewCommentForm = ({ feature }: { feature: Feature }) => {
+export default function NewCommentForm({feature}: { feature: Feature }) {
   const user = usePage().props.auth.user;
 
-  const { data, setData, post, processing } = useForm({
-    comment: "",
-  });
-  const createComment: FormEventHandler = (e) => {
-    e.preventDefault();
+  const {
+    data,
+    setData,
+    post,
+    processing
+  } = useForm({
+    comment: ''
+  })
 
-    post(route("comment.store", feature.id), {
+  const createComment: FormEventHandler = (ev) => {
+    ev.preventDefault();
+
+    post(route('comment.store', feature.id), {
       preserveScroll: true,
       preserveState: true,
-      onSuccess: () => setData("comment", ""),
-    });
-  };
+      onSuccess: () => setData('comment', '')
+    })
+  }
 
-  if (!can(user, "manage_comments")) {
+  if (!can(user, 'manage_comments')) {
     return (
-      <div className="py-3 grid place-items-center rounded-md bg-[rgba(17,24,39,0.66)] border-2 my-5 font-bold text-xl text-gray-500 border-gray-700">
-        You don't have the permission to leave comments
+      <div className="text-center text-gray-600">
+        You don't have permission to leave comments
       </div>
     );
   }
 
   return (
-    <form
-      onSubmit={createComment}
-      className="flex items-center gap-3 py-2 rounded-lg bg-gray-50 dark:bg-gray-800"
-    >
+    <form onSubmit={createComment} className="flex items-center py-2 rounded-lg bg-gray-50 dark:bg-gray-800 mb-4">
       <TextAreaInput
         rows={1}
         value={data.comment}
-        onChange={(e) => setData("comment", e.target.value)}
+        onChange={e => setData('comment', e.target.value)}
+        className="mt-1 block w-full"
         placeholder="Your comment"
-      />
+      ></TextAreaInput>
       <PrimaryButton disabled={processing}>Comment</PrimaryButton>
     </form>
   );
-};
-
-export { NewCommentForm };
+}

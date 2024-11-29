@@ -3,13 +3,13 @@
 namespace Database\Seeders;
 
 use App\Enum\PermissionsEnum;
-use App\Models\User;
+use App\Enum\RolesEnum;
 use App\Models\Feature;
+use App\Models\User;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
-use Spatie\Permission\Models\Role;
 use Spatie\Permission\Models\Permission;
-use App\Enum\RolesEnum;
+use Spatie\Permission\Models\Role;
 
 class DatabaseSeeder extends Seeder
 {
@@ -35,31 +35,32 @@ class DatabaseSeeder extends Seeder
             'name' => PermissionsEnum::UpvoteDownvote->value,
         ]);
 
-
         $userRole->syncPermissions([$upvoteDownvotePermission]);
         $commenterRole->syncPermissions([$upvoteDownvotePermission, $manageCommentsPermission]);
-        $adminRole->syncPermissions([$upvoteDownvotePermission, $manageCommentsPermission, $manageUsersPermission, $manageFeaturesPermission]);
+        $adminRole->syncPermissions([
+            $upvoteDownvotePermission,
+            $manageUsersPermission,
+            $manageCommentsPermission,
+            $manageFeaturesPermission,
+        ]);
 
         User::factory()->create([
-            'name' => 'Admin User',
-            'email' => 'admin@example.com',
+            'name' => 'User User',
+            'email' => 'user@example.com',
             'password' => '11111111a',
-        ])->assignRole((RolesEnum::Admin));
-
+        ])->assignRole(RolesEnum::User);
 
         User::factory()->create([
             'name' => 'Commenter User',
             'email' => 'commenter@example.com',
             'password' => '11111111a',
-        ])->assignRole((RolesEnum::Commenter));
-
+        ])->assignRole(RolesEnum::Commenter);
 
         User::factory()->create([
-            'name' => 'A User',
-            'email' => 'user@example.com',
+            'name' => 'Admin User',
+            'email' => 'admin@example.com',
             'password' => '11111111a',
-        ])->assignRole((RolesEnum::User));
-
+        ])->assignRole(RolesEnum::Admin);
 
         Feature::factory(100)->create();
     }

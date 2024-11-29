@@ -33,7 +33,6 @@ Copy contents of .env.example into newly created .env
 ### 4. DB
 
 Create database.sqlite in database folder
-
 run
 
 ```bash
@@ -52,6 +51,7 @@ php artisan key:generate
 
 ```bash
 composer run dev
+mailpit
 ```
 
 ---
@@ -91,7 +91,6 @@ npm i
 ### 4. DB
 
 Создайте файл database.sqlite в папке database.
-
 Затем выполните команду:
 
 ```bash

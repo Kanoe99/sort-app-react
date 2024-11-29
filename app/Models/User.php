@@ -5,11 +5,10 @@ namespace App\Models;
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Spatie\Permission\Traits\HasRoles;
-use Illuminate\Database\Eloquent\Relations\HasMany;
-
 
 class User extends Authenticatable implements MustVerifyEmail
 {
@@ -42,7 +41,6 @@ class User extends Authenticatable implements MustVerifyEmail
      *
      * @return array<string, string>
      */
-
     protected function casts(): array
     {
         return [

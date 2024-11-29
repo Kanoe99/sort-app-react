@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -17,11 +18,9 @@ class FeatureFactory extends Factory
     public function definition(): array
     {
         return [
-            'name' => fake()->text(20),
+            'name' => fake()->text(),
             'description' => fake()->text(2000),
-
-            //possibly change to function return ..
-            'user_id' => \App\Models\User::where('email', 'admin@example.com')->first()->id,
+            'user_id' => User::where('email', 'admin@example.com')->first()->id,
         ];
     }
 }

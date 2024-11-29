@@ -17,7 +17,7 @@ class UserController extends Controller
     public function index()
     {
         return Inertia::render('User/Index', [
-            'users' => AuthUserResource::collection(User::all())->resolve()
+            'users' => AuthUserResource::collection(User::all())->collection->toArray()
         ]);
     }
 
@@ -44,6 +44,6 @@ class UserController extends Controller
 
         $user->syncRoles($data['roles']);
 
-        return back()->with('success', 'Roles updated successfully');
+        return back()->with('success', 'Roles updated successfully.');
     }
 }

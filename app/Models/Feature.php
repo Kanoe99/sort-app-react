@@ -17,10 +17,12 @@ class Feature extends Model
     {
         return $this->hasMany(Upvote::class);
     }
+
     public function comments(): HasMany
     {
         return $this->hasMany(Comment::class)->latest();
     }
+
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
