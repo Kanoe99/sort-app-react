@@ -35,6 +35,13 @@ export default function Authenticated({
                 >
                   Dashboard
                 </NavLink>
+                <NavLink
+                  prefetch={["mount", "hover"]}
+                  href={route("feature.index")}
+                  active={route().current("feature.index")}
+                >
+                  Features
+                </NavLink>
 
                 {can(user, "manage_users") && (
                   <NavLink
@@ -148,7 +155,7 @@ export default function Authenticated({
               href={route("feature.index")}
               active={route().current("feature.index")}
             >
-              Users
+              Features
             </ResponsiveNavLink>
             {can(user, "manage_users") && (
               <ResponsiveNavLink
