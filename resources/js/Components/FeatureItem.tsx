@@ -17,7 +17,9 @@ const FeatureItem = ({ feature }: { feature: Feature }) => {
         <FeatureUpvoteDownvote feature={feature} />
         <div className="flex-1">
           <h2 className="text-2xl mb-2">
-            <Link href={route("feature.show", feature)}>{feature.name}</Link>
+            <Link prefetch href={route("feature.show", feature)}>
+              {feature.name}
+            </Link>
           </h2>
           {(feature.description || "").length > 200 ? (
             <>
@@ -39,6 +41,7 @@ const FeatureItem = ({ feature }: { feature: Feature }) => {
           )}
           <div>
             <Link
+              prefetch
               href={route("feature.show", feature)}
               className="inline-flex items-center rounded-md border border-gray-300 bg-white px-4 py-2 text-xs font-semibold uppercase tracking-widest text-gray-700 shadow-sm transition duration-150 ease-in-out hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 disabled:opacity-25 dark:border-gray-500 dark:bg-gray-800 dark:text-gray-300 dark:hover:bg-gray-700 dark:focus:ring-offset-gray-800"
             >

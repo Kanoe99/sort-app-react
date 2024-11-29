@@ -35,15 +35,10 @@ export default function Authenticated({
                 >
                   Dashboard
                 </NavLink>
-                <NavLink
-                  prefetch
-                  href={route("feature.index")}
-                  active={route().current("feature.index")}
-                >
-                  Features
-                </NavLink>
+
                 {can(user, "manage_users") && (
                   <NavLink
+                    prefetch={["hover"]}
                     href={route("user.index")}
                     active={route().current("user.index")}
                   >
@@ -81,7 +76,7 @@ export default function Authenticated({
                   </Dropdown.Trigger>
 
                   <Dropdown.Content>
-                    <Dropdown.Link href={route("profile.edit")}>
+                    <Dropdown.Link prefetch href={route("profile.edit")}>
                       Profile
                     </Dropdown.Link>
                     <Dropdown.Link
@@ -142,12 +137,14 @@ export default function Authenticated({
         >
           <div className="space-y-1 pb-3 pt-2">
             <ResponsiveNavLink
+              prefetch
               href={route("dashboard")}
               active={route().current("dashboard")}
             >
               Dashboard
             </ResponsiveNavLink>
             <ResponsiveNavLink
+              prefetch
               href={route("feature.index")}
               active={route().current("feature.index")}
             >
@@ -155,6 +152,7 @@ export default function Authenticated({
             </ResponsiveNavLink>
             {can(user, "manage_users") && (
               <ResponsiveNavLink
+                prefetch
                 href={route("user.index")}
                 active={route().current("user.index")}
               >

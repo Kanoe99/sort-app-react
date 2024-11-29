@@ -76,9 +76,6 @@ class FeatureController extends Controller
 
         $feature->user_has_downvoted = Upvote::where('feature_id', $feature->id)->where('user_id', auth()->id())->where('upvote', 0)->exists();
 
-        sleep(5);
-
-
         return Inertia::render('Feature/Show', [
             'feature' => new FeatureResource($feature),
             'comments' => Inertia::defer(function () use ($feature) {
