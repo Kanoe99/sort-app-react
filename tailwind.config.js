@@ -1,5 +1,6 @@
 import defaultTheme from 'tailwindcss/defaultTheme';
 import forms from '@tailwindcss/forms';
+import plugin from 'tailwindcss/plugin';
 
 /** @type {import('tailwindcss').Config} */
 export default {
@@ -15,8 +16,100 @@ export default {
             fontFamily: {
                 sans: ['Figtree', ...defaultTheme.fontFamily.sans],
             },
+            colors: {
+                "black": "#070707"
+            },
+            fontFamily: {
+                "hanken-grotesk": ["Hanken Grotesk", "sans-serif"]
+            },
+            fontSize: {
+                "2xs": ".625rem" // 10px
+            },
         },
     },
+    plugins: [
+        plugin(function({ addComponents }) {
+            addComponents({
+                '.no-scrollbar::-webkit-scrollbar': {
+                    display: 'none', // Chrome, Safari, Edge, and Opera
+                },
+                '.no-scrollbar': {
+                    '-ms-overflow-style': 'none', // Internet Explorer 10+
+                    'scrollbar-width': 'none', // Firefox
+                },
+                '.fade-bottom': {
+                    zIndex: '3',
+                    position: 'absolute',
+                    width: '100%',
+                    pointerEvents: 'none', // Allows interaction with scroll content
+                },
+                '.fade-bottom-gradient': {
+                    bottom: '0',
+                    height: '120px', // Adjust this as needed
+                    background: 'linear-gradient(to bottom, rgba(0, 0, 0, 0) 0%, rgb(0, 0, 0) 100%)',
+                },
+                '.blur-bottom': {
+                    position: 'absolute',
+                    bottom: '0',
+                    left: '0',
+                    right: '0',
+                    height: '30px',
+                    backdropFilter: 'blur(1px)',
+                    backgroundColor: 'rgba(0, 0, 0, 0.2)',
+                },
+                // New components for angle-left and angle-right
+                '.angle-left': {
+                    height: '0.75rem',
+                    width: '0.75rem', 
+                    borderLeftWidth: '2px', 
+                    borderBottomWidth: '2px', 
+                    borderColor: 'white', 
+                    position: 'absolute',
+                    top: '50%', 
+                    left: '0.5rem', 
+                    cursor: 'pointer',
+                    transform: 'translateY(-50%) rotate(45deg)',
+                },
+                '.angle-right': {
+                    height: '0.75rem',
+                    width: '0.75rem',
+                    borderRightWidth: '2px', 
+                    borderBottomWidth: '2px',
+                    borderColor: 'white', 
+                    position: 'absolute',
+                    top: '50%', 
+                    right: '0.5rem', 
+                    cursor: 'pointer', 
+                    transform: 'translateY(-50%) rotate(-45deg)',
+                },
+                '.slider': {
+                    position: 'relative',
+                    marginTop: '100px',
+                    width: '100%',
+                    height: 'calc(100vh - 5rem)',
+                    overflow: 'hidden',
+                },
+                '.item': {
+                    position: 'absolute',
+                    width: '30%',
+                    height: '100%',
+                    textAlign: 'justify',
+                    borderRadius: '10px',
+                    padding: '20px',
+                    transition: '.5s',
+                    left: 'calc(50% - 110px)',
+                    top: '0',
+                    backdropFilter: 'blur(10px)',
+                },
+                '#prev-list': {
+                    left: '50px',
+                },
+                '#next-list': {
+                    right: '50px',
+                },
+            });
+        }),
+    ],
 
     plugins: [forms],
 };
