@@ -38,7 +38,7 @@ export default function Login({
 
       <form onSubmit={submit}>
         <div>
-          <InputLabel htmlFor="email" value="Email" />
+          <InputLabel htmlFor="email" value="Почта" />
 
           <TextInput
             id="email"
@@ -55,7 +55,7 @@ export default function Login({
         </div>
 
         <div className="mt-4">
-          <InputLabel htmlFor="password" value="Password" />
+          <InputLabel htmlFor="password" value="Пароль" />
 
           <TextInput
             id="password"
@@ -96,7 +96,7 @@ export default function Login({
           )} */}
 
           <PrimaryButton className="w-full" disabled={processing}>
-            Log in
+            Войти
           </PrimaryButton>
         </div>
       </form>
