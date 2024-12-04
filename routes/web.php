@@ -11,7 +11,7 @@ use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
-Route::redirect('/', '/dashboard');
+Route::redirect('/', '/main');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
@@ -29,15 +29,16 @@ Route::middleware('auth')->group(function () {
 
     Route::middleware([
         'verified',
-        sprintf('role:%s|%s|%s',
+        sprintf(
+            'role:%s|%s|%s',
             RolesEnum::User->value,
             RolesEnum::Commenter->value,
             RolesEnum::Admin->value
         )
     ])->group(function () {
-        Route::get('/dashboard', function () {
-            return Inertia::render('Dashboard');
-        })->name('dashboard');
+        Route::get('/main', function () {
+            return Inertia::render('Main');
+        })->name('main');
 
         Route::resource('feature', FeatureController::class)
             ->except(['index', 'show'])

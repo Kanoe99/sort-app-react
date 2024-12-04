@@ -17,7 +17,7 @@ export default {
                 sans: ['Figtree', ...defaultTheme.fontFamily.sans],
             },
             colors: {
-                "black": "#070707"
+                "black": "#181818"
             },
             fontFamily: {
                 "hanken-grotesk": ["Hanken Grotesk", "sans-serif"]
