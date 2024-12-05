@@ -76,11 +76,7 @@ export default function DeleteUserForm({
           </p>
 
           <div className="mt-6">
-            <InputLabel
-              htmlFor="password"
-              value="Password"
-              className="sr-only"
-            />
+            <InputLabel htmlFor="password" value="Пароль" className="sr-only" />
 
             <TextInput
               id="password"
@@ -91,7 +87,7 @@ export default function DeleteUserForm({
               onChange={(e) => setData("password", e.target.value)}
               className="mt-1 block w-3/4"
               isFocused
-              placeholder="Password"
+              placeholder="Введите пароль"
             />
 
             <InputError message={errors.password} className="mt-2" />

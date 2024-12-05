@@ -27,4 +27,11 @@ class ProfileUpdateRequest extends FormRequest
             ],
         ];
     }
+
+    public function messages()
+    {
+        return [
+            'name.required' => 'Имя необходимо!'
+        ];
+    }
 }
