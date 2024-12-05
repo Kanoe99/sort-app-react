@@ -1,0 +1,32 @@
+services:
+    web:
+        container_name: sort-app-react
+        build:
+            context: "./vendor/laravel/sail/runtimes/8.3"
+            dockerfile: Dockerfile
+            args:
+                WWWGROUP: "${WWWGROUP}"
+        image: "sail-8.3/app"
+        extra_hosts:
+            - "host.docker.internal:host-gateway"
+        ports:
+            - "${APP_PORT:-80}:80"
+            - "${VITE_PORT:-5173}:${VITE_PORT:-5173}" # Expose Vite port
+        environment:
+            WWWUSER: "${WWWUSER}"
+            LARAVEL_SAIL: 1
+            XDEBUG_MODE: "${SAIL_XDEBUG_MODE:-off}"
+            XDEBUG_CONFIG: "${SAIL_XDEBUG_CONFIG:-client_host=host.docker.internal}"
+            IGNITION_LOCAL_SITES_PATH: "${PWD}"
+            VITE_PORT: 5173 # Default port for Vite
+        volumes:
+            - ".:/var/www/html"
+        networks:
+            - sail
+        depends_on: {}
+        command: >
+            sh -c "npm install && npm run dev & php artisan serve --host=0.0.0.0 --port=${APP_PORT:-80}"
+
+networks:
+    sail:
+        driver: bridge
