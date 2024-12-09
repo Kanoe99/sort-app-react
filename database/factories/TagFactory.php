@@ -5,9 +5,9 @@ namespace Database\Factories;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Tags>
+ * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Tag>
  */
-class TagsFactory extends Factory
+class TagFactory extends Factory
 {
     /**
      * Define the model's default state.
@@ -17,7 +17,7 @@ class TagsFactory extends Factory
     public function definition(): array
     {
         return [
-            //
+            'name' => fake()->unique()->word,
         ];
     }
 }
