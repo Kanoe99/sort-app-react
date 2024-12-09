@@ -6,6 +6,10 @@ use App\Enum\PermissionsEnum;
 use App\Enum\RolesEnum;
 use App\Models\Feature;
 use App\Models\User;
+use App\Models\Printer;
+use App\Models\Tag;
+
+use Illuminate\Database\Eloquent\Factories\Sequence;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Spatie\Permission\Models\Permission;
@@ -63,5 +67,13 @@ class DatabaseSeeder extends Seeder
         ])->assignRole(RolesEnum::Admin);
 
         Feature::factory(100)->create();
+
+        $tags = Tag::factory(20)->create();
+
+        Printer::factory(20)->hasAttached($tags)->create(new Sequence([
+            'attention' => false,
+        ], [
+            'attention' => true,
+        ]));
     }
 }
