@@ -9,6 +9,7 @@ use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use Carbon\Carbon;
+use Inertia\Inertia;
 
 class PrinterController extends Controller
 {
@@ -20,7 +21,7 @@ class PrinterController extends Controller
         $aprinters = Printer::with(['tags'])->where('attention', true)->get();
         $tags = Tag::all();
 
-        return view('printers.index', [
+        return Inertia::render('Printer/Index', [
             'printers' => $printers,
             'aprinters' => $aprinters,
             'tags' => $tags,
