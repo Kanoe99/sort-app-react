@@ -30,7 +30,7 @@ export default function Authenticated({
 
               <div className="hidden h-10 space-x-8 sm:-my-px sm:ms-10 sm:flex pb-2">
                 <NavLink href={route("main")} active={route().current("main")}>
-                  На главную
+                  Главная
                 </NavLink>
                 <NavLink
                   prefetch={["mount", "hover"]}
@@ -195,8 +195,8 @@ export default function Authenticated({
         </header>
       )}
 
-      <div className="py-0">
-        <div className="mx-auto max-w-7xl ">
+      <div className="py-10">
+        <div className="mx-auto max-w-[90vw] ">
           {success && (
             <div className="bg-emerald-500 py-4 px-6 rounded mb-8">
               {success}

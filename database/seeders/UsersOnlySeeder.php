@@ -4,18 +4,12 @@ namespace Database\Seeders;
 
 use App\Enum\PermissionsEnum;
 use App\Enum\RolesEnum;
-use App\Models\Feature;
 use App\Models\User;
-use App\Models\Printer;
-use App\Models\Tag;
-
-use Illuminate\Database\Eloquent\Factories\Sequence;
-// use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
 
-class DatabaseSeeder extends Seeder
+class UsersOnlySeeder extends Seeder
 {
     /**
      * Seed the application's database.
@@ -65,15 +59,5 @@ class DatabaseSeeder extends Seeder
             'email' => 'admin@example.com',
             'password' => '11111111a',
         ])->assignRole(RolesEnum::Admin);
-
-        Feature::factory(100)->create();
-
-        $tags = Tag::factory(20)->create();
-
-        Printer::factory(5)->hasAttached($tags)->create(new Sequence([
-            'attention' => false,
-        ], [
-            'attention' => true,
-        ]));
     }
 }

@@ -3,26 +3,27 @@ import { Head, Link, usePage, usePoll } from "@inertiajs/react";
 import { Printer, PageProps, PaginatedData } from "@/types";
 import FeatureItem from "@/Components/FeatureItem";
 import { can } from "@/helpers";
+import { Placeholder } from "./Partials/Placeholder";
+import { Tags } from "@/Components/Tags";
+import { Carousel } from "@/Components/Carousel";
 
 export default function Index({
   auth,
   printers,
+  aprinters,
+  tags,
 }: PageProps<{
   printers: PaginatedData<Printer>;
+  aprinters: PaginatedData<Printer>;
 }>) {
-  usePoll(3000);
+  // usePoll(3000);
+  console.log(printers);
 
   return (
-    <AuthenticatedLayout
-      header={
-        <h2 className="text-xl font-semibold leading-tight text-gray-800 dark:text-gray-200">
-          Принтеры
-        </h2>
-      }
-    >
+    <AuthenticatedLayout header={""}>
       <Head title="Штуки " />
 
-      {can(auth.user, "manage_features") && (
+      {/* {can(auth.user, "manage_features") && (
         <div className="mb-8">
           <Link
             href={route("feature.create")}
@@ -31,11 +32,33 @@ export default function Index({
             Create New Printer
           </Link>
         </div>
-      )}
-      {printers.map((printer) => (
-        <div className="text-white">{printer.model}</div>
-        // <FeatureItem printer={printer} key={printer.id} />
-      ))}
+      )} */}
+
+      <div className="grid grid-cols-3 grid-rows-2 gap-2 w-full">
+        {/* First pair */}
+        <div className="col-span-2 row-start-1">
+          {tags.length === 0 ? (
+            <Placeholder>Тут нет тегов ಠ_ಠ</Placeholder>
+          ) : (
+            <Tags tags={tags} />
+          )}
+        </div>
+        <div className="col-span-1 row-start-1">
+          <Placeholder>Тут будет поиск</Placeholder>
+        </div>
+
+        {/* Second pair */}
+        <div className="col-span-2 row-start-2">
+          {printers.length === 0 ? (
+            <Placeholder>Тут нет принтеров (╯°□°）╯︵ ┻━┻</Placeholder>
+          ) : (
+            <Carousel />
+          )}
+        </div>
+        <div className="col-span-1 row-start-2">
+          <Placeholder>Требуют внимания</Placeholder>
+        </div>
+      </div>
     </AuthenticatedLayout>
   );
 }

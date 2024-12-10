@@ -11,6 +11,7 @@ export interface User {
 }
 
 export type PaginatedData<T = any> = {
+  model: ReactNode;
   data: T[];
   links: Record<string, string>;
 };
@@ -20,6 +21,11 @@ export type Comment = {
   comment: string;
   created_at: string;
   user: User;
+};
+
+export type Tag = {
+  id: number;
+  name: string;
 };
 
 export type Feature = {

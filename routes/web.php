@@ -8,13 +8,12 @@ use App\Http\Controllers\PrinterController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\UpvoteController;
 use App\Http\Controllers\UserController;
-use Illuminate\Foundation\Application;
+// use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
 Route::redirect('/', '/main');
 
-Route::get('/printer', [PrinterController::class, 'index'])->name('printer.index');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
@@ -39,9 +38,7 @@ Route::middleware('auth')->group(function () {
             RolesEnum::Admin->value
         )
     ])->group(function () {
-        Route::get('/main', function () {
-            return Inertia::render('Main');
-        })->name('main');
+        Route::get('/main', [PrinterController::class, 'index'])->name('main');
 
         Route::resource('feature', FeatureController::class)
             ->except(['index', 'show'])
