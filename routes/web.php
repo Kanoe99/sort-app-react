@@ -4,6 +4,7 @@ use App\Enum\PermissionsEnum;
 use App\Enum\RolesEnum;
 use App\Http\Controllers\CommentController;
 use App\Http\Controllers\FeatureController;
+use App\Http\Controllers\PrinterController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\UpvoteController;
 use App\Http\Controllers\UserController;
@@ -12,6 +13,8 @@ use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
 Route::redirect('/', '/main');
+
+Route::get('/printer', [PrinterController::class, 'index'])->name('printer.index');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');

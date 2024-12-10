@@ -1,4 +1,4 @@
-import {Config} from 'ziggy-js';
+import { Config } from "ziggy-js";
 
 export interface User {
   id: number;
@@ -7,20 +7,20 @@ export interface User {
   email_verified_at?: string;
   created_at: string;
   permissions: string[];
-  roles: string[]
+  roles: string[];
 }
 
 export type PaginatedData<T = any> = {
   data: T[];
-  links: Record<string, string>
-}
+  links: Record<string, string>;
+};
 
 export type Comment = {
   id: number;
   comment: string;
   created_at: string;
-  user: User
-}
+  user: User;
+};
 
 export type Feature = {
   id: number;
@@ -31,11 +31,15 @@ export type Feature = {
   upvote_count: number;
   user_has_upvoted: boolean;
   user_has_downvoted: boolean;
-  comments: Comment[]
-}
+  comments: Comment[];
+};
+export type Printer = {
+  id: number;
+  model: string;
+};
 
 export type PageProps<
-  T extends Record<string, unknown> = Record<string, unknown>,
+  T extends Record<string, unknown> = Record<string, unknown>
 > = T & {
   auth: {
     user: User;

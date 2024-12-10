@@ -1,16 +1,14 @@
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
 import { Head, Link, usePage, usePoll } from "@inertiajs/react";
-import { Printer, PageProps, PaginatedData, Feature } from "@/types";
+import { Printer, PageProps, PaginatedData } from "@/types";
 import FeatureItem from "@/Components/FeatureItem";
 import { can } from "@/helpers";
 
 export default function Index({
   auth,
   printers,
-  features,
 }: PageProps<{
   printers: PaginatedData<Printer>;
-  features: PaginatedData<Feature>;
 }>) {
   usePoll(3000);
 
@@ -36,10 +34,6 @@ export default function Index({
       )}
       {printers.map((printer) => (
         <div className="text-white">{printer.model}</div>
-        // <FeatureItem printer={printer} key={printer.id} />
-      ))}
-      {features.map((feature) => (
-        <div className="text-white">{feature.model}</div>
         // <FeatureItem printer={printer} key={printer.id} />
       ))}
     </AuthenticatedLayout>
