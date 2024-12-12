@@ -51,7 +51,10 @@ const Tags = ({ tags }: { tags: Tag[] }) => {
 
     setDisplayLeft(true);
     setTranslateX((prevTranslateX) => {
-      const newTranslateX = Math.max(prevTranslateX - 200, maxTranslateX);
+      const newTranslateX = Math.max(
+        prevTranslateX - wrapperWidth * 0.5,
+        maxTranslateX
+      );
 
       if (newTranslateX === maxTranslateX) {
         setDisplayRight(false);
@@ -65,10 +68,14 @@ const Tags = ({ tags }: { tags: Tag[] }) => {
     if (!tagRibbonRef.current || !wrapperRef.current) return;
 
     const minTranslateX = 0;
+    const wrapperWidth = wrapperRef.current.clientWidth;
 
     setDisplayRight(true);
     setTranslateX((prevTranslateX) => {
-      const newTranslateX = Math.min(prevTranslateX + 200, minTranslateX);
+      const newTranslateX = Math.min(
+        prevTranslateX + wrapperWidth * 0.5,
+        minTranslateX
+      );
 
       if (newTranslateX === minTranslateX) {
         setDisplayLeft(false);
