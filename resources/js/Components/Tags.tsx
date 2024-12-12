@@ -47,7 +47,7 @@ const Tags = ({ tags }: { tags: Tag[] }) => {
     const wrapperWidth = wrapperRef.current.clientWidth;
     const ribbonWidth = tagRibbonRef.current.clientWidth;
 
-    const maxTranslateX = -(ribbonWidth - wrapperWidth + 55);
+    const maxTranslateX = -(ribbonWidth - wrapperWidth + 12);
 
     setDisplayLeft(true);
     setTranslateX((prevTranslateX) => {
