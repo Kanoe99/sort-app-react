@@ -18,8 +18,6 @@ export default function Show({
   user: User;
   roleLabels: Record<string, string>;
 }) {
-  console.log(roles);
-
   const { data, setData, processing, errors, put } = useForm({
     name: user.name,
     email: user.email,
@@ -35,7 +33,7 @@ export default function Show({
   };
 
   const onRoleChange = (ev: any) => {
-    console.log(ev.target.value, ev.target.checked);
+    // console.log(ev.target.value, ev.target.checked);
     if (ev.target.checked) {
       setData("roles", [ev.target.value]);
     }

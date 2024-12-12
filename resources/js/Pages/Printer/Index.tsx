@@ -17,7 +17,6 @@ export default function Index({
   aprinters: PaginatedData<Printer>;
 }>) {
   // usePoll(3000);
-  console.log(printers);
 
   return (
     <AuthenticatedLayout header={""}>
