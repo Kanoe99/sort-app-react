@@ -41,7 +41,18 @@ export type Feature = {
 };
 export type Printer = {
   id: number;
+  type: string;
   model: string;
+  number: number;
+  location: string;
+  IP: string;
+  status: string;
+  comment: string;
+  attention: boolean;
+  logo: string;
+  counter: string;
+  counterDate: string;
+  fixDate: string;
 };
 
 export type PageProps<

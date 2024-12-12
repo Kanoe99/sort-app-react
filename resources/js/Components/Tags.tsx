@@ -81,15 +81,13 @@ const Tags = ({ tags }: { tags: Tag[] }) => {
         setDisplayLeft(false);
       }
 
-      console.log(tags);
-
       return newTranslateX;
     });
   };
 
   return (
     <div
-      className="py-4 bg-black flex gap-2 overflow-hidden relative"
+      className="py-4 bg-black flex gap-2 w-full overflow-hidden relative"
       id="wrapper"
       ref={wrapperRef}
     >
@@ -101,7 +99,7 @@ const Tags = ({ tags }: { tags: Tag[] }) => {
         {tags.map((tag) => (
           <a
             key={tag.id}
-            className="block px-2 cursor-pointer text-white bg-[#303030] hover:bg-[#454545] rounded-md h-fit text-nowrap font-semibold transition-colors duration-300"
+            className="block select-none px-2 cursor-pointer text-white bg-[#303030] hover:bg-[#454545] rounded-md h-fit text-nowrap font-semibold transition-colors duration-300"
           >
             {tag.name}
           </a>

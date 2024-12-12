@@ -33,29 +33,33 @@ export default function Index({
         </div>
       )} */}
 
-      <div className="grid grid-cols-3 grid-rows-2 gap-2 w-full">
+      <div className="flex flex-col gap-5 w-full">
         {/* First pair */}
-        <div className="col-span-2 row-start-1">
-          {tags.length === 0 ? (
-            <Placeholder>Тут нет тегов ಠ_ಠ</Placeholder>
-          ) : (
-            <Tags tags={tags} />
-          )}
-        </div>
-        <div className="col-span-1 row-start-1">
-          <Placeholder>Тут будет поиск</Placeholder>
+        <div className="flex gap-5">
+          <div className="w-2/3">
+            {tags.length === 0 ? (
+              <Placeholder>Тут нет тегов ಠ_ಠ</Placeholder>
+            ) : (
+              <Tags tags={tags} />
+            )}
+          </div>
+          <div className="w-1/3">
+            <Placeholder>Тут будет поиск</Placeholder>
+          </div>
         </div>
 
         {/* Second pair */}
-        <div className="col-span-2 row-start-2">
-          {printers.length === 0 ? (
-            <Placeholder>Тут нет принтеров (╯°□°）╯︵ ┻━┻</Placeholder>
-          ) : (
-            <Carousel />
-          )}
-        </div>
-        <div className="col-span-1 row-start-2">
-          <Placeholder>Требуют внимания</Placeholder>
+        <div className="flex gap-5">
+          <div className="w-2/3">
+            {printers.length === 0 ? (
+              <Placeholder>Тут нет принтеров (╯°□°）╯︵ ┻━┻</Placeholder>
+            ) : (
+              <Carousel printers={printers} />
+            )}
+          </div>
+          <div className="w-1/3 pl-3">
+            <Placeholder>Требуют внимания</Placeholder>
+          </div>
         </div>
       </div>
     </AuthenticatedLayout>

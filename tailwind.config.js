@@ -83,6 +83,7 @@ export default {
                     transform: 'translateY(-50%) rotate(-45deg)',
                 },
                 '.slider': {
+                    backgroundColor: red,
                     position: 'relative',
                     marginTop: '100px',
                     width: '100%',
