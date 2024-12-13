@@ -1,19 +1,22 @@
-const Carousel = () => {
-  const bgColors = [
-    "bg-red-500",
-    "bg-pink-500",
-    "bg-white",
-    "bg-orange-500",
-    "bg-blue-500",
-    "bg-purple-500",
-  ];
+import { Printer } from "@/types";
+import { div } from "framer-motion/client";
+
+const PrinterCard = ({ printer }: { printer: Printer }) => {
   return (
-    <div>
-      {bgColors.map((bgColor) => (
-        <div
-          key={bgColor}
-          className={`${bgColor} w-[500px] h-[700px] m-2`}
-        ></div>
+    <div
+      className="bg-[#252525] hover:outline text-white rounded-md px-5 py-3 w-full h-full"
+      style={{ outlineWidth: "1px" }}
+    >
+      {printer.model}
+    </div>
+  );
+};
+
+const Carousel = ({ printers }: { printers: Printer[] }) => {
+  return (
+    <div className=" w-full h-fit grid grid-cols-2 gap-3 px-3 py-2">
+      {printers.map((printer) => (
+        <PrinterCard printer={printer} />
       ))}
     </div>
   );
