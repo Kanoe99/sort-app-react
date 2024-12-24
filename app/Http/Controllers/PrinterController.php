@@ -15,9 +15,9 @@ class PrinterController extends Controller
 {
     public function index()
     {
-        $limit = 15;
+        $perPage = 2;
 
-        $printers = Printer::with(['tags'])->latest()->take($limit)->get();
+        $printers = Printer::with(['tags'])->latest()->paginate($perPage);
         $aprinters = Printer::with(['tags'])->where('attention', true)->get();
         $tags = Tag::all();
 

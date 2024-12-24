@@ -5,7 +5,7 @@ import FeatureItem from "@/Components/FeatureItem";
 import { can } from "@/helpers";
 import { Placeholder } from "./Partials/Placeholder";
 import { Tags } from "@/Components/Tags";
-import { Carousel } from "@/Components/Carousel";
+import { PrintersMain } from "@/Components/PrintersMain";
 
 export default function Index({
   auth,
@@ -54,7 +54,7 @@ export default function Index({
             {printers.length === 0 ? (
               <Placeholder>Тут нет принтеров (╯°□°）╯︵ ┻━┻</Placeholder>
             ) : (
-              <Carousel printers={printers} />
+              <PrintersMain printers={printers} />
             )}
           </div>
           <div className="w-1/3 pl-3">

@@ -32,13 +32,6 @@ export default function Authenticated({
                 <NavLink href={route("main")} active={route().current("main")}>
                   Главная
                 </NavLink>
-                <NavLink
-                  prefetch={["mount", "hover"]}
-                  href={route("feature.index")}
-                  active={route().current("feature.index")}
-                >
-                  Весь список
-                </NavLink>
                 {can(user, "manage_users") && (
                   <NavLink
                     prefetch

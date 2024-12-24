@@ -31,7 +31,7 @@ class PrinterFactory extends Factory
         setlocale(LC_TIME, 'ru_RU.UTF-8');
 
         return [
-            'type' => fake()->text(5),
+            'type' => "принтер",
             // Convert to Carbon instances before formatting
             'counterDate' => \Carbon\Carbon::parse(fake()->dateTime())->format('d-m-Y H:i:s'), // Day first, then month and year
             'fixDate' => \Carbon\Carbon::parse(fake()->date())->format('d-m-Y'), // Day first
@@ -40,7 +40,7 @@ class PrinterFactory extends Factory
             'location' => rand(100, 599),
             'IP' => fake()->unique()->ipv4(),
             'status' => $statuses[array_rand($statuses)],
-            'comment' => fake()->text(20),
+            'comment' => fake()->text(200),
             'attention' => false,
             'counter' => fake()->numberBetween(100, 9999),
         ];
