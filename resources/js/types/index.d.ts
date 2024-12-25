@@ -53,13 +53,15 @@ export type Printer = {
   counter: string;
   counterDate: string;
   fixDate: string;
+  tags: string[];
 };
 
-export type PageProps<
-  T extends Record<string, unknown> = Record<string, unknown>
-> = T & {
+export type PageProps = {
   auth: {
     user: User;
   };
+  tags: Tag[];
+  printers: PaginatedData<Printer>; // Here the printers prop is typed as PaginatedData<Printer>
+  aprinters: PaginatedData<Printer>; // Here the aprinters prop is typed as PaginatedData<Printer>
   ziggy: Config & { location: string };
 };

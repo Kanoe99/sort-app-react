@@ -7,15 +7,7 @@ import { Placeholder } from "./Partials/Placeholder";
 import { Tags } from "@/Components/Tags";
 import { PrintersMain } from "@/Components/PrintersMain";
 
-export default function Index({
-  auth,
-  printers,
-  aprinters,
-  tags,
-}: PageProps<{
-  printers: PaginatedData<Printer>;
-  aprinters: PaginatedData<Printer>;
-}>) {
+export default function Index({ auth, printers, aprinters, tags }: PageProps) {
   // usePoll(3000);
 
   return (
@@ -51,10 +43,10 @@ export default function Index({
         {/* Second pair */}
         <div className="flex gap-5">
           <div className="w-2/3">
-            {printers.length === 0 ? (
+            {printers.data.length === 0 ? (
               <Placeholder>Тут нет принтеров (╯°□°）╯︵ ┻━┻</Placeholder>
             ) : (
-              <PrintersMain printers={printers} />
+              <PrintersMain />
             )}
           </div>
           <div className="w-1/3 pl-3 select-none">

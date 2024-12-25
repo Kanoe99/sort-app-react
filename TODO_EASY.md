@@ -3,3 +3,4 @@
 -   Delete feature after implementing printer routes
 -   Disable light/dark mode
 -   Possibly allow for choosing how many items per page are displayed (PrintersMain.tsx itemsPerPage);
+-   Fix placeholders' layouts
