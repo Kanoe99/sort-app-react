@@ -39,6 +39,8 @@ Route::middleware('auth')->group(function () {
         )
     ])->group(function () {
         Route::get('/main', [PrinterController::class, 'index'])->name('main');
+        Route::get('/printers', [PrinterController::class, 'getPrinters']);
+
 
         Route::resource('feature', FeatureController::class)
             ->except(['index', 'show'])

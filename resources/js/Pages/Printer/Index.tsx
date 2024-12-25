@@ -43,7 +43,7 @@ export default function Index({
               <Tags tags={tags} />
             )}
           </div>
-          <div className="w-1/3">
+          <div className="w-1/3 select-none">
             <Placeholder>Тут будет поиск</Placeholder>
           </div>
         </div>
@@ -57,7 +57,7 @@ export default function Index({
               <PrintersMain printers={printers} />
             )}
           </div>
-          <div className="w-1/3 pl-3">
+          <div className="w-1/3 pl-3 select-none">
             <Placeholder>Требуют внимания</Placeholder>
           </div>
         </div>

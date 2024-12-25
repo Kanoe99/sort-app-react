@@ -28,6 +28,24 @@ class PrinterController extends Controller
         ]);
     }
 
+    public function getPrinters(Request $request)
+    {
+        $perPage = $request->input('perPage', 2); // Default to 10 items per page
+        $page = $request->input('page', 1);
+
+        $printers = Printer::with(['tags'])
+            ->latest()
+            ->paginate($perPage, ['*'], 'page', $page);
+
+        return response()->json([
+            'printers' => $printers->items(),
+            'current_page' => $printers->currentPage(),
+            'last_page' => $printers->lastPage(),
+        ]);
+    }
+
+
+
     public function all()
     {
         $printers = Printer::with(['tags'])->latest()->paginate(5);
