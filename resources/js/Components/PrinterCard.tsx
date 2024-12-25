@@ -18,6 +18,10 @@ const PrinterCard = ({ printer }: { printer: Printer }) => {
           <div className="font-black text-blue-500">{printer.counter}</div>
           <div className="text-blue-200">{printer.counterDate}</div>
         </div>
+        <div className="px-4 flex justify-between text-sm mb-4">
+          <h3>Счётчик страниц</h3>
+          <h3>Обновлён</h3>
+        </div>
         <div className="px-4">
           Дата последнего ремонта:{" "}
           <span className="text-yellow-500">{printer.fixDate}</span>

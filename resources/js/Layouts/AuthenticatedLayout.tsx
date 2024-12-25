@@ -189,7 +189,7 @@ export default function Authenticated({
       )}
 
       <div className="py-10">
-        <div className="mx-auto max-w-[90vw] ">
+        <div className="mx-auto w-[90vw] ">
           {success && (
             <div className="bg-emerald-500 py-4 px-6 rounded mb-8">
               {success}

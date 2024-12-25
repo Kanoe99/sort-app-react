@@ -1,5 +1,7 @@
 import { Tag } from "@/types";
 import { useRef, useEffect, useState } from "react";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faAngleLeft } from "@fortawesome/free-solid-svg-icons";
 
 const Button = ({
   wrapperClasses,
@@ -8,7 +10,7 @@ const Button = ({
   isVisible,
 }: {
   wrapperClasses: string;
-  arrowClasses: string;
+  arrowClasses?: string;
   onClick: () => void;
   isVisible: boolean;
 }) => {
@@ -19,9 +21,10 @@ const Button = ({
       } w-16 h-full from-black from-70% hover:from-80% transition duration-700 to-transparent to-100% top-0 absolute text-white px-4 flex items-center cursor-pointer ${wrapperClasses}`}
       onClick={onClick}
     >
-      <span
-        className={`border-l-4 border-b-4 block w-4 h-4 ${arrowClasses}`}
-      ></span>
+      <FontAwesomeIcon
+        icon={faAngleLeft}
+        className={`text-3xl ${arrowClasses}`}
+      />
     </div>
   );
 };
@@ -108,13 +111,12 @@ const Tags = ({ tags }: { tags: Tag[] }) => {
       <Button
         isVisible={displayLeft}
         wrapperClasses="bg-gradient-to-r left-0"
-        arrowClasses="rotate-45"
         onClick={shiftRight}
       />
       <Button
         isVisible={displayRight}
         wrapperClasses="bg-gradient-to-l justify-end right-0"
-        arrowClasses="rotate-[225deg]"
+        arrowClasses="rotate-[180deg]"
         onClick={shiftLeft}
       />
     </div>
