@@ -26,10 +26,10 @@ export default function Index({ auth, printers, aprinters, tags }: PageProps) {
         </div>
       )} */}
 
-      <div className="flex flex-col gap-5 w-full">
+      <div className="flex flex-col gap-3 w-full">
         {/* First pair */}
-        <div className="flex gap-5">
-          <div className="w-2/3">
+        <div className="flex gap-3">
+          <div className="w-[calc(60vw_-_0.25rem)]">
             {tags.length === 0 ? (
               <Placeholder>Тут нет тегов ಠ_ಠ</Placeholder>
             ) : (
@@ -42,7 +42,7 @@ export default function Index({ auth, printers, aprinters, tags }: PageProps) {
         </div>
 
         {/* Second pair */}
-        <div className="flex gap-5">
+        <div className="flex gap-3">
           <div className="w-full">
             {printers.data.length === 0 ? (
               <Placeholder>Тут нет принтеров (╯°□°）╯︵ ┻━┻</Placeholder>

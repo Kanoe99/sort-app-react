@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use Carbon\Carbon;
 use Inertia\Inertia;
+use \App\Http\Resources\PrinterResource;
 
 class PrinterController extends Controller
 {
@@ -25,6 +26,14 @@ class PrinterController extends Controller
             'printers' => $printers,
             'aprinters' => $aprinters,
             'tags' => $tags,
+        ]);
+    }
+
+
+    public function edit(Printer $printer)
+    {
+        return Inertia::render('Printer/Edit', [
+            'printer' => new PrinterResource($printer)
         ]);
     }
 
@@ -154,13 +163,6 @@ class PrinterController extends Controller
         return redirect('/');
     }
 
-
-    public function edit(Printer $printer)
-    {
-        return view('printers.edit', [
-            'printer' => $printer,
-        ]);
-    }
 
     public function update(Request $request, Printer $printer)
     {

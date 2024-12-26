@@ -42,23 +42,16 @@ Route::middleware('auth')->group(function () {
         Route::get('/printers', [PrinterController::class, 'getPrinters']);
 
 
-        Route::resource('feature', FeatureController::class)
-            ->except(['index', 'show'])
-            ->middleware('can:' . PermissionsEnum::ManageFeatures->value);
+        Route::resource('printer', PrinterController::class)
+            ->except(['index'])
+            ->middleware('can:' . PermissionsEnum::ManagePrinters->value);
 
         Route::get('/feature', [FeatureController::class, 'index'])
             ->name('feature.index');
 
-        Route::get('/feature/{feature}', [FeatureController::class, 'show'])
-            ->name('feature.show');
-
-        Route::post('/feature/{feature}/upvote', [UpvoteController::class, 'store'])
-            ->name('upvote.store');
-        Route::delete('/upvote/{feature}', [UpvoteController::class, 'destroy'])
-            ->name('upvote.destroy');
-
         Route::post('/feature/{feature}/comments', [CommentController::class, 'store'])
             ->name('comment.store')
+
             ->middleware('can:' . PermissionsEnum::ManageComments->value);
         Route::delete('/comment/{comment}', [CommentController::class, 'destroy'])
             ->name('comment.destroy')

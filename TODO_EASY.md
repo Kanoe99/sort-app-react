@@ -5,5 +5,6 @@
 -   Possibly allow for choosing how many items per page are displayed (PrintersMain.tsx itemsPerPage);
 -   Fix placeholders' layouts
 -   Standardize outline and theme color across pages at the end
--   Fix gap search tags
--   Fix modal
+-   Figure out where tags go
+-   Display full info in a modal
+-   Manage 403 on edit error

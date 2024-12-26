@@ -26,8 +26,8 @@ class DatabaseSeeder extends Seeder
         $commenterRole = Role::create(['name' => RolesEnum::Commenter->value]);
         $adminRole = Role::create(['name' => RolesEnum::Admin->value]);
 
-        $manageFeaturesPermission = Permission::create([
-            'name' => PermissionsEnum::ManageFeatures->value,
+        $managePrintersPermission = Permission::create([
+            'name' => PermissionsEnum::ManagePrinters->value,
         ]);
         $manageCommentsPermission = Permission::create([
             'name' => PermissionsEnum::ManageComments->value,
@@ -45,7 +45,7 @@ class DatabaseSeeder extends Seeder
             $upvoteDownvotePermission,
             $manageUsersPermission,
             $manageCommentsPermission,
-            $manageFeaturesPermission,
+            $managePrintersPermission,
         ]);
 
         User::factory()->create([
@@ -70,7 +70,7 @@ class DatabaseSeeder extends Seeder
 
         $tags = Tag::factory(20)->create();
 
-        Printer::factory(13)->hasAttached($tags)->create(new Sequence([
+        Printer::factory(1000)->hasAttached($tags)->create(new Sequence([
             'attention' => false,
         ], [
             'attention' => true,

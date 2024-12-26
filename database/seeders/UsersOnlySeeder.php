@@ -20,8 +20,8 @@ class UsersOnlySeeder extends Seeder
         $commenterRole = Role::create(['name' => RolesEnum::Commenter->value]);
         $adminRole = Role::create(['name' => RolesEnum::Admin->value]);
 
-        $manageFeaturesPermission = Permission::create([
-            'name' => PermissionsEnum::ManageFeatures->value,
+        $managePrintersPermission = Permission::create([
+            'name' => PermissionsEnum::ManagePrinters->value,
         ]);
         $manageCommentsPermission = Permission::create([
             'name' => PermissionsEnum::ManageComments->value,
@@ -39,7 +39,7 @@ class UsersOnlySeeder extends Seeder
             $upvoteDownvotePermission,
             $manageUsersPermission,
             $manageCommentsPermission,
-            $manageFeaturesPermission,
+            $managePrintersPermission,
         ]);
 
         User::factory()->create([
