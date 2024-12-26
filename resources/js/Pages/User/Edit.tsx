@@ -42,15 +42,15 @@ export default function Show({
   return (
     <AuthenticatedLayout
       header={
-        <h2 className="text-xl font-semibold leading-tight text-gray-800 dark:text-gray-200">
+        <h2 className="text-xl font-semibold leading-tight text-gray-200">
           Edit User <b>"{user.name}"</b>
         </h2>
       }
     >
       <Head title={"Редактировать пользователя " + user.name} />
 
-      <div className="mb-4 overflow-hidden bg-white shadow-sm sm:rounded-lg dark:bg-gray-800">
-        <div className="p-6 text-gray-900 dark:text-gray-100 flex gap-8">
+      <div className="mb-4 overflow-hidden shadow-sm sm:rounded-lg bg-gray-800">
+        <div className="p-6 text-gray-100 flex gap-8">
           <form onSubmit={updateUser} className="w-full">
             <div className="mb-8">
               <InputLabel htmlFor="name" value="Name" />
@@ -92,7 +92,7 @@ export default function Show({
                     value={role.name}
                     onChange={onRoleChange}
                   />
-                  <span className="ms-2 text-sm text-gray-600 dark:text-gray-400">
+                  <span className="ms-2 text-sm text-gray-400">
                     {roleLabels[role.name]}
                   </span>
                 </label>

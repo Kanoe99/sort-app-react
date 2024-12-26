@@ -10,8 +10,7 @@ export default function InputLabel({
     <label
       {...props}
       className={
-        `text-sm font-medium text-gray-700 flex items-center gap-2 dark:text-gray-300 ` +
-        className
+        `text-sm font-medium flex items-center gap-2 text-gray-300 ` + className
       }
     >
       <div className="w-2 h-2 bg-white rounded-sm"></div>

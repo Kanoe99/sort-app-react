@@ -26,15 +26,15 @@ export default function Show({ feature }: { feature: Feature }) {
   return (
     <AuthenticatedLayout
       header={
-        <h2 className="text-xl font-semibold leading-tight text-gray-800 dark:text-gray-200">
+        <h2 className="text-xl font-semibold leading-tight text-gray-200">
           Edit Feature <b>"{feature.name}"</b>
         </h2>
       }
     >
       <Head title={"Редактировать штуку " + feature.name} />
 
-      <div className="mb-4 overflow-hidden bg-white shadow-sm sm:rounded-lg dark:bg-gray-800">
-        <div className="p-6 text-gray-900 dark:text-gray-100 flex gap-8">
+      <div className="mb-4 overflow-hidden shadow-sm sm:rounded-lg bg-gray-800">
+        <div className="p-6 text-gray-100 flex gap-8">
           <form onSubmit={updateFeature} className="w-full">
             <div className="mb-8">
               <InputLabel htmlFor="name" value="Name" />

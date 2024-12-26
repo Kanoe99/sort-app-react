@@ -7,7 +7,7 @@ export default function Index({ auth, users }: PageProps<{ users: User[] }>) {
   return (
     <AuthenticatedLayout
       header={
-        <h2 className="text-xl font-semibold leading-tight text-gray-800 dark:text-gray-200">
+        <h2 className="text-xl font-semibold leading-tight text-gray-200">
           Users
         </h2>
       }
@@ -15,8 +15,8 @@ export default function Index({ auth, users }: PageProps<{ users: User[] }>) {
       <Head title="Пользователи" />
 
       <div className="relative overflow-x-auto">
-        <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
-          <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-[#252525] dark:text-gray-300">
+        <table className="w-full text-sm text-left rtl:text-right text-gray-400">
+          <thead className="text-xs uppercase bg-[#252525] text-gray-300">
             <tr>
               <th scope="col" className="px-6 py-3">
                 Имя
@@ -37,21 +37,19 @@ export default function Index({ auth, users }: PageProps<{ users: User[] }>) {
           </thead>
           <tbody>
             {users.map((user) => (
-              <tr className="bg-white border-b dark:bg-[#303030] dark:border-gray-700">
+              <tr className="border-b bg-[#303030] border-gray-700">
                 <th
                   scope="row"
-                  className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
+                  className="px-6 py-4 font-medium whitespace-nowrap text-white"
                 >
                   {user.name}
                 </th>
-                <td className="px-6 py-4 dark:text-[#bebebe]">{user.email}</td>
-                <td className="px-6 py-4 dark:text-[#bebebe]">
-                  {user.created_at}
-                </td>
-                <td className="px-6 py-4 dark:text-[#bebebe]">
+                <td className="px-6 py-4 text-[#bebebe]">{user.email}</td>
+                <td className="px-6 py-4 text-[#bebebe]">{user.created_at}</td>
+                <td className="px-6 py-4 text-[#bebebe]">
                   {user.roles.join(", ")}
                 </td>
-                <td className="px-6 py-4 dark:text-[#bebebe]">
+                <td className="px-6 py-4 text-[#bebebe]">
                   <Link
                     href={route("user.edit", user.id)}
                     className="text-blue-500"

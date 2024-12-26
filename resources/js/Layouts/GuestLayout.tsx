@@ -4,7 +4,7 @@ import { PropsWithChildren } from "react";
 
 export default function Guest({ children }: PropsWithChildren) {
   return (
-    <div className="flex min-h-screen flex-col items-center bg-gray-100 pt-6 sm:justify-center sm:pt-0 dark:bg-black">
+    <div className="flex min-h-screen flex-col items-center pt-6 sm:justify-center sm:pt-0 bg-black">
       <Link
         href="/"
         className="sm:max-w-md w-full flex justify-between items-center px-6"
@@ -13,7 +13,7 @@ export default function Guest({ children }: PropsWithChildren) {
         <h2 className="text-white text-2xl font-bold">Принтеры - Вход</h2>
       </Link>
 
-      <div className="mt-6 w-full overflow-hidden bg-white px-6 py-4 shadow-md sm:max-w-md sm:rounded-lg dark:bg-white/5">
+      <div className="mt-6 w-full overflow-hidden px-6 py-4 shadow-md sm:max-w-md sm:rounded-lg bg-white/5">
         {children}
       </div>
     </div>

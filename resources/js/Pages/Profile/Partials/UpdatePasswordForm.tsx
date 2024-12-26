@@ -44,13 +44,9 @@ export default function UpdatePasswordForm({
   return (
     <section className={className}>
       <header>
-        <h2 className="text-lg font-medium text-gray-900 dark:text-gray-100">
-          Обновить пароль
-        </h2>
+        <h2 className="text-lg font-medium text-gray-100">Обновить пароль</h2>
 
-        <p className="mt-1 text-sm text-gray-600 dark:text-gray-400">
-          Используйте сильный пароль
-        </p>
+        <p className="mt-1 text-sm text-gray-400">Используйте сильный пароль</p>
       </header>
 
       <form onSubmit={updatePassword} className="mt-6 space-y-6">
@@ -114,7 +110,7 @@ export default function UpdatePasswordForm({
             leave="transition ease-in-out"
             leaveTo="opacity-0"
           >
-            <p className="text-sm text-gray-600 dark:text-gray-400">Saved.</p>
+            <p className="text-sm text-gray-400">Saved.</p>
           </Transition>
         </div>
       </form>

@@ -58,7 +58,7 @@ const Trigger = ({ children }: PropsWithChildren) => {
 const Content = ({
   align = "right",
   width = "48",
-  contentClasses = "py-1 bg-white dark:bg-black/70 border-gray-500 border-[1px] border",
+  contentClasses = "py-1 bg-[#181818] bg-black/70 border-gray-500 border-[1px] border",
   children,
 }: PropsWithChildren<{
   align?: "left" | "right";
@@ -120,7 +120,7 @@ const DropdownLink = ({
       prefetch
       {...props}
       className={
-        "block w-full px-4 py-2 text-start text-sm leading-5 text-gray-700 transition duration-150 ease-in-out hover:bg-white/90 focus:bg-gray-100 focus:outline-none dark:text-gray-300 dark:hover:bg-[#000] dark:focus:bg-black backdrop-blur-sm " +
+        "block w-full px-4 py-2 text-start text-sm  leading-5 bg-[#181818] transition duration-150 ease-in-out focus:outline-none text-gray-300 hover:bg-[#000] focus:bg-black backdrop-blur-sm " +
         className
       }
     >

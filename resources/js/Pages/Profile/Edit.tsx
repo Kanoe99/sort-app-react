@@ -8,7 +8,7 @@ import { ReactNode } from "react";
 
 const Wrapper = ({ children }: { children: ReactNode }) => {
   return (
-    <div className="bg-white p-4 shadow sm:rounded-lg sm:p-8 dark:bg-black border border-white/20">
+    <div className="p-4 shadow sm:rounded-lg sm:p-8 bg-black border border-white/20">
       {children}
     </div>
   );
@@ -21,7 +21,7 @@ export default function Edit({
   return (
     <AuthenticatedLayout
       header={
-        <h2 className="text-xl font-semibold leading-tight text-gray-800 dark:text-gray-200">
+        <h2 className="text-xl font-semibold leading-tight text-gray-200">
           Профиль
         </h2>
       }

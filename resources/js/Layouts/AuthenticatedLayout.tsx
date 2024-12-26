@@ -17,14 +17,14 @@ export default function Authenticated({
     useState(false);
 
   return (
-    <div className="min-h-screen bg-gray-100 dark:bg-black">
-      <nav className="border-b border-gray-100 bg-white dark:border-gray-700 dark:bg-black">
+    <div className="min-h-screen bg-black">
+      <nav className="border-b border-gray-700 bg-black">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="flex h-16 justify-between">
             <div className="flex items-center">
               <div className="flex shrink-0 items-center select-none">
                 <Link href="/">
-                  <ApplicationLogo className="block h-9 w-auto fill-current text-gray-800 dark:text-gray-200" />
+                  <ApplicationLogo className="block h-9 w-auto fill-current text-gray-200" />
                 </Link>
               </div>
 
@@ -51,7 +51,7 @@ export default function Authenticated({
                     <span className="inline-flex rounded-md">
                       <button
                         type="button"
-                        className="inline-flex items-center rounded-md border border-transparent bg-white px-3 py-2 text-sm font-medium leading-4 text-gray-500 transition duration-150 ease-in-out hover:text-gray-700 focus:outline-none dark:bg-black dark:text-gray-400 dark:hover:text-gray-300"
+                        className="inline-flex items-center rounded-md border border-transparent px-3 py-2 text-sm font-medium leading-4 transition duration-150 ease-in-out  focus:outline-none bg-black text-gray-400 hover:text-gray-300"
                       >
                         {user.name}
 
@@ -94,7 +94,7 @@ export default function Authenticated({
                     (previousState) => !previousState
                   )
                 }
-                className="inline-flex items-center justify-center rounded-md p-2 text-gray-400 transition duration-150 ease-in-out hover:bg-gray-100 hover:text-gray-500 focus:bg-gray-100 focus:text-gray-500 focus:outline-none dark:text-gray-500 dark:hover:bg-gray-900 dark:hover:text-gray-400 dark:focus:bg-gray-900 dark:focus:text-gray-400"
+                className="inline-flex items-center justify-center rounded-md p-2 transition duration-150 ease-in-out focus:outline-none text-gray-500 hover:bg-gray-900 hover:text-gray-400 focus:bg-gray-900 focus:text-gray-400"
               >
                 <svg
                   className="h-6 w-6"
@@ -154,9 +154,9 @@ export default function Authenticated({
             )}
           </div>
 
-          <div className="border-t border-gray-200 pb-1 pt-4 dark:border-gray-600">
+          <div className="border-t pb-1 pt-4 border-gray-600">
             <div className="px-4">
-              <div className="text-base font-medium text-gray-800 dark:text-gray-200">
+              <div className="text-base font-medium text-gray-200">
                 {user.name}
               </div>
               <div className="text-sm font-medium text-gray-500">
@@ -181,7 +181,7 @@ export default function Authenticated({
       </nav>
 
       {header && (
-        <header className="bg-white shadow dark:bg-black">
+        <header className="shadow bg-black">
           <div className="mx-auto max-w-7xl px-4 pt-6 pb-0 sm:px-6 lg:px-8">
             {header}
           </div>
