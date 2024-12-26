@@ -15,7 +15,7 @@ export default function Index({ auth, printers, aprinters, tags }: PageProps) {
     <AuthenticatedLayout header={""}>
       <Head title="Штуки " />
 
-      {can(auth.user, "manage_features") && (
+      {/* {can(auth.user, "manage_features") && (
         <div className="mb-8">
           <Link
             href={route("feature.create")}
@@ -24,7 +24,7 @@ export default function Index({ auth, printers, aprinters, tags }: PageProps) {
             Create New Printer
           </Link>
         </div>
-      )}
+      )} */}
 
       <div className="flex flex-col gap-5 w-full">
         {/* First pair */}

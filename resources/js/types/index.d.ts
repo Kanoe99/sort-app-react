@@ -56,7 +56,9 @@ export type Printer = {
   tags: string[];
 };
 
-export type PageProps = {
+export type PageProps<
+  T extends Record<string, unknown> = Record<string, unknown>
+> = T & {
   auth: {
     user: User;
   };
