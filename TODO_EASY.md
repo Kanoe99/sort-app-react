@@ -4,3 +4,4 @@
 -   Disable light/dark mode
 -   Possibly allow for choosing how many items per page are displayed (PrintersMain.tsx itemsPerPage);
 -   Fix placeholders' layouts
+-   Standardize outline and theme color across pages at the end

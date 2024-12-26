@@ -9,7 +9,7 @@ const PrintersMain = () => {
     current_page: 1,
     last_page: 1,
   });
-  const itemsPerPage = 10;
+  const itemsPerPage = 12;
 
   useEffect(() => {
     const fetchPrinters = async () => {
@@ -36,12 +36,18 @@ const PrintersMain = () => {
 
   return (
     <div className="flex flex-col relative">
-      <div className="grid grid-cols-2 gap-3 py-2 mb-10">
+      <div
+        className="grid grid-cols-3 gap-3 py-2 items-start min-h-screen"
+        style={{
+          msOverflowStyle: "none", // IE and Edge
+          scrollbarWidth: "none", // Firefox
+        }}
+      >
         {printersData.map((printer) => (
           <PrinterCard key={printer.id} printer={printer} />
         ))}
       </div>
-      <div className="fixed flex-1 bottom-0 backdrop-blur-xl w-[calc(60vw_-_0.75rem)]">
+      <div className="sticky flex-1 bottom-0 backdrop-blur-xl w-full">
         <Pagination pagination={pagination} setPagination={setPagination} />
       </div>
     </div>

@@ -40,7 +40,7 @@ const Trigger = ({ children }: PropsWithChildren) => {
     <>
       <div
         onClick={toggleOpen}
-        className="border bg-black border-white rounded-md"
+        className="border bg-black border-gray-500 rounded-md"
       >
         {children}
       </div>
@@ -58,7 +58,7 @@ const Trigger = ({ children }: PropsWithChildren) => {
 const Content = ({
   align = "right",
   width = "48",
-  contentClasses = "py-1 bg-white dark:bg-black/70 border-white border-[1px] border",
+  contentClasses = "py-1 bg-white dark:bg-black/70 border-gray-500 border-[1px] border",
   children,
 }: PropsWithChildren<{
   align?: "left" | "right";

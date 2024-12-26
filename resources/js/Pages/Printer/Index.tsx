@@ -6,6 +6,7 @@ import { can } from "@/helpers";
 import { Placeholder } from "./Partials/Placeholder";
 import { Tags } from "@/Components/Tags";
 import { PrintersMain } from "@/Components/PrintersMain";
+import { Search } from "@/Components/Search";
 
 export default function Index({ auth, printers, aprinters, tags }: PageProps) {
   // usePoll(3000);
@@ -36,21 +37,18 @@ export default function Index({ auth, printers, aprinters, tags }: PageProps) {
             )}
           </div>
           <div className="w-1/3 select-none">
-            <Placeholder>Тут будет поиск</Placeholder>
+            <Search />
           </div>
         </div>
 
         {/* Second pair */}
         <div className="flex gap-5">
-          <div className="w-2/3">
+          <div className="w-full">
             {printers.data.length === 0 ? (
               <Placeholder>Тут нет принтеров (╯°□°）╯︵ ┻━┻</Placeholder>
             ) : (
               <PrintersMain />
             )}
-          </div>
-          <div className="w-1/3 pl-3 select-none">
-            <Placeholder>Требуют внимания</Placeholder>
           </div>
         </div>
       </div>
