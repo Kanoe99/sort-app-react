@@ -16,7 +16,7 @@ export default function Index({ auth, users }: PageProps<{ users: User[] }>) {
 
       <div className="relative overflow-x-auto">
         <table className="w-full text-sm text-left rtl:text-right text-gray-400">
-          <thead className="text-xs uppercase bg-[#252525] text-gray-300">
+          <thead className="text-xs uppercase bg-bg-main text-gray-300">
             <tr>
               <th scope="col" className="px-6 py-3">
                 Имя

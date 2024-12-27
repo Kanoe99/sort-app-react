@@ -1,17 +1,13 @@
 import { Printer } from "@/types";
-import { faXmark } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useState } from "react";
-import Modal from "./Modal";
-import { Link } from "@inertiajs/react";
-import { features } from "process";
+import { PrinterModal } from "./PrinterModal";
 
 const PrinterCard = ({ printer }: { printer: Printer }) => {
   const [isVisible, setIsVisible] = useState(false);
 
   return (
     <div
-      className="bg-[#252525] flex flex-col gap-2 text-white rounded-md px-5 py-3 w-full h-fit"
+      className="bg-bg-main flex flex-col gap-2 text-white rounded-md px-5 py-3 w-full h-fit"
       style={{ outlineWidth: "1px" }}
     >
       <div>
@@ -48,31 +44,11 @@ const PrinterCard = ({ printer }: { printer: Printer }) => {
           >
             смотреть
           </button>
-          <Modal
-            show={isVisible}
-            maxWidth="2xl"
-            onClose={() => setIsVisible(!isVisible)}
-          >
-            <div className="text-white bg-[#252525]">
-              <>
-                <div className="flex w-full justify-between">
-                  <h2 className="text-3xl p-10 py-5 rounded-br-3xl bg-black/0">
-                    <Link href="/test">{printer.model}</Link>
-                  </h2>
-                  <FontAwesomeIcon
-                    icon={faXmark}
-                    className="hover:bg-gray-900 rounded-md text-5xl px-3 py-2 cursor-pointer"
-                    onClick={() => {
-                      setIsVisible(!isVisible);
-                    }}
-                  />
-                </div>
-                <p className="w-[50%] ml-10 text-xl py-10 text-left">
-                  {printer.comment}
-                </p>
-              </>
-            </div>
-          </Modal>
+          <PrinterModal
+            isVisible={isVisible}
+            setIsVisible={setIsVisible}
+            printer={printer}
+          />
           <button className=" font-bold underline text-accent-underline">
             <a href={route("printer.edit", printer.id)}>редактировать</a>
           </button>

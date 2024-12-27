@@ -62,7 +62,7 @@ export default function DeleteUserForm({
       <DangerButton onClick={confirmUserDeletion}>Удалить Аккаунт</DangerButton>
 
       <Modal show={confirmingUserDeletion} onClose={closeModal}>
-        <form onSubmit={deleteUser} className="p-6 bg-[#252525]">
+        <form onSubmit={deleteUser} className="p-6 bg-bg-main">
           <h2 className="text-lg font-medium text-gray-100">Вы уверены?</h2>
 
           <p className="mt-1 text-sm text-gray-400">{message}</p>

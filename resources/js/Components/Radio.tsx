@@ -9,7 +9,7 @@ export default function Radio({
       {...props}
       type="radio"
       className={
-        "rounded-full text-indigo-600 shadow-sm border-gray-700 bg-gray-900 focus:ring-indigo-600 focus:ring-offset-gray-800 " +
+        "rounded-full text-accent-main shadow-sm border-gray-700 bg-gray-900 focus:ring-accent-main focus:ring-offset-gray-800 " +
         className
       }
     />

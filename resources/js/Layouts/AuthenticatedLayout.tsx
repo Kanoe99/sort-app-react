@@ -5,6 +5,8 @@ import ResponsiveNavLink from "@/Components/ResponsiveNavLink";
 import { Link, usePage } from "@inertiajs/react";
 import { PropsWithChildren, ReactNode, useState } from "react";
 import { can, hasRole } from "@/helpers";
+import { faPlus } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 export default function Authenticated({
   header,
@@ -19,9 +21,9 @@ export default function Authenticated({
   return (
     <div className="min-h-screen bg-black">
       <nav className="border-b border-gray-700 bg-black">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <div className="mx-auto max-w-[90vw]">
           <div className="flex h-16 justify-between">
-            <div className="flex items-center">
+            <div className="flex items-center pl-36 w-[calc(60vw_-_0.25rem)]">
               <div className="flex shrink-0 items-center select-none">
                 <Link href="/">
                   <ApplicationLogo className="block h-9 w-auto fill-current text-gray-200" />
@@ -43,8 +45,16 @@ export default function Authenticated({
                 )}
               </div>
             </div>
-
-            <div className="hidden sm:ms-6 sm:flex sm:items-center select-none">
+            <div className="hidden sm:ms-6 sm:flex sm:items-center select-none gap-5 w-1/3">
+              <span className="inline-flex rounded-md">
+                <button
+                  type="button"
+                  className="inline-flex gap-3 outline outline-1 outline-neutral-light items-center rounded-md border border-transparent px-3 py-2 text- font-medium leading-4 transition duration-150 ease-in-out   bg-black text-gray-400 hover:text-gray-300"
+                >
+                  <h2>Добавить принтер</h2>
+                  <FontAwesomeIcon className="text-lg" icon={faPlus} />
+                </button>
+              </span>
               <div className="relative ms-3">
                 <Dropdown>
                   <Dropdown.Trigger>

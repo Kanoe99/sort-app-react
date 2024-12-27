@@ -31,7 +31,15 @@ export default {
                     bright: '#9CA3AF',
                     transparent:{
                         button: 'rgba(255, 255, 255, 0.05)',
+                        sheet: 'rgba(0,0,0, .75)',
                     }
+                },
+                bg:{
+                    main: '#252525',
+                    modal: '#353535',
+                },
+                button: {
+                    main: '#e2e2e2',
                 }
             },
             fontSize: {

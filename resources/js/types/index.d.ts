@@ -53,7 +53,7 @@ export type Printer = {
   counter: string;
   counterDate: string;
   fixDate: string;
-  tags: string[];
+  tags: Tag[];
 };
 
 export type PageProps<

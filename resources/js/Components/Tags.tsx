@@ -90,7 +90,7 @@ const Tags = ({ tags }: { tags: Tag[] }) => {
 
   return (
     <div
-      className="py-4 bg-black flex gap-2 w-full overflow-hidden relative"
+      className="py-4 bg-black rounded-md flex gap-2 w-full overflow-hidden relative"
       id="wrapper"
       ref={wrapperRef}
     >

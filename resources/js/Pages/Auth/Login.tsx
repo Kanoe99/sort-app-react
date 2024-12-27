@@ -54,7 +54,7 @@ export default function Login({
           <InputError message={errors.email} className="mt-2" />
         </div>
 
-        <div className="mt-4">
+        <div className="mt-4 ">
           <InputLabel htmlFor="password" value="Пароль" />
 
           <TextInput
