@@ -13,7 +13,7 @@ export default function Guest({ children }: PropsWithChildren) {
         <h2 className="text-white text-2xl font-bold">Принтеры - Вход</h2>
       </Link>
 
-      <div className="mt-6 w-full overflow-hidden px-6 py-4 shadow-md sm:max-w-md sm:rounded-lg bg-white/5">
+      <div className="mt-6 w-full overflow-hidden px-6 py-4 shadow-md sm:max-w-md sm:rounded-lg bg-neutral-transparent-button">
         {children}
       </div>
     </div>

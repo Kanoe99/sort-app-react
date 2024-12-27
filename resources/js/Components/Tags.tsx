@@ -102,7 +102,7 @@ const Tags = ({ tags }: { tags: Tag[] }) => {
         {tags.map((tag) => (
           <a
             key={tag.id}
-            className="block select-none px-2 cursor-pointer text-white bg-[#303030] hover:bg-[#454545] rounded-md h-fit text-nowrap font-semibold transition-colors duration-300"
+            className="block select-none px-2 cursor-pointer text-white bg-neutral-muted hover:bg-neutral-soft rounded-md h-fit text-nowrap font-semibold transition-colors duration-300"
           >
             {tag.name}
           </a>

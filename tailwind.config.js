@@ -1,6 +1,5 @@
 import defaultTheme from 'tailwindcss/defaultTheme';
 import forms from '@tailwindcss/forms';
-import plugin from 'tailwindcss/plugin';
 
 /** @type {import('tailwindcss').Config} */
 export default {
@@ -15,20 +14,30 @@ export default {
         extend: {
             fontFamily: {
                 sans: ['Figtree', ...defaultTheme.fontFamily.sans],
+                "hanken-grotesk": ["Hanken Grotesk", "sans-serif"],
             },
             colors: {
-                "black": "#181818"
-            },
-            fontFamily: {
-                "hanken-grotesk": ["Hanken Grotesk", "sans-serif"]
+                black: "#181818",
+                accent: {
+                    main: '#3b82f6',
+                    light: '#bfdbfe',
+                    dark: '#2563eb',
+                    underline: '#d97706',
+                },
+                neutral: {
+                    muted: '#303030',
+                    soft: '#454545',
+                    light: '#6b7280',
+                    bright: '#9CA3AF',
+                    transparent:{
+                        button: 'rgba(255, 255, 255, 0.05)',
+                    }
+                }
             },
             fontSize: {
-                "2xs": ".625rem" // 10px
+                "2xs": ".625rem", // 10px
             },
         },
     },
-    plugins: [
-    ],
-
     plugins: [forms],
 };

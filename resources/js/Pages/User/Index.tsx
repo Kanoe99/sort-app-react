@@ -52,7 +52,7 @@ export default function Index({ auth, users }: PageProps<{ users: User[] }>) {
                 <td className="px-6 py-4 text-[#bebebe]">
                   <Link
                     href={route("user.edit", user.id)}
-                    className="text-blue-500"
+                    className="text-accent-main"
                   >
                     Редактировать
                   </Link>

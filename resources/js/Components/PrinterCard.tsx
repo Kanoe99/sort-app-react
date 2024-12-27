@@ -15,8 +15,8 @@ const PrinterCard = ({ printer }: { printer: Printer }) => {
       style={{ outlineWidth: "1px" }}
     >
       <div>
-        <div className="bg-black px-4 outline outline-1 outline-[#454545] rounded-md w-full flex justify-between">
-          <div className="flex-1 border-r border-[#454545] h-full py-2">
+        <div className="bg-black px-4 outline outline-1 outline-neutral-soft rounded-md w-full flex justify-between">
+          <div className="flex-1 border-r border-neutral-soft h-full py-2">
             {printer.model}
           </div>
           <div className="pl-4 py-2">{printer.number}</div>
@@ -24,9 +24,9 @@ const PrinterCard = ({ printer }: { printer: Printer }) => {
         <div className="text-sm font-bold mb-2 mt-1 px-4">{printer.type}</div>
       </div>
       <div>
-        <div className="bg-black px-4 py-2 rounded-md flex justify-between outline outline-1 outline-[#303030] ">
-          <div className="font-black text-blue-500">{printer.counter}</div>
-          <div className="text-blue-200">{printer.counterDate}</div>
+        <div className="bg-black px-4 py-2 rounded-md flex justify-between outline outline-1 outline-neutral-muted ">
+          <div className="font-black text-accent-main">{printer.counter}</div>
+          <div className="text-accent-light">{printer.counterDate}</div>
         </div>
         <div className="px-4 flex justify-between text-sm mb-4">
           <h3>Счётчик страниц</h3>
@@ -34,17 +34,17 @@ const PrinterCard = ({ printer }: { printer: Printer }) => {
         </div>
         <div className="px-4">
           Дата последнего ремонта:{" "}
-          <span className="text-blue-500">{printer.fixDate}</span>
+          <span className="text-accent-main">{printer.fixDate}</span>
         </div>
       </div>
       <div className="flex justify-between mt-3">
-        <span className="font-bold bg-[#181818] px-4 rounded-md inline-block py-1 w-fit outline-1 outline outline-[#303030]">
+        <span className="font-bold bg-black px-4 rounded-md inline-block py-1 w-fit outline-1 outline outline-neutral-muted">
           {printer.status}
         </span>
         <div className="flex gap-2">
           <button
             onClick={() => setIsVisible(!isVisible)}
-            className="font-bold cursor-pointer px-2 rounded-md inline-block py-1 w-fit text-sm text-gray-400 hover:text-white hover:bg-black transition duration-300"
+            className="font-bold cursor-pointer px-2 rounded-md inline-block py-1 w-fit text-sm text-neutral-bright hover:text-white hover:bg-black transition duration-300"
           >
             смотреть
           </button>
@@ -53,7 +53,7 @@ const PrinterCard = ({ printer }: { printer: Printer }) => {
             maxWidth="2xl"
             onClose={() => setIsVisible(!isVisible)}
           >
-            <div className="text-white bg-black/0">
+            <div className="text-white bg-[#252525]">
               <>
                 <div className="flex w-full justify-between">
                   <h2 className="text-3xl p-10 py-5 rounded-br-3xl bg-black/0">
@@ -67,13 +67,13 @@ const PrinterCard = ({ printer }: { printer: Printer }) => {
                     }}
                   />
                 </div>
-                <p className="w-[50%] ml-10 text-xl my-10 text-left">
+                <p className="w-[50%] ml-10 text-xl py-10 text-left">
                   {printer.comment}
                 </p>
               </>
             </div>
           </Modal>
-          <button className=" font-bold underline text-yellow-600">
+          <button className=" font-bold underline text-accent-underline">
             <a href={route("printer.edit", printer.id)}>редактировать</a>
           </button>
         </div>

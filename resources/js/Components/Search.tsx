@@ -6,9 +6,9 @@ const Search = () => {
     <div className="relative">
       <input
         type="text"
-        className="rounded-md w-full text-3xl h-16 bg-black text-[#afafaf] pr-16"
+        className="rounded-md border border-1 border-neutral-light w-full text-3xl h-16 bg-black text-[#afafaf] pr-16"
       />
-      <div className=" border-0 border-gray-500 w-16 h-16 absolute top-0 right-0 rounded-r-md grid place-items-center cursor-pointer text-gray-500 hover:text-blue-500">
+      <div className="w-16 h-16 absolute top-0 right-0 rounded-r-md grid place-items-center cursor-pointer text-neutral-light hover:text-accent-main">
         <FontAwesomeIcon
           icon={faMagnifyingGlass}
           className=" transition duration-100 text-4xl"
