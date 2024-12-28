@@ -1,5 +1,8 @@
--   Create button design main page;
 -   Allow only admin to do crud operations for printers;
 -   Delete feature after implementing printer routes
--   Remove english names etc.
 -   Possibly allow for choosing how many items per page are displayed (PrintersMain.tsx itemsPerPage);
+-   Make version for small screens
+-   Allow for adding tags/editing comments in modal
+-   Maybe add up button in the header with arrow and same styles
+-   Make path to the logo absolute
+-   change empty guarded in tag.php to fillable array of value

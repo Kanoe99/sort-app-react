@@ -20,7 +20,7 @@ export default function Authenticated({
 
   return (
     <div className="min-h-screen bg-black">
-      <nav className="border-b border-gray-700 bg-black">
+      <nav className="border-b border-gray-700 bg-black sticky top-0 z-20">
         <div className="mx-auto max-w-[90vw]">
           <div className="flex h-16 justify-between">
             <div className="flex items-center pl-36 w-[calc(60vw_-_0.25rem)]">
@@ -51,8 +51,8 @@ export default function Authenticated({
                   type="button"
                   className="inline-flex gap-3 outline outline-1 outline-neutral-light items-center rounded-md border border-transparent px-3 py-2 text- font-medium leading-4 transition duration-150 ease-in-out   bg-black text-gray-400 hover:text-gray-300"
                 >
-                  <h2>Добавить принтер</h2>
-                  <FontAwesomeIcon className="text-lg" icon={faPlus} />
+                  <Link href={route("printer.create")}>Добавить принтер</Link>
+                  <FontAwesomeIcon className="text-xs" icon={faPlus} />
                 </button>
               </span>
               <div className="relative ms-3">

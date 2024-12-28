@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Storage;
 use Carbon\Carbon;
 use Inertia\Inertia;
 use \App\Http\Resources\PrinterResource;
+use App\Services\TagService;
 
 class PrinterController extends Controller
 {
@@ -65,7 +66,7 @@ class PrinterController extends Controller
 
     public function create()
     {
-        return view('printers.create');
+        return Inertia::render('Printer/Create');
     }
 
     public function show(Printer $printer)
@@ -79,8 +80,8 @@ class PrinterController extends Controller
     {
         $attributes = $request->validate([
             'type' => ['required', 'string', 'max:255'],
-            'counter' => ['required', 'string', 'max:255'],
             'model' => ['required', 'string', 'max:255'],
+            'counter' => ['required', 'string', 'max:255'],
             'number' => ['required', 'unique:printers,number', 'numeric', 'min:1', 'max:16777215'],
             'location' => ['required', 'string', 'max:255'],
             'status' => ['required', 'string', 'max:255'],
@@ -99,6 +100,8 @@ class PrinterController extends Controller
             'fixDate.required' => 'Укажите дату последнего ремонта.',
             'logo.*.mimes' => 'Только PNG, JPG или JPEG!',
         ]);
+
+        // dd($attributes);
 
         $attributes['attention'] = $request->has('attention') ? 1 : 0;
 
@@ -146,7 +149,13 @@ class PrinterController extends Controller
             $attributes['logo'] = json_encode($logoPaths);
         }
 
+
+
         $printer = Auth::user()->printers()->create(Arr::except($attributes, 'tags'));
+        $tagService = new TagService();
+        $tagService->generateTagsForPrinter($printer);
+
+        // dd($tagService);
 
         if ($attributes['tags'] ?? false) {
             // Use an array to store unique tags

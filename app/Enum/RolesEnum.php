@@ -11,15 +11,15 @@ enum RolesEnum: string
     public static function labels(): array
     {
         return [
-            self::Admin->value => 'Admin',
-            self::Commenter->value => 'Commenter',
-            self::User->value => 'User',
+            self::Admin->value => 'Администратор',
+            self::Commenter->value => 'Комментатор',
+            self::User->value => 'Пользователь',
         ];
     }
 
     public function label()
     {
-        return match($this) {
+        return match ($this) {
             self::Admin => 'Admin',
             self::User => 'User',
             self::Commenter => 'Commenter',

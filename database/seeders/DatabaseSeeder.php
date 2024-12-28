@@ -68,9 +68,7 @@ class DatabaseSeeder extends Seeder
 
         Feature::factory(100)->create();
 
-        $tags = Tag::factory(20)->create();
-
-        Printer::factory(1000)->hasAttached($tags)->create(new Sequence([
+        Printer::factory(1000)->create(new Sequence([
             'attention' => false,
         ], [
             'attention' => true,

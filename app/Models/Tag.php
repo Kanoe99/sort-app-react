@@ -10,6 +10,9 @@ class Tag extends Model
 {
     use HasFactory;
 
+
+    protected $guarded = [];
+
     public function printers(): BelongsToMany
     {
         return $this->belongsToMany(Printer::class);

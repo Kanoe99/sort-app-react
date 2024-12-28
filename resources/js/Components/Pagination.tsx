@@ -16,7 +16,7 @@ const Button = ({
   return (
     <button
       onClick={onClick}
-      className="px-5 py-3 text-white rounded-md select-none grid place-items-center text-4xl hover:bg-neutral-transparent-button"
+      className="px-5 py-3 text-white rounded-md select-none grid place-items-center text-xl hover:bg-neutral-transparent-button"
     >
       <FontAwesomeIcon icon={faAngleLeft} className={arrowStyle} />
     </button>
@@ -84,7 +84,7 @@ const Pagination = ({ setPagination, pagination }: PaginationProps) => {
   const pages = generatePages();
 
   return (
-    <div className="flex justify-between w-full relative py-2 px-2">
+    <div className="flex justify-between w-full relative py-1 px-1">
       <Button onClick={handlePrevious} />
 
       <div className="text-white flex items-center justify-center select-none w-full space-x-2">
@@ -93,7 +93,7 @@ const Pagination = ({ setPagination, pagination }: PaginationProps) => {
             <span
               key={index}
               onClick={() => handlePageChange(page)}
-              className={`text-2xl w-14 h-14 rounded-md cursor-pointer grid place-items-center hover:bg-neutral-transparent-button ${
+              className={`text-md w-10 h-10 rounded-md cursor-pointer grid place-items-center hover:bg-neutral-transparent-button ${
                 page === pagination.current_page
                   ? "!bg-neutral-soft text-white"
                   : ""

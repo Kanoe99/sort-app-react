@@ -65,16 +65,18 @@ const PrinterModal = ({
           </span>
           <span>{printer.comment}</span>
         </div>
-        <div className="mx-5 my-3 bg-black rounded-md flex gap-2 py-2 px-2 flex-wrap">
-          {printer.tags.map((tag) => (
-            <div
-              key={printer.id}
-              className="px-2 rounded-md bg-neutral-muted cursor-pointer hover:bg-neutral-soft"
-            >
-              {tag.name}
-            </div>
-          ))}
-        </div>
+        {printer.tags.length !== 0 && (
+          <div className="mx-5 my-3 bg-black rounded-md flex gap-2 py-2 px-2 flex-wrap">
+            {printer.tags.map((tag) => (
+              <div
+                key={printer.id}
+                className="px-2 rounded-md bg-neutral-muted cursor-pointer hover:bg-neutral-soft"
+              >
+                {tag.name}
+              </div>
+            ))}
+          </div>
+        )}
       </>
     </Modal>
   );

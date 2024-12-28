@@ -4,12 +4,23 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
+// use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Printer extends Model
 {
     use HasFactory;
+
+    protected $fillable = [
+        'type',
+        'number',
+        'counter',
+        'model',
+        'status',
+        'location',
+        'counterDate'
+    ];
 
     public function tag(string $name): void
     {
@@ -21,6 +32,12 @@ class Printer extends Model
     public function tags(): BelongsToMany
     {
         return $this->belongsToMany(Tag::class);
+    }
+
+
+    public function user(): BelongsToMany
+    {
+        return $this->belongsToMany(User::class);
     }
 
 }

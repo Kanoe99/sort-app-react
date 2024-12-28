@@ -100,7 +100,7 @@ export default function Show({
             </div>
 
             <div className="flex items-center gap-4">
-              <PrimaryButton disabled={processing}>Save</PrimaryButton>
+              <PrimaryButton disabled={processing}>Сохранить</PrimaryButton>
             </div>
           </form>
         </div>
