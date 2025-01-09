@@ -8,7 +8,7 @@ import {
 
 export default forwardRef(function TextInput(
   {
-    type = "text",
+    type = "date",
     className = "",
     isFocused = false,
     ...props
@@ -28,14 +28,22 @@ export default forwardRef(function TextInput(
   }, [isFocused]);
 
   return (
-    <input
-      {...props}
-      type={type}
-      className={
-        "mt-1 block w-full py-3 rounded-xl border-border-input text-white bg-bg-input-black focus:border-accent-main focus:ring-accent-main " +
-        className
-      }
-      ref={localRef}
-    />
+    <>
+      <input
+        {...props}
+        type={type}
+        className={
+          "text-white rounded-xl mt-1 block w-full py-3 shadow-sm border-gray-700 bg-bg-input-black focus:border-accent-main focus:ring-accent-main " +
+          className
+        }
+        ref={localRef}
+      />
+      <style>{`
+        input[type="date"]::-webkit-calendar-picker-indicator {
+          filter: invert(50%) brightness(100%);
+          cursor: pointer;
+        }
+      `}</style>
+    </>
   );
 });

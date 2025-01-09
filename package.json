@@ -29,6 +29,7 @@
         "@fortawesome/free-solid-svg-icons": "^6.7.2",
         "@fortawesome/react-fontawesome": "^0.2.2",
         "@inertiajs/inertia-react": "^0.8.1",
-        "framer-motion": "^11.13.5"
+        "framer-motion": "^11.13.5",
+        "tailwindcss-animate": "^1.0.7"
     }
 }

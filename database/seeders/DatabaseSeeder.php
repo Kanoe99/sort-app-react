@@ -68,7 +68,7 @@ class DatabaseSeeder extends Seeder
 
         Feature::factory(100)->create();
 
-        Printer::factory(1000)->create(new Sequence([
+        Printer::factory(1000)->withTags()->create(new Sequence([
             'attention' => false,
         ], [
             'attention' => true,

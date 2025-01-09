@@ -16,8 +16,6 @@ const PrinterModal = ({
   setIsVisible,
   printer,
 }: PrinterModalProps) => {
-  console.log(printer.tags);
-
   return (
     <Modal
       show={isVisible}

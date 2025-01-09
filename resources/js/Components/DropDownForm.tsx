@@ -1,5 +1,4 @@
 import { Transition } from "@headlessui/react";
-import { InertiaLinkProps, Link } from "@inertiajs/react";
 import React, {
   createContext,
   Dispatch,
@@ -8,6 +7,7 @@ import React, {
   useContext,
   useState,
 } from "react";
+import { InertiaLinkProps, Link } from "@inertiajs/react";
 
 const DropDownContext = createContext<{
   open: boolean;
@@ -19,7 +19,7 @@ const DropDownContext = createContext<{
   toggleOpen: () => {},
 });
 
-const Dropdown = ({ children }: PropsWithChildren) => {
+const DropdownForm = ({ children }: PropsWithChildren) => {
   const [open, setOpen] = useState(false);
 
   const toggleOpen = () => {
@@ -34,7 +34,7 @@ const Dropdown = ({ children }: PropsWithChildren) => {
 };
 
 const Trigger = ({ children }: PropsWithChildren) => {
-  const { open, setOpen, toggleOpen } = useContext(DropDownContext);
+  const { open, toggleOpen } = useContext(DropDownContext);
 
   return (
     <>
@@ -46,10 +46,7 @@ const Trigger = ({ children }: PropsWithChildren) => {
       </div>
 
       {open && (
-        <div
-          className="fixed inset-0 z-40"
-          onClick={() => setOpen(false)}
-        ></div>
+        <div className="fixed inset-0 z-40" onClick={() => toggleOpen()}></div>
       )}
     </>
   );
@@ -58,7 +55,7 @@ const Trigger = ({ children }: PropsWithChildren) => {
 const Content = ({
   align = "right",
   width = "48",
-  contentClasses = "py-1 border-neutral-light border-1 border bod==",
+  contentClasses = "py-1 border-neutral-light border-1 border",
   children,
 }: PropsWithChildren<{
   align?: "left" | "right";
@@ -82,55 +79,50 @@ const Content = ({
   }
 
   return (
-    <>
-      <Transition
-        show={open}
-        enter="transition ease-out duration-200"
-        enterFrom="opacity-0 scale-95"
-        enterTo="opacity-100 scale-100"
-        leave="transition ease-in duration-75"
-        leaveFrom="opacity-100 scale-100"
-        leaveTo="opacity-0 scale-95"
+    <Transition
+      show={open}
+      enter="transition ease-out duration-200"
+      enterFrom="opacity-0 scale-95"
+      enterTo="opacity-100 scale-100"
+      leave="transition ease-in duration-75"
+      leaveFrom="opacity-100 scale-100"
+      leaveTo="opacity-0 scale-95"
+    >
+      <div
+        className={`absolute z-50 mt-2 min-w-full rounded-md shadow-lg ${alignmentClasses} ${widthClasses}`}
+        onClick={() => setOpen(false)}
       >
         <div
-          className={`absolute z-50 mt-2 rounded-md shadow-lg ${alignmentClasses} ${widthClasses}`}
-          onClick={() => setOpen(false)}
+          className={`rounded-md ring-1 ring-black ring-opacity-5 ${contentClasses}`}
         >
-          <div
-            className={
-              `rounded-md ring-1 ring-black ring-opacity-5 ` + contentClasses
-            }
-          >
-            {children}
-          </div>
+          {children}
         </div>
-      </Transition>
-    </>
+      </div>
+    </Transition>
   );
 };
 
-const DropdownLink = ({
-  prefetch,
+const Option = ({
   className = "",
   children,
-  ...props
-}: InertiaLinkProps) => {
+}: {
+  className?: string;
+  children: React.ReactNode;
+}) => {
   return (
-    <Link
-      prefetch
-      {...props}
+    <div
       className={
-        "block w-full px-4 py-2 text-start text-sm  leading-5 bg-[#181818] transition duration-150 ease-in-out focus:outline-none text-gray-300 hover:bg-[#000] focus:bg-black backdrop-blur-sm " +
+        "block w-full px-4 py-2 text-start text-sm leading-5 bg-[#181818] transition duration-150 ease-in-out focus:outline-none text-gray-300 hover:bg-[#000] focus:bg-black backdrop-blur-sm " +
         className
       }
     >
       {children}
-    </Link>
+    </div>
   );
 };
 
-Dropdown.Trigger = Trigger;
-Dropdown.Content = Content;
-Dropdown.Link = DropdownLink;
+DropdownForm.Trigger = Trigger;
+DropdownForm.Content = Content;
+DropdownForm.Option = Option;
 
-export default Dropdown;
+export default DropdownForm;

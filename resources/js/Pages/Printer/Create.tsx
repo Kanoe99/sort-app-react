@@ -8,18 +8,31 @@ import InputError from "@/Components/InputError";
 import { FormEventHandler } from "react";
 // import TextAreaInput from "@/Components/TextAreaInput";
 import PrimaryButton from "@/Components/PrimaryButton";
+import DateInput from "@/Components/DateInput";
+import IPBool from "@/Components/IPBool";
 
 export default function Show() {
-  const { data, setData, processing, errors, post } = useForm({
+  const { data, setData, processing, errors, post } = useForm<{
+    type: string;
+    model: string;
+    counter: string;
+    number: undefined | number;
+    location: string;
+    status: string;
+    fixDate: string;
+    IPBool: string;
+  }>({
     type: "",
     model: "",
     counter: "",
     number: undefined,
     location: "",
     status: "",
+    fixDate: "",
+    IPBool: "false",
   });
 
-  const createFeature: FormEventHandler = (ev) => {
+  const createPrinter: FormEventHandler = (ev) => {
     ev.preventDefault();
 
     post(route("printer.store"), {
@@ -41,7 +54,7 @@ export default function Show() {
         <div className="mx-auto mb-4 overflow-hidden shadow-sm sm:rounded-lg bg-bg-main w-[40%]">
           <div className="p-6 text-gray-100 flex gap-8">
             <form
-              onSubmit={createFeature}
+              onSubmit={createPrinter}
               className="w-full flex flex-col gap-4"
             >
               <div>
@@ -50,7 +63,7 @@ export default function Show() {
                 <TextInput
                   id="type"
                   placeholder="Принтер"
-                  className="mt-1 block w-full py-3 rounded-xl"
+                  className=""
                   value={data.type}
                   onChange={(e) => setData("type", e.target.value)}
                   required
@@ -67,7 +80,7 @@ export default function Show() {
                 <TextInput
                   id="model"
                   placeholder="Samsung 400"
-                  className="mt-1 block w-full py-3 rounded-xl"
+                  className=""
                   value={data.model}
                   onChange={(e) => setData("model", e.target.value)}
                   required
@@ -83,7 +96,7 @@ export default function Show() {
                 <TextInput
                   id="counter"
                   placeholder="1234"
-                  className="mt-1 block w-full py-3 rounded-xl"
+                  className=""
                   value={data.counter}
                   onChange={(e) => setData("counter", e.target.value)}
                   required
@@ -100,10 +113,15 @@ export default function Show() {
                   type="number"
                   id="number"
                   placeholder="5873"
-                  className="mt-1 block w-full py-3 rounded-xl"
+                  className=""
                   pattern="\d*"
                   value={data.number}
-                  onChange={(e) => setData("number", e.target.value)}
+                  onChange={(e) => {
+                    {
+                      const value = parseInt(e.target.value);
+                      setData("number", value);
+                    }
+                  }}
                   required
                   isFocused
                   autoComplete="number"
@@ -117,7 +135,7 @@ export default function Show() {
                 <TextInput
                   id="location"
                   placeholder="318"
-                  className="mt-1 block w-full py-3 rounded-xl"
+                  className=""
                   value={data.location}
                   onChange={(e) => setData("location", e.target.value)}
                   required
@@ -133,12 +151,45 @@ export default function Show() {
                 <TextInput
                   id="status"
                   placeholder="В эксплуатации"
-                  className="mt-1 block w-full py-3 rounded-xl"
+                  className=""
                   value={data.status}
                   onChange={(e) => setData("status", e.target.value)}
                   required
                   isFocused
                   autoComplete="status"
+                />
+
+                <InputError className="mt-2" message={errors.status} />
+              </div>
+
+              <div>
+                <InputLabel htmlFor="fixDate" value="Дата последнего ремонта" />
+
+                <DateInput
+                  id=""
+                  placeholder="В эксплуатации"
+                  className=""
+                  value={data.fixDate}
+                  onChange={(e) => setData("fixDate", e.target.value)}
+                  required
+                  isFocused
+                  autoComplete="fixDate"
+                />
+
+                <InputError className="mt-2" message={errors.status} />
+              </div>
+
+              <div>
+                <InputLabel htmlFor="IPBool" value="Есть IP?" />
+
+                <IPBool
+                  id="IPBool"
+                  className="mt-1 block w-full py-3 rounded-xl"
+                  value={data.IPBool}
+                  onChange={(e) => setData("IPBool", e.target.value)}
+                  required
+                  isFocused
+                  autoComplete="IPBool"
                 />
 
                 <InputError className="mt-2" message={errors.status} />

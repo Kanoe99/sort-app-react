@@ -19,7 +19,9 @@ export default function Authenticated({
     useState(false);
 
   return (
-    <div className="min-h-screen bg-black">
+    <div className="min-h-screen bg-black flex flex-col">
+      {" "}
+      {/* Added flex flex-col here */}
       <nav className="border-b border-gray-700 bg-black sticky top-0 z-20">
         <div className="mx-auto max-w-[90vw]">
           <div className="flex h-16 justify-between">
@@ -49,7 +51,7 @@ export default function Authenticated({
               <span className="inline-flex rounded-md">
                 <button
                   type="button"
-                  className="inline-flex gap-3 outline outline-1 outline-neutral-light items-center rounded-md border border-transparent px-3 py-2 text- font-medium leading-4 transition duration-150 ease-in-out   bg-black text-gray-400 hover:text-gray-300"
+                  className="inline-flex gap-3 outline outline-1 outline-neutral-light items-center rounded-md border border-transparent px-3 py-2 text- font-medium leading-4 transition duration-150 ease-in-out bg-black text-gray-400 hover:text-gray-300"
                 >
                   <Link href={route("printer.create")}>Добавить принтер</Link>
                   <FontAwesomeIcon className="text-xs" icon={faPlus} />
@@ -135,61 +137,7 @@ export default function Authenticated({
             </div>
           </div>
         </div>
-
-        <div
-          className={
-            (showingNavigationDropdown ? "block" : "hidden") + " sm:hidden"
-          }
-        >
-          <div className="space-y-1 pb-3 pt-2">
-            <ResponsiveNavLink
-              href={route("main")}
-              active={route().current("main")}
-            >
-              Главная
-            </ResponsiveNavLink>
-            <ResponsiveNavLink
-              href={route("feature.index")}
-              active={route().current("feature.index")}
-            >
-              Features
-            </ResponsiveNavLink>
-            {can(user, "manage_users") && (
-              <ResponsiveNavLink
-                href={route("user.index")}
-                active={route().current("user.index")}
-              >
-                Users
-              </ResponsiveNavLink>
-            )}
-          </div>
-
-          <div className="border-t pb-1 pt-4 border-gray-600">
-            <div className="px-4">
-              <div className="text-base font-medium text-gray-200">
-                {user.name}
-              </div>
-              <div className="text-sm font-medium text-gray-500">
-                {user.email}
-              </div>
-            </div>
-
-            <div className="mt-3 space-y-1">
-              <ResponsiveNavLink prefetch href={route("profile.edit")}>
-                Профиль
-              </ResponsiveNavLink>
-              <ResponsiveNavLink
-                method="post"
-                href={route("logout")}
-                as="button"
-              >
-                Выйти
-              </ResponsiveNavLink>
-            </div>
-          </div>
-        </div>
       </nav>
-
       {header && (
         <header className="shadow bg-black">
           <div className="mx-auto max-w-7xl px-4 pt-6 pb-0 sm:px-6 lg:px-8">
@@ -197,8 +145,9 @@ export default function Authenticated({
           </div>
         </header>
       )}
-
-      <div className="py-10">
+      <div className="py-10 flex-grow">
+        {" "}
+        {/* Added flex-grow here */}
         <div className="mx-auto w-[90vw] ">
           {success && (
             <div className="bg-emerald-500 py-4 px-6 rounded mb-8">

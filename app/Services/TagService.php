@@ -11,13 +11,27 @@ class TagService
     {
         $tags = collect();
 
-        if ($printer->counter > 3000) {
-            $tags->push('Over 3000');
+        switch ($printer->counter) {
+
+            case $printer->counter > 0 && $printer->counter < 3000:
+                $tags->push('до 3000');
+                break;
+            case $printer->counter > 3000 && $printer->counter < 6000:
+                $tags->push('от 3000 до 6000');
+                break;
+            case $printer->counter > 6000 && $printer->counter < 9000:
+                $tags->push('от 6000 до 9000');
+                break;
+            case $printer->counter > 9000:
+                $tags->push('IT\'S OVER 9000!!!');
+                break;
+            default:
+                break;
         }
 
-        if ($printer->attention) {
-            $tags->push('Needs Attention');
-        }
+
+
+        $tags->push($printer->status, $printer->type);
 
         $uniqueTags = $tags->unique();
 

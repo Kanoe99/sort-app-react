@@ -5,6 +5,8 @@ import {
   useImperativeHandle,
   useRef,
 } from "react";
+import Dropdown from "./Dropdown";
+import DropdownForm from "./DropDownForm";
 
 export default forwardRef(function TextInput(
   {
@@ -28,14 +30,13 @@ export default forwardRef(function TextInput(
   }, [isFocused]);
 
   return (
-    <input
-      {...props}
-      type={type}
-      className={
-        "mt-1 block w-full py-3 rounded-xl border-border-input text-white bg-bg-input-black focus:border-accent-main focus:ring-accent-main " +
-        className
-      }
-      ref={localRef}
-    />
+    <Dropdown>
+      <Dropdown.Trigger>esr</Dropdown.Trigger>
+
+      <Dropdown.Content>
+        <Dropdown.DropdownLink>Тест</Dropdown.DropdownLink>
+        <Dropdown.DropdownLink>Lorem</Dropdown.DropdownLink>
+      </Dropdown.Content>
+    </Dropdown>
   );
 });

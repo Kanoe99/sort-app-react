@@ -6,3 +6,4 @@
 -   Maybe add up button in the header with arrow and same styles
 -   Make path to the logo absolute
 -   change empty guarded in tag.php to fillable array of value
+-   make pagination display 2 previous and next pages

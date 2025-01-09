@@ -3,7 +3,8 @@ import forms from '@tailwindcss/forms';
 
 /** @type {import('tailwindcss').Config} */
 export default {
-  content: [
+    darkMode: ['class'],
+    content: [
     './vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php',
     './storage/framework/views/*.php',
     './resources/views/**/*.blade.php',
@@ -11,41 +12,58 @@ export default {
   ],
 
   theme: {
-    extend: {
-      fontFamily: {
-        sans: ['Figtree', ...defaultTheme.fontFamily.sans],
-        "hanken-grotesk": ["Hanken Grotesk", "sans-serif"],
-      },
-      colors: {
-        black: "#181818",
-        accent: {
-          main: '#3b82f6',
-          light: '#bfdbfe',
-          dark: '#2563eb',
-          underline: '#d97706',
-        },
-        neutral: {
-          muted: '#303030',
-          soft: '#454545',
-          light: '#6b7280',
-          bright: '#9CA3AF',
-          transparent: {
-            button: 'rgba(255, 255, 255, 0.05)',
-            sheet: 'rgba(0,0,0, .75)',
-          }
-        },
-        bg: {
-          main: '#252525',
-          modal: '#353535',
-        },
-        button: {
-          main: '#e2e2e2',
-        }
-      },
-      fontSize: {
-        "2xs": ".625rem", // 10px
-      },
-    },
+  	extend: {
+  		fontFamily: {
+  			sans: [
+  				'Figtree',
+                    ...defaultTheme.fontFamily.sans
+                ],
+  			'hanken-grotesk': [
+  				'Hanken Grotesk',
+  				'sans-serif'
+  			]
+  		},
+  		colors: {
+  			black: '#181818',
+  			accent: {
+  				main: '#3b82f6',
+  				light: '#bfdbfe',
+  				dark: '#2563eb',
+  				underline: '#d97706'
+  			},
+  			neutral: {
+  				muted: '#303030',
+  				soft: '#454545',
+  				light: '#6b7280',
+  				bright: '#9CA3AF',
+  				transparent: {
+  					button: 'rgba(255, 255, 255, 0.05)',
+  					sheet: 'rgba(0,0,0, .75)'
+  				}
+  			},
+  			bg: {
+  				main: '#252525',
+  				modal: '#353535',
+  				input: {
+  					black: '#1c1c1c'
+  				}
+  			},
+			border: {
+				input: "#374151"
+			},
+  			button: {
+  				main: '#e2e2e2'
+  			}
+  		},
+  		fontSize: {
+  			'2xs': '.625rem'
+  		},
+  		borderRadius: {
+  			lg: 'var(--radius)',
+  			md: 'calc(var(--radius) - 2px)',
+  			sm: 'calc(var(--radius) - 4px)'
+  		}
+  	}
   },
 
   plugins: [
@@ -65,6 +83,7 @@ export default {
           'appearance': 'textfield',       // For other browsers
         },
       });
-    }
-  ],
+    },
+      require("tailwindcss-animate")
+],
 };

@@ -15,23 +15,13 @@ export default function Index({ auth, printers, aprinters, tags }: PageProps) {
     <AuthenticatedLayout header={""}>
       <Head title="Штуки " />
 
-      {/* {can(auth.user, "manage_features") && (
-        <div className="mb-8">
-          <Link
-            href={route("feature.create")}
-            className="inline-flex items-center rounded-md border border-transparent px-4 py-2 text-xs font-semibold uppercase tracking-widest transition duration-150 ease-in-out focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 bg-gray-200 text-gray-800 hover:bg-white focus:bg-white focus:ring-offset-gray-800 active:bg-gray-300"
-          >
-            Create New Printer
-          </Link>
-        </div>
-      )} */}
-
       <div className="flex flex-col gap-3 w-full">
-        {/* First pair */}
         <div className="flex gap-3">
           <div className="w-[calc(60vw_-_0.25rem)]">
             {tags.length === 0 ? (
-              <Placeholder>Тут нет тегов ಠ_ಠ</Placeholder>
+              <Placeholder additionalClasses="flex-1">
+                Тут нет тегов ಠ_ಠ
+              </Placeholder>
             ) : (
               <Tags tags={tags} />
             )}
@@ -41,15 +31,16 @@ export default function Index({ auth, printers, aprinters, tags }: PageProps) {
           </div>
         </div>
 
-        {/* Second pair */}
-        <div className="flex gap-3">
-          <div className="w-full">
-            {printers.data.length === 0 ? (
-              <Placeholder>Тут нет принтеров (╯°□°）╯︵ ┻━┻</Placeholder>
-            ) : (
-              <PrintersMain />
-            )}
-          </div>
+        <div className="w-full h-full flex flex-col">
+          {printers.data.length === 0 ? (
+            <div className="flex-1">
+              <Placeholder additionalClasses="flex-1 h-[calc(100vh_-_16rem)]">
+                Тут нет принтеров (╯°□°）╯︵ ┻━┻
+              </Placeholder>
+            </div>
+          ) : (
+            <PrintersMain />
+          )}
         </div>
       </div>
     </AuthenticatedLayout>

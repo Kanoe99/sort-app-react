@@ -3,6 +3,7 @@
 namespace Database\Factories;
 
 use App\Models\Printer;
+use App\Services\TagService;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -27,22 +28,31 @@ class PrinterFactory extends Factory
 
         $statuses = ['подготовка к списанию', 'в эксплуатации', 'требуется ремонт', 'резерв'];
 
-        // Ensure locale is set correctly
-        setlocale(LC_TIME, 'ru_RU.UTF-8');
-
         return [
-            'type' => "принтер",
-            // Convert to Carbon instances before formatting
-            'counterDate' => \Carbon\Carbon::parse(fake()->dateTime())->format('d-m-Y H:i:s'), // Day first, then month and year
-            'fixDate' => \Carbon\Carbon::parse(fake()->date())->format('d-m-Y'), // Day first
-            'model' => strval($model),
-            'number' => rand(1000, 9999),
-            'location' => rand(100, 599),
-            'IP' => fake()->unique()->ipv4(),
+            'type' => 'принтер',
+            'counterDate' => now()->format('Y-m-d H:i:s'),
+            'fixDate' => now()->subDays(rand(1, 365))->format('Y-m-d'),
+            'model' => $model,
+            'number' => fake()->unique()->numberBetween(1000, 9999),
+            'location' => 'Location ' . rand(1, 100),
+            'IP' => $this->faker->unique()->ipv4(),
             'status' => $statuses[array_rand($statuses)],
-            'comment' => fake()->text(200),
-            'attention' => false,
-            'counter' => fake()->numberBetween(100, 9999),
+            'comment' => $this->faker->text(200),
+            'attention' => $this->faker->boolean,
+            'counter' => $this->faker->numberBetween(100, 9999),
         ];
+    }
+
+    /**
+     * Generate tags for the printer after creation.
+     *
+     * @return \Illuminate\Database\Eloquent\Factories\Factory
+     */
+    public function withTags(): Factory
+    {
+        return $this->afterCreating(function (Printer $printer) {
+            $tagService = new TagService();
+            $tagService->generateTagsForPrinter($printer);
+        });
     }
 }

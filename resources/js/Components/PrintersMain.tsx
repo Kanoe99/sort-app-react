@@ -37,7 +37,7 @@ const PrintersMain = () => {
   return (
     <div className="flex flex-col relative">
       <div
-        className="grid grid-cols-3 gap-3 py-2 items-start min-h-screen"
+        className="grid grid-cols-3 grid-rows-4 gap-3 py-2 items-start min-h-screen"
         style={{
           msOverflowStyle: "none", // IE and Edge
           scrollbarWidth: "none", // Firefox

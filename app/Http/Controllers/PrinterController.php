@@ -101,14 +101,12 @@ class PrinterController extends Controller
             'logo.*.mimes' => 'Только PNG, JPG или JPEG!',
         ]);
 
-        // dd($attributes);
-
         $attributes['attention'] = $request->has('attention') ? 1 : 0;
 
         if ($request->filled('fixDate')) {
             $attributes['fixDate'] = Carbon::createFromFormat('Y-m-d', $request->input('fixDate'));
         }
-        $attributes['counterDate'] = Carbon::now()->format('Y-m-d');
+        $attributes['counterDate'] = Carbon::now()->format('Y-m-d H:i:s');
         if ($request->ip_exists === 'yes') {
             $ip = $request->input('IP');
 
@@ -157,17 +155,17 @@ class PrinterController extends Controller
 
         // dd($tagService);
 
-        if ($attributes['tags'] ?? false) {
-            // Use an array to store unique tags
-            $tags = array_unique(array_map('trim', explode(',', $attributes['tags'])));
+        // if ($attributes['tags'] ?? false) {
+        //     // Use an array to store unique tags
+        //     $tags = array_unique(array_map('trim', explode(',', $attributes['tags'])));
 
-            foreach ($tags as $tag) {
-                // Check if the tag already exists before tagging
-                if (!empty($tag) && !$printer->tags()->where('name', $tag)->exists()) {
-                    $printer->tag($tag);
-                }
-            }
-        }
+        //     foreach ($tags as $tag) {
+        //         // Check if the tag already exists before tagging
+        //         if (!empty($tag) && !$printer->tags()->where('name', $tag)->exists()) {
+        //             $printer->tag($tag);
+        //         }
+        //     }
+        // }
 
         return redirect('/');
     }

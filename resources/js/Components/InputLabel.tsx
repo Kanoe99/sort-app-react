@@ -13,7 +13,7 @@ export default function InputLabel({
         `text-sm font-medium flex items-center gap-2 text-gray-300 ` + className
       }
     >
-      <div className="w-2 h-2 bg-white rounded-sm"></div>
+      <div className="w-2 h-2 bg-white rounded-[2px]"></div>
       {value ? value : children}
     </label>
   );
