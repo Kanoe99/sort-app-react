@@ -27,7 +27,10 @@ return new class extends Migration {
             $table->string('model');
 
             // Number became unique
-            $table->unsignedMediumInteger('number')->unique();
+            $table->boolean('hasNumber');
+            $table->unsignedMediumInteger('number')->nullable();
+            $table->unique('number')->whereNotNull('number');
+
 
             $table->string('location');
 

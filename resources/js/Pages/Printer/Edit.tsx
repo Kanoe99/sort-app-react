@@ -14,9 +14,9 @@ import { Printer } from "@/types";
 import DangerButton from "@/Components/DangerButton";
 import Modal from "@/Components/Modal";
 import SecondaryButton from "@/Components/SecondaryButton";
-import IsNetworkCapableDropdown from "@/Components/isNetworkCapableDropdown";
+import IsNetworkCapableDropdown from "@/Components/IsNetworkCapableDropdown";
 import DepartmentDropdown from "@/Components/DepartmentDropdown";
-import IsLocalDropdown from "@/Components/isLocalDropdown";
+import IsLocalDropdown from "@/Components/IsLocalDropdown";
 
 export default function Edit({
   printer,

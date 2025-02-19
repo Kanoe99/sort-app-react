@@ -44,6 +44,8 @@ class PrinterFactory extends Factory
         $isLocal = $this->faker->boolean();
         $PC_name = $isLocal ? 'p66-ws' . strval($this->faker->numberBetween(123456, 934535)) : null;
 
+        $hasNumber = $this->faker->boolean();
+
         return [
             'type' => $types[array_rand($types)],
             'department' => $department,
@@ -54,7 +56,8 @@ class PrinterFactory extends Factory
             'counterDate' => now()->format('Y-m-d H:i:s'),
             'fixDate' =>  $fixDate[array_rand($fixDate)],
             'model' => $model,
-            'number' => $this->faker->unique()->numberBetween(1000, 9999),
+            'hasNumber' => $hasNumber,
+            'number' => $hasNumber ? $this->faker->unique()->numberBetween(1000, 9999) : null,
             'location' => 'Location ' . rand(1, 100),
             'status' => $statuses[array_rand($statuses)],
             'comment' => $this->faker->text(200),

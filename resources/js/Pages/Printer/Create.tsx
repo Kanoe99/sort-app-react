@@ -11,9 +11,10 @@ import { useState } from "react";
 import IP from "@/Components/IP";
 import TextAreaInput from "@/Components/TextAreaInput";
 import DepartmentDropdown from "@/Components/DepartmentDropdown";
-import IsLocalDropdown from "@/Components/isLocalDropdown";
-import IsNetworkCapableDropdown from "@/Components/isNetworkCapableDropdown";
+import IsLocalDropdown from "@/Components/IsLocalDropdown";
+import IsNetworkCapableDropdown from "@/Components/IsNetworkCapableDropdown";
 import NumberInput from "@/Components/NumberInput";
+import HasNumberDropdown from "@/Components/HasNumberDropdown";
 
 export default function Show({
   department_heads,
@@ -36,7 +37,9 @@ export default function Show({
     department_head: string;
     PC_name: string;
     network_capable: string;
+    hasNumber: boolean;
   }>({
+    hasNumber: true,
     network_capable: "Нет возможности",
     PC_name: "",
     department_head: department_heads[0],
@@ -55,6 +58,7 @@ export default function Show({
   });
 
   const [hasIP, setHasIP] = useState(true);
+  const [hasNumber, setHasNumber] = useState(true);
   const [isLocal, setIsLocal] = useState(true);
 
   //TODO: make into 1
@@ -126,28 +130,48 @@ export default function Show({
                 <InputError className="mt-2" message={errors.model} />
               </div>
 
-              <div>
-                <InputLabel htmlFor="number" value="Номер" />
+              {/* TODO: make 2 items dropdown into generic component */}
 
-                <NumberInput
-                  id="number"
-                  placeholder="5873"
-                  className=""
-                  value={data.number || ""} // Render an empty string if data.number is undefined
-                  onChange={(e) => {
-                    const value = parseInt(e.target.value);
-                    if (!isNaN(value)) {
-                      setData("number", value);
-                    } else {
-                      setData("number", undefined); // Set to undefined if input is invalid
-                    }
-                  }}
-                  isFocused
-                  autoComplete="number"
+              <div>
+                <InputLabel
+                  htmlFor="hasNumber"
+                  value="Есть инвентарный номер?"
                 />
 
-                <InputError className="mt-2" message={errors.number} />
+                <HasNumberDropdown
+                  hasNumber={hasNumber}
+                  setData={setData}
+                  id="hasNumber"
+                  setHasNumber={setHasNumber}
+                  className="mt-1 block w-full py-3 rounded-xl"
+                  isFocused
+                />
               </div>
+
+              {hasNumber && (
+                <div>
+                  <InputLabel htmlFor="number" value="Номер" />
+
+                  <NumberInput
+                    id="number"
+                    placeholder="5873"
+                    className=""
+                    value={data.number || ""} // Render an empty string if data.number is undefined
+                    onChange={(e) => {
+                      const value = parseInt(e.target.value);
+                      if (!isNaN(value)) {
+                        setData("number", value);
+                      } else {
+                        setData("number", undefined); // Set to undefined if input is invalid
+                      }
+                    }}
+                    isFocused
+                    autoComplete="number"
+                  />
+
+                  <InputError className="mt-2" message={errors.number} />
+                </div>
+              )}
 
               <div>
                 <InputLabel

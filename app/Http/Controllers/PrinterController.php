@@ -163,7 +163,8 @@ class PrinterController extends Controller
 
    public function store(Request $request)
     {
-    //  try{
+        dd($request->all());
+     try{
         $attributes = $request->validate([
             'network_capable' => ['required', 'string', 'max:255'],
             "PC_name" => ['required' , 'string', 'max:255'],
@@ -172,7 +173,7 @@ class PrinterController extends Controller
             'type' => ['required', 'string', 'max:255'],
             'model' => ['required', 'string', 'max:255'],
             'counter' => ['required', 'unique:printers,number', 'numeric', 'min:1', 'max:999999999999999'],
-            'number' => ['required', 'unique:printers,number', 'numeric', 'min:1', 'max:999999999999999'],
+            'hasNumber' => ['required', 'boolean'],
             'location' => ['required', 'string', 'max:255'],
             'status' => ['required', 'string', 'max:255'],
             'comment' => ['nullable', 'string', 'max:255'],
@@ -188,9 +189,8 @@ class PrinterController extends Controller
             'isLocal.boolean' => 'Только да или нет!',
             'type.required' => 'Укажите модель принтера.',
             'model.required' => 'Укажите модель принтера.',
-            'number.required' => 'Укажите номер принтера.',
-            'number.max' => 'Номер поменьше надо (максимум: 999999999999999)',
-            'number.unique' => 'Инвентарный номер уже существует!',
+            'hasNumber.required' => 'Есть инвентарный номер?',
+            'hasNumber.boolean' => 'Только значения "есть" или "нет"!',
             'location.required' => 'Укажите кабинет.',
             'status.required' => 'Укажите статус принтера.',
             'counter.required' => 'Укажите счётчик страниц.',
@@ -199,10 +199,10 @@ class PrinterController extends Controller
             'isIPv4.required' => 'Требуется указать тип IP адреса!',
             'isIPv4.boolean' => 'Только IPv4 или IPv6!',
         ]);
-    //  }
-    //     catch(\Illuminate\Validation\ValidationException $e){
-    //         dd($e->errors());
-    //       }
+     }
+        catch(\Illuminate\Validation\ValidationException $e){
+            dd($e->errors());
+          }
     
         function lowercaseRussianOnly($text)
         {
@@ -231,6 +231,20 @@ class PrinterController extends Controller
             $attributes['IP'] = $request->IP;
         } else {
             $attributes['IP'] = null;
+        }
+
+        if ($request->hasNumber) {
+            $request->validate([
+            'number' => ['required', 'unique:printers,number', 'numeric', 'min:1', 'max:999999999999999'],
+            ], [
+                'number.required' => 'Укажите номер принтера.',
+                'number.max' => 'Номер поменьше надо (максимум: 999999999999999)',
+                'number.unique' => 'Инвентарный номер уже существует!',
+            ]);
+    
+            $attributes['number'] = $request->number;
+        } else {
+            $attributes['number'] = null;
         }
     
         $attributes['attention'] = $request->has('attention') ? 1 : 0;
