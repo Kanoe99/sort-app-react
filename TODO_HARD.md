@@ -1,0 +1,6 @@
+-   Create docker-compose.prod.yml for production;
+-   PrintersMain.tsx figure out how i implemented photo functionality. Display photos only when exists, otherwise do not put placeholder there
+-   Rework pagination links numbers
+-   Store history of printer's data change
+-   store deleted printer items in the trashbin
+-   customize error pages

@@ -1,0 +1,16 @@
+-   Make version for small screens
+-   Allow for adding tags/editing comments in modal
+-   Make path to the logo absolute
+-   change empty guarded in tag.php to fillable array of value
+-   make pagination display 2 previous and next pages
+-   make counterDate to display last date of counter's change or list of them
+-   printer's type is fixed list of items, also add option to add new items to it
+-   make cursor jump in ipv4 if zero is entered
+-   async fetching data for success message
+-   no item ? no pagination
+-   fix visual bug in printers main on no search results
+-   add tag on edit properties from which tags are created
+-   fix ipv6
+-   if rgb color hasOwnProperty in range either r+g+b or only similar in r or g or b
+-   fix rounding on ip toggler dropdown
+-   implement onpaste functionality in form

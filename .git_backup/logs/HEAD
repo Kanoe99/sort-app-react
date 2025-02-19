@@ -1,0 +1,17 @@
+367b8694b823a6e03dec4208ba036d3a3e3e740a 4d5f6f9f34cc75250a9430a56008fc84088fecf7 Kanoe99 <kanoe.s99@gmail.com> 1737518327 +0500	commit: fix: state fixes
+4d5f6f9f34cc75250a9430a56008fc84088fecf7 e3694814836d4377d077bafaa1ca2c8925157dbe Kanoe99 <kanoe.s99@gmail.com> 1737527396 +0500	commit: fix: flash success message
+e3694814836d4377d077bafaa1ca2c8925157dbe 4418c200d54335a1480b3ae71286b4d5f82d7f9b Kanoe99 <kanoe.s99@gmail.com> 1737954113 +0500	commit: graphs: good so far
+4418c200d54335a1480b3ae71286b4d5f82d7f9b 4418c200d54335a1480b3ae71286b4d5f82d7f9b Kanoe99 <kanoe.s99@gmail.com> 1737956177 +0500	reset: moving to 4418c20
+4418c200d54335a1480b3ae71286b4d5f82d7f9b 4418c200d54335a1480b3ae71286b4d5f82d7f9b Kanoe99 <kanoe.s99@gmail.com> 1737956790 +0500	reset: moving to 4418c20
+4418c200d54335a1480b3ae71286b4d5f82d7f9b 6f6dd0b57f4d3abc52af56a0343a5ea596bea387 Kanoe99 <kanoe.s99@gmail.com> 1737979215 +0500	commit: graph: more or less
+6f6dd0b57f4d3abc52af56a0343a5ea596bea387 a54f899b298b765c82664e42dbfdfdd456eef67f Kanoe99 <kanoe.s99@gmail.com> 1738056729 +0500	commit: graphs: done, kinda, 1st step
+a54f899b298b765c82664e42dbfdfdd456eef67f 3debf2a6949cf8067d9525893028cab287413c16 Kanoe99 <kanoe.s99@gmail.com> 1738065177 +0500	commit: form: delete button, modal to be added later
+3debf2a6949cf8067d9525893028cab287413c16 fce410e33c642200828bb2e5568d3577a6bb4a8a Kanoe99 <kanoe.s99@gmail.com> 1738123180 +0500	commit: form: delete modal
+fce410e33c642200828bb2e5568d3577a6bb4a8a 85c48cc65c4ba44f4b3f238f5213f4d5495a1df3 Kanoe99 <kanoe.s99@gmail.com> 1738149410 +0500	commit: search: kinda done, to be improved later
+85c48cc65c4ba44f4b3f238f5213f4d5495a1df3 44a9ffbd3000d3a8b6c30a10ee1e7db98f3d61fa Kanoe99 <kanoe.s99@gmail.com> 1738229135 +0500	commit: search: done; search transliterated to be done
+44a9ffbd3000d3a8b6c30a10ee1e7db98f3d61fa 657f2b017e471a8e7b67394e13f5a9c5961ce3df Kanoe99 <kanoe.s99@gmail.com> 1738306045 +0500	commit: fix: search & form
+657f2b017e471a8e7b67394e13f5a9c5961ce3df 836e64ce9514c55d14dc539522d642639d6114f0 Kanoe99 <kanoe.s99@gmail.com> 1738558108 +0500	commit: fix: search regex
+836e64ce9514c55d14dc539522d642639d6114f0 7fd897d8f12cae43481bbc916a064c8e329ea43f Kanoe99 <kanoe.s99@gmail.com> 1738572099 +0500	commit: fix: minor fixes
+7fd897d8f12cae43481bbc916a064c8e329ea43f 06af485ffc08befb081cb799862c6f7f47a087dd Kanoe99 <kanoe.s99@gmail.com> 1738580924 +0500	commit: v2: done
+06af485ffc08befb081cb799862c6f7f47a087dd 41aca5de050b533297fa57c0ba4aac3dad94b13d Kanoe99 <kanoe.s99@gmail.com> 1738582342 +0500	commit: fix: minor visual bug
+41aca5de050b533297fa57c0ba4aac3dad94b13d 8d1d6a54dfe721961461ccdfe8b96b8ffe8d411a Kanoe99 <kanoe.s99@gmail.com> 1738582917 +0500	commit: fix: minor fixes
