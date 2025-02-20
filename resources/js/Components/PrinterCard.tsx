@@ -24,7 +24,11 @@ const PrinterCard = ({ printer }: { printer: Printer }) => {
               {printer.model}
             </div>
             <div className="pl-4 py-2">
-              {printer.number ?? "Нет инвентарного номера"}
+              {printer.number ?? (
+                <span className="text-red-500 select-none">
+                  Нет инвентарного номера
+                </span>
+              )}
             </div>
           </div>
           <div className="text-sm font-bold mb-2 mt-1 px-4">{printer.type}</div>

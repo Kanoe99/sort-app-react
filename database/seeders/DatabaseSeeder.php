@@ -4,7 +4,6 @@ namespace Database\Seeders;
 
 use App\Enum\PermissionsEnum;
 use App\Enum\RolesEnum;
-use App\Models\Feature;
 use App\Models\User;
 use App\Models\Printer;
 use App\Models\Tag;
@@ -13,6 +12,7 @@ use Illuminate\Database\Eloquent\Factories\Sequence;
 use Illuminate\Database\Seeder;
 use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
+use App\Models\PrinterPages;
 
 class DatabaseSeeder extends Seeder
 {
@@ -54,12 +54,12 @@ class DatabaseSeeder extends Seeder
             'password' => '11111111a',
         ])->assignRole(RolesEnum::Admin);
 
-        Feature::factory(100)->create();
-
         Printer::factory(1000)->withTags()->create(new Sequence([
             'attention' => false,
         ], [
             'attention' => true,
-        ]));
+        ]))->each(function($printer){
+            PrinterPages::factory()->getPrinterId($printer->id)->generateData()->create();
+        });
     }
 }

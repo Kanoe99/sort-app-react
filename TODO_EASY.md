@@ -14,3 +14,4 @@
 -   if rgb color hasOwnProperty in range either r+g+b or only similar in r or g or b
 -   fix rounding on ip toggler dropdown
 -   implement onpaste functionality in form
+-   fix search on empty string
