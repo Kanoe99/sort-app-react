@@ -59,7 +59,7 @@ class DatabaseSeeder extends Seeder
         ], [
             'attention' => true,
         ]))->each(function($printer){
-            PrinterPages::factory()->getPrinterId($printer->id)->generateData()->create();
+            PrinterPages::factory()->getPrinterId($printer->id)->generateData();
         });
     }
 }

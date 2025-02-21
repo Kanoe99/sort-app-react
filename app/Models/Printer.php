@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 // use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use App\Models\PrinterPages;
 
 class Printer extends Model
 {
@@ -43,6 +44,10 @@ class Printer extends Model
         return $this->belongsToMany(Tag::class);
     }
 
+    public function printerPages()
+    {
+        return $this->hasMany(PrinterPages::class);
+    }
 
     public function user(): BelongsToMany
     {
