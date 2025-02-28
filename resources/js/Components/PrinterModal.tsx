@@ -3,8 +3,7 @@ import Modal from "./Modal";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Printer } from "@/types";
 import { IPView } from "./IPView";
-import { mirrorEasing } from "framer-motion";
-import DataRangeSelector from "./DataRangeSelector";
+import { Expandable } from "./ExpandableSelector";
 
 interface PrinterModalProps {
   isVisible: boolean;
@@ -25,7 +24,7 @@ const PrinterModal = ({
       onClose={() => setIsVisible(!isVisible)}
     >
       <>
-        <div className="flex w-full justify-between">
+        <div className="flex w-full justify-between overflow-visible">
           <div className="px-5 py-3 flex-1">
             <div className="bg-black px-4 outline outline-1 outline-neutral-soft rounded-md w-full flex justify-between">
               <div className="flex-1 border-r border-neutral-soft h-full py-2">
@@ -46,9 +45,15 @@ const PrinterModal = ({
           />
         </div>
         <div className="px-5 py-3">
-          <div className="bg-black px-4 py-2 rounded-md flex justify-between outline outline-1 outline-neutral-muted ">
-            <div className="font-black text-accent-main">{printer.counter}</div>
-            <DataRangeSelector />
+          <div className="bg-black px-4 py-2 rounded-md flex justify-around outline outline-1 outline-neutral-muted ">
+            <div className="mb-14">
+              отсканировано
+              <Expandable printer_id={printer.id} isPrint={false} />
+            </div>
+            <div className="mb-14">
+              напечатано
+              <Expandable printer_id={printer.id} isPrint={true} />
+            </div>
             {/* <div className="text-accent-light">{printer.counterDate}</div> */}
           </div>
           <div className="px-4 flex justify-between text-sm mb-4">

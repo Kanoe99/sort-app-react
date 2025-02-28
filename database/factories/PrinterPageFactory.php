@@ -6,9 +6,9 @@ use App\Models\Printer;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\PrinterPages>
+ * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\PrinterPage>
  */
-class PrinterPagesFactory extends Factory
+class PrinterPageFactory extends Factory
 {
     private ?int $printer_id = null;
 
@@ -20,9 +20,9 @@ class PrinterPagesFactory extends Factory
     public function definition(): array
     {}
 
-    protected function customDefinition(int $print_pages, int $scan_pages, int $end_year, bool $isSum = false):array
+    protected function customDefinition(int $print_pages, int $scan_pages, int $start_year, int $end_year, bool $isSum = false):array
     {
-        $start_year = rand($end_year - 10, $end_year);
+        $start_year = rand($start_year, $end_year);
 
         $start_month = rand(1, 12);
         $end_month = $start_year === $end_year ? rand($start_month, 12) : rand(1, 12);
@@ -63,7 +63,7 @@ class PrinterPagesFactory extends Factory
 
         $printPages = [];
         $scanPages = [];
-        $end_years = [1935];
+        $years = [1925];
 
         $totalPrintPages = 0;
         $totalScanPages = 0;
@@ -77,16 +77,18 @@ class PrinterPagesFactory extends Factory
             $totalPrintPages += $printPages[$i];
             $totalScanPages += $scanPages[$i];
 
-            $end_years[$i + 1] = rand($end_years[$i], $end_years[$i] + 10); 
+            $years[$i + 1] = rand($years[$i], $years[$i] + 10); 
         }
+
+        // dd($years);
         
-        $rows[] = $this->customDefinition($totalPrintPages, $totalScanPages, end($end_years), true);
+        $rows[] = $this->customDefinition($totalPrintPages, $totalScanPages, end($years), end($years), true);
         for($i = 0; $i < $count - 1; $i++)
         {
-            $rows[] = $this->customDefinition($printPages[$i], $scanPages[$i], $end_years[$i + 1]);
+            $rows[] = $this->customDefinition($printPages[$i], $scanPages[$i], $years[$i], $years[$i + 1]);
         }
 
 
-        $createdRows = Printer::find($this->printer_id)->printerPages()->createMany($rows);
+        $createdRows = Printer::find($this->printer_id)->PrinterPage()->createMany($rows);
     }
 }

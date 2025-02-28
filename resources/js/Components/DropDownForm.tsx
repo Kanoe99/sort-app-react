@@ -8,7 +8,7 @@ import React, {
   useState,
 } from "react";
 
-const DropDownContext = createContext<{
+export const DropDownContext = createContext<{
   open: boolean;
   setOpen: Dispatch<SetStateAction<boolean>>;
   toggleOpen: () => void;
@@ -53,14 +53,15 @@ const Trigger = ({ children }: PropsWithChildren) => {
 
 const Content = ({
   align = "right",
-  width = "48",
-  contentClasses = "py-1 border-neutral-light border-1 border",
+  width = "",
   children,
   position = "below",
+  nopy = false,
 }: PropsWithChildren<{
+  nopy?: boolean;
   position?: "below" | "right";
   align?: "left" | "right";
-  width?: "48";
+  width?: string;
   contentClasses?: string;
 }>) => {
   const { open, setOpen } = useContext(DropDownContext);
@@ -75,9 +76,9 @@ const Content = ({
   }
 
   if (position === "below") {
-    positionClasses = "w-full";
+    positionClasses = !width ? "w-full" : "";
   } else if (position === "right") {
-    positionClasses = "top-[-10rem] left-[107%] w-fit whitespace-nowrap";
+    positionClasses = "top-[-10rem] left-[107%] whitespace-nowrap";
   }
 
   return (
@@ -92,11 +93,12 @@ const Content = ({
         leaveTo="opacity-0 scale-95"
       >
         <div
-          className={`bg-bg-input-black border-border-input absolute  z-50 mt-2 rounded-md shadow-lg ${positionClasses} ${alignmentClasses}`}
-          onClick={() => setOpen(false)}
+          className={`bg-bg-input-black border-border-input absolute  z-50 mt-2 rounded-xl shadow-lg ${width} ${positionClasses} ${alignmentClasses}`}
         >
           <div
-            className={`rounded-xl py-[.8rem] ring-1 ring-black ring-opacity-0 ${contentClasses}`}
+            className={`rounded-xl ${
+              nopy ? "py-0" : "py-[1.1rem]"
+            } ring-1 ring-black ring-opacity-0 border-neutral-light border-1 border`}
           >
             {children}
           </div>
@@ -113,15 +115,19 @@ const Option = ({
 }: {
   className?: string;
   children: React.ReactNode;
-  onClick: (e: any) => void;
+  onClick: () => void;
 }) => {
+  const { setOpen } = useContext(DropDownContext);
   return (
     <div
       className={
-        "block cursor-pointer w-full px-4 py-2 text-start leading-5 transition duration-150 ease-in-out focus:outline-none text-white hover:bg-[#000] focus:bg-black" +
+        `block cursor-pointer w-full px-4 text-start leading-5 transition duration-150 ease-in-out focus:outline-none text-white hover:bg-[#000] focus:bg-black` +
         className
       }
-      onClick={onClick}
+      onClick={() => {
+        setOpen(false);
+        onClick();
+      }}
     >
       {children}
     </div>

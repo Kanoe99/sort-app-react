@@ -5,6 +5,7 @@ use App\Enum\RolesEnum;
 use App\Http\Controllers\CommentController;
 use App\Http\Controllers\FeatureController;
 use App\Http\Controllers\PrinterController;
+use App\Http\Controllers\PrinterPageController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\UpvoteController;
 use App\Http\Controllers\UserController;
@@ -40,6 +41,8 @@ Route::middleware('auth')->group(function () {
         Route::get('/main', [PrinterController::class, 'index'])->name('main');
         Route::get('/printers', [PrinterController::class, 'getPrinters']);
         Route::get('/search', [PrinterController::class, 'searchPrinters']);
+        Route::get('/printed', [PrinterPageController::class, 'printed']);
+        Route::get('/scanned', [PrinterPageController::class, 'scanned']);
 
 
         Route::resource('printer', PrinterController::class)
@@ -47,17 +50,6 @@ Route::middleware('auth')->group(function () {
             ->middleware('can:' . PermissionsEnum::ManagePrinters->value);
 
         Route::get('/graph', [GraphController::class, 'index'])->name('graph');
-
-        // Route::get('/feature', [FeatureController::class, 'index'])
-        //     ->name('feature.index');
-
-        // Route::post('/feature/{feature}/comments', [CommentController::class, 'store'])
-        //     ->name('comment.store')
-
-        //     ->middleware('can:' . PermissionsEnum::ManageComments->value);
-        // Route::delete('/comment/{comment}', [CommentController::class, 'destroy'])
-        //     ->name('comment.destroy')
-        //     ->middleware('can:' . PermissionsEnum::ManageComments->value);
     });
 });
 

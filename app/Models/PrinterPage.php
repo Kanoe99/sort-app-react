@@ -7,9 +7,9 @@ use Illuminate\Database\Eloquent\Model;
 use App\Models\Printer;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
-class PrinterPages extends Model
+class PrinterPage extends Model
 {
-    /** @use HasFactory<\Database\Factories\PrinterPagesFactory> */
+    /** @use HasFactory<\Database\Factories\PrinterPageFactory> */
     use HasFactory;
 
     protected $fillable = [

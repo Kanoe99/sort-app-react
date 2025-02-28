@@ -119,7 +119,6 @@ class PrinterController extends Controller
             'last_page' => $printers->lastPage(),
         ]);
     }
-    
 
     public function getPrinters(Request $request)
     {

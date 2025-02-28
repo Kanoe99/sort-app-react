@@ -12,7 +12,7 @@ use Illuminate\Database\Eloquent\Factories\Sequence;
 use Illuminate\Database\Seeder;
 use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
-use App\Models\PrinterPages;
+use App\Models\PrinterPage;
 
 class DatabaseSeeder extends Seeder
 {
@@ -59,7 +59,7 @@ class DatabaseSeeder extends Seeder
         ], [
             'attention' => true,
         ]))->each(function($printer){
-            PrinterPages::factory()->getPrinterId($printer->id)->generateData();
+            PrinterPage::factory()->getPrinterId($printer->id)->generateData();
         });
     }
 }

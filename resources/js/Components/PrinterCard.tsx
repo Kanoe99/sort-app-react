@@ -5,8 +5,7 @@ import { can } from "@/helpers";
 import { usePage } from "@inertiajs/react";
 import { IPView } from "./IPView";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faBan, faDesktop, faWifi } from "@fortawesome/free-solid-svg-icons";
-import { h3 } from "framer-motion/client";
+import { faDesktop, faWifi } from "@fortawesome/free-solid-svg-icons";
 
 const PrinterCard = ({ printer }: { printer: Printer }) => {
   const [isVisible, setIsVisible] = useState(false);

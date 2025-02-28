@@ -15,3 +15,5 @@
 -   fix rounding on ip toggler dropdown
 -   implement onpaste functionality in form
 -   fix search on empty string
+-   display last 3 periods pages counter
+-   add copy ip funcitonality
