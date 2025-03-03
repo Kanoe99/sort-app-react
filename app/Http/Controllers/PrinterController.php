@@ -2,8 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Printer;
-use App\Models\Tag;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Auth;
@@ -13,6 +11,10 @@ use Inertia\Inertia;
 use \App\Http\Resources\PrinterResource;
 use App\Services\TagService;
 use App\Services\DepartmentService;
+
+use App\Models\Printer;
+use App\Http\Controllers\PrinterPage;
+use App\Models\Tag;
 
 class PrinterController extends Controller
 {

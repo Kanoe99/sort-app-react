@@ -75,8 +75,8 @@ export const Expandable = ({
   const [isMonthOpen, setIsMonthOpen] = useState<boolean>(false);
   const [isYearOpen, setIsYearOpen] = useState<boolean>(false);
   const [printedData, setPrintedData] = useState("");
-  const [months, setMonths] = useState<string[]>([""]);
-  const [years, setYears] = useState<string[]>([""]);
+  const [months, setMonths] = useState<string[]>(["3", "9"]);
+  const [years, setYears] = useState<string[]>(["1938", "1948"]);
 
   const handleIsMonthOpen = () => {
     setIsYearOpen(false);
@@ -152,15 +152,23 @@ export const Expandable = ({
               }&end_month=${months[months.length - 1]}`;
 
               const rangeStart = isYearOpen
-                ? `&end_year=${years[0]}&end_month=${months[0]}`
-                : rangeEnd;
+                ? `&start_year=${years[0]}&start_month=${months[0]}`
+                : isMonthOpen
+                ? `&start_month=${months[0]}`
+                : "";
+
+              const url = `/${endPoint}?printer_id=${printer_id}${rangeStart}${rangeEnd}`;
 
               const fetchData = async () => {
-                const response = await fetch(
-                  `/${endPoint}?printer_id=${printer_id}${rangeStart}${rangeEnd}`
-                );
+                const response = await fetch(url);
                 const printedData = await response.json();
+                // printedData.data[0].end_month
+                console.log(url);
+                console.warn("isYearOpen: " + isYearOpen);
+                console.warn("isMonthOpen: " + isMonthOpen);
                 setPrintedData(printedData);
+                console.log("printedData: " + printedData);
+                // console.log(printedData);
               };
               fetchData();
             }}

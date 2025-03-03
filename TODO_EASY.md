@@ -15,5 +15,7 @@
 -   fix rounding on ip toggler dropdown
 -   implement onpaste functionality in form
 -   fix search on empty string
--   display last 3 periods pages counter
 -   add copy ip funcitonality
+-   display last 3 and 2 first periods pages counter
+-   display all records that fall in search results
+-   fix filter for when the month is open and year is closed

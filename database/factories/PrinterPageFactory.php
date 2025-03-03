@@ -77,7 +77,12 @@ class PrinterPageFactory extends Factory
             $totalPrintPages += $printPages[$i];
             $totalScanPages += $scanPages[$i];
 
-            $years[$i + 1] = rand($years[$i], $years[$i] + 10); 
+            $nextYear = rand($years[$i], $years[$i] + 10);
+    
+            while (in_array($nextYear, $years)) {
+                $nextYear = rand($years[$i], $years[$i] + 50);
+                }
+            $years[] = $nextYear;
         }
 
         // dd($years);
