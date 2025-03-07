@@ -13,7 +13,8 @@ use App\Services\TagService;
 use App\Services\DepartmentService;
 
 use App\Models\Printer;
-use App\Http\Controllers\PrinterPage;
+use App\Models\PrinterPage;
+use App\Http\Controllers\PrinterPageController;
 use App\Models\Tag;
 
 class PrinterController extends Controller
@@ -124,19 +125,26 @@ class PrinterController extends Controller
 
     public function getPrinters(Request $request)
     {
-        $perPage = $request->input('perPage', 2); // Default to 10 items per page
+        $perPage = $request->input('perPage', 2);
         $page = $request->input('page', 1);
+    
+        $printers = Printer::latest()->paginate($perPage, ['*'], 'page', $page);
 
-        $printers = Printer::with(['tags'])
-            ->latest()
-            ->paginate($perPage, ['*'], 'page', $page);
-
+        $printers->load([
+            'tags',
+            'sumPages',
+            'threeLastPages'
+        ]);
+    
         return response()->json([
-            'printers' => $printers->items(),
+            'printers' => $printers->items(), 
             'current_page' => $printers->currentPage(),
             'last_page' => $printers->lastPage(),
         ]);
     }
+    
+    
+    
 
 
 
@@ -164,6 +172,7 @@ class PrinterController extends Controller
 
    public function store(Request $request)
     {
+        //delete try cath in prod
         dd($request->all());
      try{
         $attributes = $request->validate([

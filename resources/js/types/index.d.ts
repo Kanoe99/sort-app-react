@@ -60,6 +60,22 @@ export type Printer = {
   fixDate: string;
   isIPv4: boolean;
   tags: Tag[];
+  sum_pages: PrintPage[];
+  three_last_pages: PrintPage[];
+};
+
+export type PrintPage = {
+  created_at: string;
+  end_month: number;
+  end_year: number;
+  id: number;
+  isSum: number;
+  print_pages: number;
+  printer_id: number;
+  scan_pages: number;
+  start_year: number;
+  start_month: number;
+  updated_at: string;
 };
 
 export type PageProps<

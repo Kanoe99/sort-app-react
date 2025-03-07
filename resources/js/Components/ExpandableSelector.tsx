@@ -62,9 +62,13 @@ const Arrow = ({
 };
 
 export const Expandable = ({
+  printedData,
+  setPrintedData,
   isPrint,
   printer_id,
 }: {
+  printedData: string;
+  setPrintedData: (printedData: string) => void;
   isPrint: boolean;
   printer_id: number;
 }) => {
@@ -74,9 +78,9 @@ export const Expandable = ({
 
   const [isMonthOpen, setIsMonthOpen] = useState<boolean>(false);
   const [isYearOpen, setIsYearOpen] = useState<boolean>(false);
-  const [printedData, setPrintedData] = useState("");
-  const [months, setMonths] = useState<string[]>(["3", "9"]);
-  const [years, setYears] = useState<string[]>(["1938", "1948"]);
+  // const [printedData, setPrintedData] = useState("");
+  const [months, setMonths] = useState<string[]>([""]);
+  const [years, setYears] = useState<string[]>([""]);
 
   const handleIsMonthOpen = () => {
     setIsYearOpen(false);
@@ -92,11 +96,35 @@ export const Expandable = ({
     console.log(printedData);
   }, [printedData]);
 
+  const handleSearch = () => {
+    const endPoint = isPrint ? "printed" : "scanned";
+
+    const rangeEnd = `&end_year=${years[years.length - 1]}&end_month=${
+      months[months.length - 1]
+    }`;
+
+    const rangeStart = isYearOpen
+      ? `&start_year=${years[0]}&start_month=${months[0]}`
+      : isMonthOpen
+      ? `&start_month=${months[0]}`
+      : "";
+
+    const url = `/${endPoint}?printer_id=${printer_id}${rangeStart}${rangeEnd}`;
+
+    const fetchData = async () => {
+      const response = await fetch(url);
+      const printedData = await response.json();
+      console.log(url);
+      console.warn("isYearOpen: " + isYearOpen);
+      console.warn("isMonthOpen: " + isMonthOpen);
+      setPrintedData(printedData);
+      console.log("printedData: " + printedData);
+    };
+    fetchData();
+  };
+
   return (
-    <form
-      // onSubmit={handleSubmit}
-      className="rounded-b-lg z-[99] flex flex-col justify-center min-h-[10rem] relative"
-    >
+    <form className="rounded-b-lg z-[99] flex flex-col justify-center min-h-[10rem] relative">
       <div className="absolute left-[-50px] h-full">
         <Arrow
           isOpen={isYearOpen}
@@ -144,34 +172,7 @@ export const Expandable = ({
             </div>
           </div>
           <button
-            onClick={() => {
-              const endPoint = isPrint ? "printed" : "scanned";
-
-              const rangeEnd = `&end_year=${
-                years[years.length - 1]
-              }&end_month=${months[months.length - 1]}`;
-
-              const rangeStart = isYearOpen
-                ? `&start_year=${years[0]}&start_month=${months[0]}`
-                : isMonthOpen
-                ? `&start_month=${months[0]}`
-                : "";
-
-              const url = `/${endPoint}?printer_id=${printer_id}${rangeStart}${rangeEnd}`;
-
-              const fetchData = async () => {
-                const response = await fetch(url);
-                const printedData = await response.json();
-                // printedData.data[0].end_month
-                console.log(url);
-                console.warn("isYearOpen: " + isYearOpen);
-                console.warn("isMonthOpen: " + isMonthOpen);
-                setPrintedData(printedData);
-                console.log("printedData: " + printedData);
-                // console.log(printedData);
-              };
-              fetchData();
-            }}
+            onClick={handleSearch}
             type="button"
             className={`w-full py-1 select-none mb-5 text-center font-bold text-black bg-white hover:text-white hover:bg-black cursor-pointer text-lg rounded-lg border`}
           >

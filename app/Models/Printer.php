@@ -44,14 +44,27 @@ class Printer extends Model
         return $this->belongsToMany(Tag::class);
     }
 
-    public function PrinterPage()
-    {
+    public function pages(){
         return $this->hasMany(PrinterPage::class);
     }
 
+    public function sumPages(){
+        return $this->pages()->where('isSum', 1);
+    }
+  
+    public function threeLastPages(){
+        return $this->pages()->where('isSum', 0)->orderBy('end_year', 'desc')->limit(3);
+    }
+  
+    
     public function user(): BelongsToMany
     {
         return $this->belongsToMany(User::class);
+    }
+
+    public function getPages()
+    {
+        return $this->pages()->where('isSum', 1)->get();
     }
 
 }

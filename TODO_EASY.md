@@ -15,7 +15,11 @@
 -   fix rounding on ip toggler dropdown
 -   implement onpaste functionality in form
 -   fix search on empty string
--   add copy ip funcitonality
+-   add copy ip functionality
 -   display last 3 and 2 first periods pages counter
 -   display all records that fall in search results
 -   fix filter for when the month is open and year is closed
+-   fix redirect back to 1st page after exiting edit page
+-   delete current page passed in getPrinters method or figure out why it is there
+-   for set range found this record
+-   pages and text justify between to even out width

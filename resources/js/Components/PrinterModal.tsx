@@ -4,6 +4,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Printer } from "@/types";
 import { IPView } from "./IPView";
 import { Expandable } from "./ExpandableSelector";
+import { useState } from "react";
 
 interface PrinterModalProps {
   isVisible: boolean;
@@ -16,6 +17,8 @@ const PrinterModal = ({
   setIsVisible,
   printer,
 }: PrinterModalProps) => {
+  const [printedData, setPrintedData] = useState("");
+
   return (
     <Modal
       key={printer.id}
@@ -45,20 +48,80 @@ const PrinterModal = ({
           />
         </div>
         <div className="px-5 py-3">
-          <div className="bg-black px-4 py-2 rounded-md flex justify-around outline outline-1 outline-neutral-muted ">
-            <div className="mb-14">
+          <div className="bg-black absolute left-[-20rem] top-0 px-4 py-2 rounded-md flex flex-col justify-around outline outline-1 outline-neutral-muted ">
+            <div className="mb-14 ml-14 mr-7">
               отсканировано
-              <Expandable printer_id={printer.id} isPrint={false} />
+              <Expandable
+                printedData={printedData}
+                setPrintedData={setPrintedData}
+                printer_id={printer.id}
+                isPrint={false}
+              />
             </div>
-            <div className="mb-14">
+            <div className="mb-14 ml-14 mr-7">
               напечатано
-              <Expandable printer_id={printer.id} isPrint={true} />
+              <Expandable
+                printedData={printedData}
+                setPrintedData={setPrintedData}
+                printer_id={printer.id}
+                isPrint={true}
+              />
             </div>
             {/* <div className="text-accent-light">{printer.counterDate}</div> */}
           </div>
-          <div className="px-4 flex justify-between text-sm mb-4">
-            <h3>Счётчик страниц</h3>
-            <h3>Обновлён</h3>
+          <div className="px-4 flex flex-col gap-1 justify-between text-sm mb-4">
+            <div className="flex justify-between">
+              <div className="flex gap-2">
+                <div className="py-1">
+                  Всего напечатано (на {printer.sum_pages[0].end_month}.
+                  {printer.sum_pages[0].end_year}г.):{" "}
+                </div>
+                <div className="bg-black rounded-md px-3 py-1 w-fit">
+                  {printer.sum_pages[0].print_pages}
+                </div>
+              </div>
+              <div className="flex gap-2">
+                <div className="py-1">
+                  Всего отсканировано (на {printer.sum_pages[0].end_month}.
+                  {printer.sum_pages[0].end_year}г.):{" "}
+                </div>
+                <div className="bg-black rounded-md px-3 py-1 w-fit">
+                  {printer.sum_pages[0].scan_pages}
+                </div>
+              </div>
+            </div>
+            <hr />
+            <div className="my-1 flex justify-between mx-auto gap-24">
+              <div>
+                <div className="text-xs mb-2">Последние три записи:</div>
+                {printer.three_last_pages.map((page, index) => (
+                  <div key={index} className="flex gap-2 mb-1">
+                    <div className="text-xs py-1">
+                      с {page.start_month}.{page.start_year}г. по{" "}
+                      {page.end_month}.{page.end_year}г.
+                    </div>
+                    <div className="text-xs bg-black w-fit px-3 py-1 rounded-md">
+                      {page.print_pages}
+                    </div>
+                  </div>
+                ))}
+              </div>
+              <div className="border-l pl-20 border-white">
+                <div className="text-xs mb-2">Последние три записи:</div>
+                {printer.three_last_pages.map((page, index) => (
+                  <div key={index} className="flex gap-2 mb-1">
+                    <div className="text-xs py-1">
+                      с {page.start_month}.{page.start_year}г. по{" "}
+                      {page.end_month}.{page.end_year}г.
+                    </div>
+                    <div className="text-xs bg-black w-fit px-3 py-1 rounded-md">
+                      {page.scan_pages}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+            <hr />
           </div>
           <div className="px-4">
             Дата последнего ремонта:{" "}
