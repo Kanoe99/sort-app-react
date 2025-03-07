@@ -22,4 +22,3 @@
 -   fix redirect back to 1st page after exiting edit page
 -   delete current page passed in getPrinters method or figure out why it is there
 -   for set range found this record
--   pages and text justify between to even out width

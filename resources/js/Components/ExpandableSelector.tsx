@@ -8,7 +8,9 @@ const TextContainer = ({
   yearCondition,
   tabIndex,
   placeHolder,
+  width,
 }: {
+  width: string;
   placeHolder?: string | undefined;
   tabIndex?: number | undefined;
   monthCondition: boolean;
@@ -21,11 +23,11 @@ const TextContainer = ({
       type="text"
       className={`rounded-lg
         px-5
-        text-center bg-transparent overflow-hidden grid place-items-center shadow-[inset_0_0_0_2px_rgba(0,0,0,0.5)] h-[2rem] w-[5rem] text-white transition-all duration-500 p-0 ${
-          yearCondition && monthCondition
-            ? "opacity-100 block max-w-40 mb-2"
-            : "opacity-0 hidden overflow-hidden"
-        }`}
+        text-center bg-transparent overflow-hidden grid place-items-center ${width} shadow-[inset_0_0_0_2px_rgba(0,0,0,0.5)] h-[2rem] text-white p-0 ${
+        yearCondition && monthCondition
+          ? "opacity-100 block mb-2"
+          : "opacity-0 hidden overflow-hidden"
+      }`}
     />
   );
 };
@@ -42,7 +44,7 @@ const Arrow = ({
   return (
     <div
       className={`py-1 h-full bg-black/90 backdrop-blur-sm border border-black hover:bg-black flex justify-center items-center rounded-lg select-none cursor-pointer ${
-        orientation === "vertical" && "min-h-[10rem] mr-2"
+        orientation === "vertical" && "min-h-[10rem]"
       }`}
       onClick={handleClick}
     >
@@ -134,17 +136,23 @@ export const Expandable = ({
       </div>
       <div className="flex justify-center items-center relative">
         <div>
-          <div className="text-sm text-center mt-2">За период</div>
-          <div className={`flex my-3 mx-2`}>
-            <div className="mr-2">
-              {isYearOpen && <div className="text-sm text-center">c</div>}
+          <div className="pl-4 bg-black shadow-white/10 shadow-inner px-2 pb-1 pt-2 rounded-md outline outline-[1px] outline-black font-bold text-sm mt-2 mx-4 w-[12rem]">
+            {isPrint ? "Напечатано" : "Отсканировано"}
+          </div>
+          <div className={`flex gap-2 my-3 mx-2`}>
+            <div className="">
+              {/* {isYearOpen && (
+                <div className="text-sm text-center w-fit mx-auto">c</div>
+              )} */}
               <TextContainer
+                width={"w-[6rem]"}
                 placeHolder="2024"
                 tabIndex={!isYearOpen ? -1 : 0}
                 yearCondition={isYearOpen}
                 monthCondition={!isMonthOpen}
               />
               <TextContainer
+                width={"w-[6rem]"}
                 placeHolder="ЯНВ"
                 tabIndex={!isYearOpen ? -1 : 0}
                 yearCondition={isYearOpen}
@@ -152,32 +160,39 @@ export const Expandable = ({
               />
             </div>
             <div>
-              {isYearOpen && <div className="text-sm text-center">по</div>}
+              {/* {isYearOpen && (
+                <div className="text-sm text-center w-fit mx-auto">по</div>
+              )} */}
               <TextContainer
+                width={isYearOpen ? "w-[6rem]" : "w-[12rem]"}
                 placeHolder="2025"
                 yearCondition={true}
                 monthCondition={true}
               />
               <TextContainer
+                width={isYearOpen ? "w-[6rem]" : "w-[12rem]"}
                 placeHolder="ЯНВ"
                 tabIndex={!isMonthOpen ? -1 : 0}
                 monthCondition={isMonthOpen}
                 yearCondition={!isYearOpen}
               />
               <TextContainer
+                width={isYearOpen ? "w-[6rem]" : "w-[12rem]"}
                 placeHolder="ФЕВ"
                 monthCondition={true}
                 yearCondition={true}
               />
             </div>
           </div>
-          <button
-            onClick={handleSearch}
-            type="button"
-            className={`w-full py-1 select-none mb-5 text-center font-bold text-black bg-white hover:text-white hover:bg-black cursor-pointer text-lg rounded-lg border`}
-          >
-            Найти
-          </button>
+          <div className="w-[14rem] px-4">
+            <button
+              onClick={handleSearch}
+              type="button"
+              className={`w-full py-1 select-none mb-5 text-center font-bold text-black bg-white hover:text-white hover:bg-black cursor-pointer text-lg rounded-lg border`}
+            >
+              Найти
+            </button>
+          </div>
         </div>
       </div>
       <div className="absolute bottom-[-50px] w-full">

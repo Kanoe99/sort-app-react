@@ -48,9 +48,8 @@ const PrinterModal = ({
           />
         </div>
         <div className="px-5 py-3">
-          <div className="bg-black absolute left-[-20rem] top-0 px-4 py-2 rounded-md flex flex-col justify-around outline outline-1 outline-neutral-muted ">
+          <div className="bg-black h-full absolute right-[-24rem] top-0 px-4 py-2 rounded-md flex flex-col justify-around outline outline-1 outline-neutral-muted ">
             <div className="mb-14 ml-14 mr-7">
-              отсканировано
               <Expandable
                 printedData={printedData}
                 setPrintedData={setPrintedData}
@@ -59,7 +58,6 @@ const PrinterModal = ({
               />
             </div>
             <div className="mb-14 ml-14 mr-7">
-              напечатано
               <Expandable
                 printedData={printedData}
                 setPrintedData={setPrintedData}
@@ -70,8 +68,9 @@ const PrinterModal = ({
             {/* <div className="text-accent-light">{printer.counterDate}</div> */}
           </div>
           <div className="px-4 flex flex-col gap-1 justify-between text-sm mb-4">
-            <div className="flex justify-between">
-              <div className="flex gap-2">
+            <hr />
+            <div className="flex justify-between my-1 text-xs">
+              <div className="flex gap-2 w-1/2 justify-between pr-8">
                 <div className="py-1">
                   Всего напечатано (на {printer.sum_pages[0].end_month}.
                   {printer.sum_pages[0].end_year}г.):{" "}
@@ -80,7 +79,7 @@ const PrinterModal = ({
                   {printer.sum_pages[0].print_pages}
                 </div>
               </div>
-              <div className="flex gap-2">
+              <div className="flex gap-2 border-l w-1/2 pl-8 justify-between">
                 <div className="py-1">
                   Всего отсканировано (на {printer.sum_pages[0].end_month}.
                   {printer.sum_pages[0].end_year}г.):{" "}
@@ -91,11 +90,14 @@ const PrinterModal = ({
               </div>
             </div>
             <hr />
-            <div className="my-1 flex justify-between mx-auto gap-24">
-              <div>
+            <div className="my-1 flex justify-between">
+              <div className="w-1/2">
                 <div className="text-xs mb-2">Последние три записи:</div>
                 {printer.three_last_pages.map((page, index) => (
-                  <div key={index} className="flex gap-2 mb-1">
+                  <div
+                    key={index}
+                    className="flex justify-between pr-8 pl-8 gap-2 mb-1"
+                  >
                     <div className="text-xs py-1">
                       с {page.start_month}.{page.start_year}г. по{" "}
                       {page.end_month}.{page.end_year}г.
@@ -106,10 +108,13 @@ const PrinterModal = ({
                   </div>
                 ))}
               </div>
-              <div className="border-l pl-20 border-white">
+              <div className="border-l pl-8 w-1/2">
                 <div className="text-xs mb-2">Последние три записи:</div>
                 {printer.three_last_pages.map((page, index) => (
-                  <div key={index} className="flex gap-2 mb-1">
+                  <div
+                    key={index}
+                    className="flex gap-2 pl-8 mb-1 justify-between"
+                  >
                     <div className="text-xs py-1">
                       с {page.start_month}.{page.start_year}г. по{" "}
                       {page.end_month}.{page.end_year}г.
@@ -122,14 +127,13 @@ const PrinterModal = ({
               </div>
             </div>
             <hr />
-          </div>
-          <div className="px-4">
-            Дата последнего ремонта:{" "}
-            <span className="text-accent-main">{printer.fixDate}</span>
-          </div>
-          <div className="px-4">
-            Расположен в{" "}
-            <span className="text-accent-main">{printer.location}</span>
+            <div className="px-4 my-1">
+              Дата последнего ремонта:{" "}
+              <span className="text-yellow-400">
+                {printer.fixDate ?? "Не известна"}
+              </span>
+            </div>
+            <hr />
           </div>
           {printer.IP !== null ? (
             <div className="py-3">
@@ -164,13 +168,23 @@ const PrinterModal = ({
               <FontAwesomeIcon
                 icon={faWifi}
                 className={`
-                   ${printer.network_capable === "yes" && "text-green-500"}
-                   ${printer.network_capable === "maybe" && "text-yellow-500"}
-                   ${printer.network_capable === "no" && "text-red-500"}`}
+                   ${printer.network_capable === "Сетевой" && "text-green-500"}
+                   ${
+                     printer.network_capable === "Есть возможность" &&
+                     "text-yellow-500"
+                   }
+                   ${
+                     printer.network_capable === "Нет возможности" &&
+                     "text-red-500"
+                   }`}
               />
-              {printer.network_capable === "yes" && <h3>Сетевой</h3>}
-              {printer.network_capable === "maybe" && <h3>Есть возможность</h3>}
-              {printer.network_capable === "no" && <h3>Не сетевой</h3>}
+              {printer.network_capable === "Сетевой" && <h3>Сетевой</h3>}
+              {printer.network_capable === "Есть возможность" && (
+                <h3>Есть возможность</h3>
+              )}
+              {printer.network_capable === "Нет возможности" && (
+                <h3>Не сетевой</h3>
+              )}
             </div>
           </div>
           <div className="my-3 px-3 py-3 rounded-md bg-neutral-soft">

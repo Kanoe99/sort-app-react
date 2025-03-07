@@ -84,8 +84,6 @@ class PrinterPageFactory extends Factory
                 }
             $years[] = $nextYear;
         }
-
-        // dd($years);
         
         $rows[] = $this->customDefinition($totalPrintPages, $totalScanPages, end($years), end($years), true);
         for($i = 0; $i < $count - 1; $i++)
