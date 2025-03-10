@@ -1,33 +1,49 @@
-import { useState, FormEvent, useEffect } from "react";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faAngleDown } from "@fortawesome/free-solid-svg-icons";
+import { useState, useEffect } from "react";
 import { useForm } from "@inertiajs/react";
+import TextInput from "./TextInput";
+import MonthsDropdown from "./MonthsDropdown";
 
 const TextContainer = ({
-  monthCondition,
-  yearCondition,
-  tabIndex,
-  placeHolder,
+  isMonth,
+  contentFar,
 }: {
+  isMonth: boolean;
   placeHolder?: string | undefined;
   tabIndex?: number | undefined;
   monthCondition: boolean;
   yearCondition: boolean;
+  contentFar?: boolean;
 }) => {
-  return (
-    <input
-      placeholder={placeHolder}
-      tabIndex={tabIndex ?? 0}
-      type="text"
-      className={`rounded-lg
-        px-5
-        text-center bg-transparent overflow-hidden grid place-items-center shadow-[inset_0_0_0_2px_rgba(0,0,0,0.5)] h-[2rem] text-white p-0 ${
-          yearCondition && monthCondition
-            ? `opacity-100 w-full block mb-2`
-            : "opacity-0 hidden w-0 overflow-hidden invisible"
-        }`}
-    />
-  );
+  if (!isMonth) {
+    return (
+      <TextInput
+        type="number"
+        id="number"
+        max="2"
+        placeholder="2025"
+        className="py-[.35rem]"
+        pattern="\d*"
+        onChange={(e) => {
+          {
+            const value = parseInt(e.target.value);
+          }
+        }}
+        isFocused
+        autoComplete="number"
+      />
+    );
+  } else {
+    return (
+      <MonthsDropdown
+        contentFar={contentFar}
+        db_head={null}
+        department_heads={[]}
+        setData={function (key: string, value: string): void {
+          throw new Error("Function not implemented.");
+        }}
+      />
+    );
+  }
 };
 
 const TripleToggle = ({
@@ -108,19 +124,8 @@ export const Expandable = ({
 
   const [isMonthOpen, setIsMonthOpen] = useState<boolean>(false);
   const [isYearOpen, setIsYearOpen] = useState<boolean>(false);
-  // const [printedData, setPrintedData] = useState("");
   const [months, setMonths] = useState<string[]>([""]);
   const [years, setYears] = useState<string[]>([""]);
-
-  const handleIsMonthOpen = () => {
-    setIsYearOpen(false);
-    setIsMonthOpen(!isMonthOpen);
-  };
-
-  const handleIsYearOpen = () => {
-    setIsMonthOpen(false);
-    setIsYearOpen(!isYearOpen);
-  };
 
   useEffect(() => {
     console.log(printedData);
@@ -163,7 +168,7 @@ export const Expandable = ({
       />
       <div className="flex justify-center items-center relative">
         <div>
-          <div className="pl-4 bg-black shadow-white/10 shadow-inner px-2 pb-1 pt-2 rounded-md outline outline-[1px] mx-2 outline-black font-bold text-sm mt-2 w-[14rem]">
+          <div className="pl-4 select-none bg-black shadow-white/10 shadow-inner px-2 pb-1 pt-2 rounded-md outline outline-[1px] mx-2 outline-black font-bold text-sm mt-2 w-[14rem]">
             {isPrint ? "Напечатано" : "Отсканировано"}
           </div>
           <div
@@ -171,37 +176,60 @@ export const Expandable = ({
               isYearOpen ? "gap-2" : "gap-0"
             } my-3 mx-2 w-[14rem]`}
           >
-            <div className={isYearOpen ? "w-1/2" : "w-0"}>
-              <TextContainer
-                placeHolder="2024"
-                tabIndex={!isYearOpen ? -1 : 0}
-                yearCondition={isYearOpen}
-                monthCondition={!isMonthOpen}
-              />
-              <TextContainer
-                placeHolder="ЯНВ"
-                tabIndex={!isYearOpen ? -1 : 0}
-                yearCondition={isYearOpen}
-                monthCondition={!isMonthOpen}
-              />
+            <div
+              className={`${
+                isYearOpen
+                  ? "w-1/2 gap-2 flex flex-col"
+                  : "w-0 invisible opacity-0 hidden"
+              } `}
+            >
+              {isYearOpen && (
+                <>
+                  <TextContainer
+                    isMonth={false}
+                    placeHolder="2024"
+                    tabIndex={!isYearOpen ? -1 : 0}
+                    yearCondition={isYearOpen}
+                    monthCondition={!isMonthOpen}
+                  />
+                  <TextContainer
+                    isMonth={true}
+                    placeHolder="ЯНВАРЬ"
+                    tabIndex={!isYearOpen ? -1 : 0}
+                    yearCondition={isYearOpen}
+                    monthCondition={!isMonthOpen}
+                  />
+                </>
+              )}
             </div>
-            <div className={isYearOpen ? "w-1/2" : "w-full"}>
+            <div
+              className={`${
+                isYearOpen ? "w-1/2" : "w-full"
+              } flex flex-col gap-2`}
+            >
               <TextContainer
+                contentFar={!isYearOpen}
+                isMonth={false}
                 placeHolder="2025"
                 yearCondition={true}
                 monthCondition={true}
               />
               <TextContainer
-                placeHolder="ЯНВ"
+                contentFar={!isYearOpen}
+                isMonth={true}
+                placeHolder="ЯНВАРЬ"
                 tabIndex={!isMonthOpen ? -1 : 0}
                 monthCondition={isMonthOpen}
                 yearCondition={!isYearOpen}
               />
-              <TextContainer
-                placeHolder="ФЕВ"
-                monthCondition={true}
-                yearCondition={true}
-              />
+              {isMonthOpen && (
+                <TextContainer
+                  isMonth={true}
+                  placeHolder="СЕНТЯБРЬ"
+                  monthCondition={true}
+                  yearCondition={true}
+                />
+              )}
             </div>
           </div>
           <div className="w-[14rem] mx-2">
