@@ -48,8 +48,8 @@ const PrinterModal = ({
           />
         </div>
         <div className="px-5 py-3">
-          <div className="bg-black h-full absolute right-[-24rem] top-0 px-4 py-2 rounded-md flex flex-col justify-around outline outline-1 outline-neutral-muted ">
-            <div className="mb-14 ml-14 mr-7">
+          <div className="bg-black h-full absolute right-[-24rem] top-0 px-4 py-2 rounded-md flex flex-col justify-start pt-10 gap-14 outline outline-1 outline-neutral-muted ">
+            <div className="ml-7 mr-7">
               <Expandable
                 printedData={printedData}
                 setPrintedData={setPrintedData}
@@ -57,7 +57,7 @@ const PrinterModal = ({
                 isPrint={false}
               />
             </div>
-            <div className="mb-14 ml-14 mr-7">
+            <div className="ml-7 mr-7">
               <Expandable
                 printedData={printedData}
                 setPrintedData={setPrintedData}
