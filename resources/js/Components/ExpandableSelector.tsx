@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { useForm } from "@inertiajs/react";
 import TextInput from "./TextInput";
-import MonthsDropdown from "./MonthsDropdown";
+import MonthsDropdown from "@/Components/MonthsDropDown";
 
 const TextContainer = ({
   isMonth,
@@ -35,6 +35,7 @@ const TextContainer = ({
   } else {
     return (
       <MonthsDropdown
+        id=""
         contentFar={contentFar}
         db_head={null}
         department_heads={[]}
@@ -159,7 +160,7 @@ export const Expandable = ({
   };
 
   return (
-    <form className="rounded-b-lg z-[99] flex flex-col justify-center min-h-[10rem] relative">
+    <form className="rounded-b-lg z-[] flex flex-col justify-center min-h-[10rem] relative">
       <TripleToggle
         isYearOpen={isYearOpen}
         isMonthOpen={isMonthOpen}
