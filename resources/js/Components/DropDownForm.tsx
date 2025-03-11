@@ -99,7 +99,7 @@ const Content = ({
           className={`${
             position === "right"
               ? `bg-[#000] ${
-                  contentFar ? "left-[18rem]" : "left-[10.75rem]"
+                  contentFar ? "left-[18rem]" : "left-[10.749999999999rem]"
                 } w-fit border-l`
               : "bg-bg-input-black  rounded-xl border-border-input"
           } absolute  z-50 mt-2 shadow-lg ${width} ${positionClasses} ${alignmentClasses} ${contentClasses}`}

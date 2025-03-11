@@ -22,3 +22,5 @@
 -   fix redirect back to 1st page after exiting edit page
 -   delete current page passed in getPrinters method or figure out why it is there
 -   for set range found this record
+-   make second month list to start from the month selected in the first month list
+-   search is broken

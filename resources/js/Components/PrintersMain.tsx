@@ -25,7 +25,7 @@ const PrintersMain = ({
     [searchQuery]
   );
 
-  useEffect(() => console.log(printersData), [printersData]);
+  // useEffect(() => console.log(printersData), [printersData]);
 
   useEffect(() => {
     const fetchData = async () => {

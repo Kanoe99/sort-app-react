@@ -39,14 +39,16 @@ const Trigger = ({ children }: PropsWithChildren) => {
     <>
       <div
         onClick={toggleOpen}
-        className="border bg-bg-input-black border-border-input rounded-xl"
+        className={`border ${
+          open && "border-white"
+        } bg-bg-input-black border-border-input rounded-xl`}
       >
         {children}
       </div>
 
       {open && (
         <div
-          className="fixed w-[80rem] bg-red-500/50 inset-0 z-[10]"
+          className="fixed w-[80rem] inset-0 z-[10]"
           onClick={() => toggleOpen()}
         ></div>
       )}
@@ -102,7 +104,7 @@ const Content = ({
           className={`${
             position === "right"
               ? `bg-[#000] ${
-                  contentFar ? "left-[18rem]" : "left-[10.75rem]"
+                  contentFar ? "left-[18rem]" : "left-[10.7499999999rem]"
                 } w-fit border-l`
               : "bg-bg-input-black  rounded-xl border-border-input"
           } absolute  z-50 mt-2 shadow-lg ${width} ${positionClasses} ${alignmentClasses} ${contentClasses}`}
@@ -135,7 +137,7 @@ const Option = ({
   return (
     <div
       className={
-        `block py-[0.15rem] font-semibold hover:bg-white hover:text-black cursor-pointer w-full px-4 text-start leading-5 transition duration-150 ease-in-out focus:outline-none text-white` +
+        `block select-none py-[0.15rem] font-semibold hover:bg-white hover:text-black cursor-pointer w-full px-4 text-start leading-5 transition duration-150 ease-in-out focus:outline-none text-white` +
         className
       }
       onClick={() => {

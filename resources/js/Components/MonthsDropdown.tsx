@@ -98,14 +98,14 @@ export default forwardRef(function TextInput(
         contentFar={contentFar}
       >
         <div className="font-semibold">
-          {months.map((department_head) => (
+          {months.map((month) => (
             <DropDownMonth.Option
-              key={department_head}
+              key={month}
               onClick={() => {
-                handleClick(department_head);
+                handleClick(month);
               }}
             >
-              {department_head}
+              {month}
             </DropDownMonth.Option>
           ))}
         </div>

@@ -1,9 +1,10 @@
 import { useState, useEffect } from "react";
 import { useForm } from "@inertiajs/react";
-import TextInput from "./TextInput";
 import MonthsDropdown from "@/Components/MonthsDropDown";
+import NumberInput from "./NumberInput";
 
 const TextContainer = ({
+  onChange,
   isMonth,
   contentFar,
 }: {
@@ -13,24 +14,12 @@ const TextContainer = ({
   monthCondition: boolean;
   yearCondition: boolean;
   contentFar?: boolean;
+  onChange: (value: number) => void;
 }) => {
+  const max = new Date().getFullYear().toString().length;
   if (!isMonth) {
     return (
-      <TextInput
-        type="number"
-        id="number"
-        max="2"
-        placeholder="2025"
-        className="py-[.35rem]"
-        pattern="\d*"
-        onChange={(e) => {
-          {
-            const value = parseInt(e.target.value);
-          }
-        }}
-        isFocused
-        autoComplete="number"
-      />
+      <NumberInput onChange={onChange} className="py-[0.35rem]" max={max} />
     );
   } else {
     return (
@@ -125,12 +114,19 @@ export const Expandable = ({
 
   const [isMonthOpen, setIsMonthOpen] = useState<boolean>(false);
   const [isYearOpen, setIsYearOpen] = useState<boolean>(false);
-  const [months, setMonths] = useState<string[]>([""]);
-  const [years, setYears] = useState<string[]>([""]);
+  const [months, setMonths] = useState<number[]>([]);
+  const [years, setYears] = useState<number[]>([]);
+
+  // useEffect(() => {
+  //   console.log(printedData);
+  // }, [printedData]);
 
   useEffect(() => {
-    console.log(printedData);
-  }, [printedData]);
+    console.log(
+      `%c${years}`,
+      "background-color: black; color: white; padding: 10px; border: 1px solid green;"
+    );
+  }, [years, months]);
 
   const handleSearch = () => {
     const endPoint = isPrint ? "printed" : "scanned";
@@ -157,6 +153,14 @@ export const Expandable = ({
       console.log("printedData: " + printedData);
     };
     fetchData();
+  };
+
+  const handleYears = (
+    e: React.ChangeEvent<HTMLInputElement>,
+    value: number
+  ) => {
+    setYears((prev) => [Number(e.target.value), prev[0]]);
+    console.log("test");
   };
 
   return (
@@ -187,6 +191,11 @@ export const Expandable = ({
               {isYearOpen && (
                 <>
                   <TextContainer
+                    onChange={(value: number) => {
+                      if (years[0] !== value) {
+                        setYears((prev) => [value, prev[0]]);
+                      }
+                    }}
                     isMonth={false}
                     placeHolder="2024"
                     tabIndex={!isYearOpen ? -1 : 0}
@@ -209,6 +218,11 @@ export const Expandable = ({
               } flex flex-col gap-2`}
             >
               <TextContainer
+                onChange={(value: number) => {
+                  if (years[0] !== value) {
+                    setYears((prev) => [value, prev[1]]);
+                  }
+                }}
                 contentFar={!isYearOpen}
                 isMonth={false}
                 placeHolder="2025"

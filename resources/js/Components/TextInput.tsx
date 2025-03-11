@@ -46,7 +46,6 @@ export default forwardRef(function TextInput(
 
   return (
     <input
-      max={max}
       {...props}
       type={type}
       className={`mt-1 block w-full ${
