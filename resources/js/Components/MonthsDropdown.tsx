@@ -48,28 +48,6 @@ export default forwardRef(function TextInput(
     setData("activeMonth", activeMonth);
   };
 
-  const Trigger = ({ children }: PropsWithChildren) => {
-    const { open, setOpen, toggleOpen } = useContext(DropDownMonthContext);
-
-    return (
-      <>
-        <div
-          onClick={toggleOpen}
-          className="border bg-black border-neutral-light rounded-md"
-        >
-          {children}
-        </div>
-
-        {open && (
-          <div
-            className="fixed inset-0 z-40"
-            onClick={() => setOpen(false)}
-          ></div>
-        )}
-      </>
-    );
-  };
-
   useImperativeHandle(ref, () => ({
     focus: () => localRef.current?.focus(),
   }));

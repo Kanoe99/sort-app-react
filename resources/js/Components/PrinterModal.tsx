@@ -3,7 +3,7 @@ import Modal from "./Modal";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Printer } from "@/types";
 import { IPView } from "./IPView";
-import { Expandable } from "./ExpandableSelector";
+import { Expandable } from "./Expandable/ExpandableSelector";
 import { useState } from "react";
 
 interface PrinterModalProps {
