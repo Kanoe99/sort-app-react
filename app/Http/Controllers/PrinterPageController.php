@@ -31,7 +31,7 @@ class PrinterPageController extends Controller
        ]) : $data;        
     
         return response()->json([
-            'print_pages' => $data->pluck('print_pages')->toArray(),
+            'print_pages' => $data->all(),
         ]);
     }
 

@@ -25,8 +25,6 @@ const PrintersMain = ({
     [searchQuery]
   );
 
-  // useEffect(() => console.log(printersData), [printersData]);
-
   useEffect(() => {
     const fetchData = async () => {
       const endPoint = isSearchMode ? "search" : "printers";

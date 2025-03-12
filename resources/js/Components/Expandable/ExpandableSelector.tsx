@@ -64,7 +64,7 @@ export const Expandable = ({
       console.warn("isYearOpen: " + isYearOpen);
       console.warn("isMonthOpen: " + isMonthOpen);
       setPrintedData(printedData);
-      console.log("printedData: " + printedData);
+      console.log("printedData: " + printedData.print_pages);
     };
     fetchData();
   };
