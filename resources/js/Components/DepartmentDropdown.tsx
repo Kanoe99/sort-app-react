@@ -23,7 +23,7 @@ export default forwardRef(function TextInput(
   ref
 ) {
   const [department_head, setDepartment_head] = useState<string | null>(
-    db_head ?? "Выберите отвественное лицо"
+    db_head ?? "Выберите ответственное лицо"
   );
   const localRef = useRef<HTMLInputElement>(null);
 

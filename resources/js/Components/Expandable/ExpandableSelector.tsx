@@ -3,6 +3,14 @@ import { useForm } from "@inertiajs/react";
 import { TextContainer } from "@/Components/Expandable/TextContainer";
 import { TripleToggle } from "@/Components/Expandable/TripleToggle";
 import NumberInput from "../NumberInput";
+import MonthsDropdown from "./MonthsDropdown";
+
+interface DateRange {
+  startMonth: number;
+  startYear: number;
+  endMonth: number;
+  endYear: number;
+}
 
 export const Expandable = ({
   setPrintedData,
@@ -20,27 +28,32 @@ export const Expandable = ({
 
   const [isMonthOpen, setIsMonthOpen] = useState<boolean>(false);
   const [isYearOpen, setIsYearOpen] = useState<boolean>(false);
-  const [months, setMonths] = useState<number[]>([]);
-  const [years, setYears] = useState<number[]>([]);
+
+  const currentDate = new Date();
+  const pastDate = new Date(currentDate);
+  pastDate.setMonth(currentDate.getMonth() - 3);
+
+  const [dates, setDates] = useState<DateRange>({
+    startYear: pastDate.getFullYear(),
+    startMonth: pastDate.getMonth() + 1,
+    endYear: currentDate.getFullYear(),
+    endMonth: currentDate.getMonth() + 1,
+  });
 
   useEffect(() => {
     console.log(
-      `%c${years}`,
+      `%c${(dates?.startYear, dates?.endYear)}`,
       "background-color: black; color: white; padding: 10px; border: 1px solid green;"
     );
-  }, [years, months]);
+  }, [dates?.startYear, dates?.endYear]);
 
   const handleSearch = () => {
     const endPoint = isPrint ? "printed" : "scanned";
 
-    const rangeEnd = `&end_year=${years[years.length - 1]}&end_month=${
-      months[months.length - 1]
-    }`;
+    const rangeEnd = `&end_year=${dates?.endYear}&end_month=${dates?.endMonth}`;
 
     const rangeStart = isYearOpen
-      ? `&start_year=${years[0]}&start_month=${months[0]}`
-      : isMonthOpen
-      ? `&start_month=${months[0]}`
+      ? `&start_year=${dates?.startYear}&start_month=${dates?.startMonth}`
       : "";
 
     const url = `/${endPoint}?printer_id=${printer_id}${rangeStart}${rangeEnd}`;
@@ -58,19 +71,21 @@ export const Expandable = ({
   };
 
   const handleChange = (value: number) => {
-    if (years[0] !== value) {
-      setYears((prev) => [value, prev[0]]);
-    }
+    setDates((prev) => ({
+      startYear: value,
+      startMonth: prev?.startMonth ?? 0,
+      endMonth: prev?.endMonth ?? 0,
+      endYear: prev?.endYear ?? 0,
+    }));
   };
 
   const max = new Date().getFullYear().toString().length;
 
-  const handleYears = (
-    e: React.ChangeEvent<HTMLInputElement>,
-    value: number
-  ) => {
-    setYears((prev) => [Number(e.target.value), prev[0]]);
-    console.log("test");
+  const handleMonthChange = (key: "startMonth" | "endMonth", month: number) => {
+    setDates((prev) => ({
+      ...prev,
+      [key]: month, // Update the specified month in the dates state
+    }));
   };
 
   return (
@@ -105,7 +120,11 @@ export const Expandable = ({
                     className="py-[0.35rem]"
                     max={max}
                   />
-                  <TextContainer onChange={() => {}} />
+                  <MonthsDropdown
+                    id="startMonth"
+                    month={dates.startMonth}
+                    onChange={(month) => handleMonthChange("startMonth", month)}
+                  />
                 </>
               )}
             </div>
@@ -119,8 +138,20 @@ export const Expandable = ({
                 className="py-[0.35rem]"
                 max={max}
               />
-              {isMonthOpen && <TextContainer onChange={() => {}} />}
-              <TextContainer onChange={() => {}} />
+              {isMonthOpen && (
+                <MonthsDropdown
+                  id="startMonth"
+                  contentFar={false}
+                  month={dates.startMonth}
+                  onChange={(month) => handleMonthChange("startMonth", month)}
+                />
+              )}
+              <MonthsDropdown
+                id="endMonth"
+                contentFar={false}
+                month={dates.endMonth}
+                onChange={(month) => handleMonthChange("endMonth", month)}
+              />
             </div>
           </div>
           <div className="w-[14rem] mx-2">

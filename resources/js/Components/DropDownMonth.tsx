@@ -101,13 +101,13 @@ const Content = ({
         leaveTo="opacity-0 scale-95"
       >
         <div
-          className={`${
+          className={`absolute  z-50 mt-2 shadow-lg right-0 ${
             position === "right"
               ? `bg-[#000] ${
-                  contentFar ? "left-[18rem]" : "left-[10.7499999999rem]"
+                  contentFar ? "ml-[11.25rem]" : "ml-[4rem]"
                 } w-fit border-l`
               : "bg-bg-input-black  rounded-xl border-border-input"
-          } absolute  z-50 mt-2 shadow-lg ${width} ${positionClasses} ${alignmentClasses} ${contentClasses}`}
+          } ${width} ${positionClasses} ${alignmentClasses} ${contentClasses}`}
         >
           <div
             className={`${
