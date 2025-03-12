@@ -10,14 +10,17 @@ export default forwardRef(function NumberInput(
   {
     className = "",
     isFocused = false,
+    _placeholder,
     value,
     max,
     onChange,
     ...props
   }: InputHTMLAttributes<HTMLInputElement> & {
+    value: number | "";
+    _placeholder: number | "";
     max: number;
     isFocused?: boolean;
-    onChange: (value: number) => void;
+    onChange: (value: number | "") => void;
   },
   ref
 ) {
@@ -53,14 +56,18 @@ export default forwardRef(function NumberInput(
     <input
       onChange={(e) => {
         const input = e.target;
+        if (input.value === "") {
+          onChange("");
+          return;
+        }
         if (input.value.length > max) {
           input.value = input.value.slice(0, 4);
         }
         onChange(Number(input.value));
       }}
       {...props}
-      value={value}
-      placeholder="2025"
+      value={value ?? ""}
+      placeholder={_placeholder.toString()}
       type="number"
       max={max}
       className={`mt-1 block w-full ${

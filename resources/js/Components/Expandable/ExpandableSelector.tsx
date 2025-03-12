@@ -1,15 +1,14 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, ChangeEvent } from "react";
 import { useForm } from "@inertiajs/react";
-import { TextContainer } from "@/Components/Expandable/TextContainer";
 import { TripleToggle } from "@/Components/Expandable/TripleToggle";
 import NumberInput from "../NumberInput";
 import MonthsDropdown from "./MonthsDropdown";
 
 interface DateRange {
   startMonth: number;
-  startYear: number;
+  startYear: number | "";
   endMonth: number;
-  endYear: number;
+  endYear: number | "";
 }
 
 export const Expandable = ({
@@ -84,7 +83,17 @@ export const Expandable = ({
   const handleMonthChange = (key: "startMonth" | "endMonth", month: number) => {
     setDates((prev) => ({
       ...prev,
-      [key]: month, // Update the specified month in the dates state
+      [key]: month,
+    }));
+  };
+
+  const handleYearChange = (
+    key: "startYear" | "endYear",
+    year: number | "" | ChangeEvent<HTMLInputElement>
+  ) => {
+    setDates((prev) => ({
+      ...prev,
+      [key]: year,
     }));
   };
 
@@ -116,7 +125,9 @@ export const Expandable = ({
               {isYearOpen && (
                 <>
                   <NumberInput
-                    onChange={() => {}}
+                    value={dates.startYear === "" ? "" : dates.startYear}
+                    _placeholder={dates.startYear}
+                    onChange={(year) => handleYearChange("startYear", year)}
                     className="py-[0.35rem]"
                     max={max}
                   />
@@ -134,7 +145,9 @@ export const Expandable = ({
               } flex flex-col gap-2`}
             >
               <NumberInput
-                onChange={() => {}}
+                value={dates.endYear}
+                _placeholder={dates.endYear}
+                onChange={(year) => handleYearChange("endYear", year)}
                 className="py-[0.35rem]"
                 max={max}
               />

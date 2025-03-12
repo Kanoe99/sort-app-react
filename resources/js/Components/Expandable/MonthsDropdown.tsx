@@ -12,7 +12,7 @@ import DropDownMonth from "@/Components/DropDownMonth";
 interface MonthsDropdownProps {
   id: string;
   month: number;
-  onChange?: (month: number) => void; // Add onChange prop
+  onChange?: (month: number) => void;
   contentFar?: boolean;
 }
 
