@@ -35,6 +35,9 @@ export default {
   			]
   		},
   		colors: {
+			'scrollbar-track': '#1f2937', // Dark background
+			'scrollbar-thumb': '#6b7280', // Gray thumb
+			'scrollbar-thumb-hover': '#4b5563', // Darker thumb on hover
   			black: '#181818',
   			accent: {
   				main: '#3b82f6',

@@ -69,7 +69,6 @@ export default forwardRef(function NumberInput(
       value={value ?? ""}
       placeholder={_placeholder.toString()}
       type="number"
-      max={max}
       className={`mt-1 block w-full ${
         className ?? "py-3"
       } rounded-xl border-border-input text-white bg-bg-input-black focus:border-accent-main focus:ring-accent-main`}

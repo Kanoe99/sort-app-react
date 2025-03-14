@@ -3,6 +3,7 @@ import { PrinterCard } from "./PrinterCard";
 import { Pagination } from "./Pagination";
 import { Printer } from "@/types";
 import { NotFound } from "./NotFound";
+import { PrinterCardContextProvider } from "./PrinterCardContext";
 
 const PrintersMain = ({
   isSearchMode,
@@ -50,7 +51,7 @@ const PrintersMain = ({
   }, [pagination.current_page, isSearchMode, searchQuery]);
 
   return (
-    <div className="flex flex-col relative">
+    <div className="flex flex-col relative overflow-x-hidden">
       {printersData && printersData.length !== 0 ? (
         isSearchMode && (
           <div className="font-semibold text-xl border-l-2 flex items-center pl-4 mb-6 h-10">
@@ -70,7 +71,9 @@ const PrintersMain = ({
         {printersData &&
           printersData.length !== 0 &&
           printersData.map((printer) => (
-            <PrinterCard key={printer.id} printer={printer} />
+            <PrinterCardContextProvider>
+              <PrinterCard key={printer.id} printer={printer} />
+            </PrinterCardContextProvider>
           ))}
       </div>
       <div className="sticky flex-1 bottom-0 backdrop-blur-xl w-full">

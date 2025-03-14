@@ -12,11 +12,13 @@ export default function Modal({
   maxWidth = "2xl",
   closeable = true,
   onClose = () => {},
+  transparent,
 }: PropsWithChildren<{
   show: boolean;
-  maxWidth?: "sm" | "md" | "lg" | "xl" | "2xl";
+  maxWidth?: "sm" | "md" | "lg" | "xl" | "2xl" | "3xl" | "4xl" | "5xl" | "fit";
   closeable?: boolean;
   onClose: CallableFunction;
+  transparent?: boolean;
 }>) {
   const close = () => {
     if (closeable) {
@@ -30,6 +32,10 @@ export default function Modal({
     lg: "sm:max-w-lg",
     xl: "sm:max-w-xl",
     "2xl": "sm:max-w-2xl",
+    "3xl": "sm:max-w-3xl",
+    "4xl": "sm:max-w-4xl",
+    "5xl": "sm:max-w-5xl",
+    fit: "sm:max-w-fit",
   }[maxWidth];
 
   return (
@@ -60,7 +66,12 @@ export default function Modal({
           leaveTo="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
         >
           <DialogPanel
-            className={`mb-6 bg-neutral-muted text-white transform  rounded-lg shadow-xl transition-all sm:mx-auto sm:w-full outline outline-1 outline-neutral-soft backdrop-blur-xl ${maxWidthClass}`}
+            style={{ backgroundColor: "transparent" }}
+            className={`mb-6 ${
+              transparent
+                ? " outline-none"
+                : "bg-neutral-muted outline-neutral-soft"
+            } text-white transform  rounded-lg shadow-xl transition-all w-fit sm:mx-auto sm:w-fit outline outline-1 ${maxWidthClass}`}
           >
             {children}
           </DialogPanel>

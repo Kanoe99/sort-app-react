@@ -1,4 +1,5 @@
 -   Make version for small screens
+-   Merge /printers and /main
 -   Allow for adding tags/editing comments in modal
 -   Make path to the logo absolute
 -   change empty guarded in tag.php to fillable array of value
@@ -24,3 +25,4 @@
 -   for set range found this record
 -   make second month list to start from the month selected in the first month list
 -   search is broken
+-   date search broken

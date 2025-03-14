@@ -3,6 +3,7 @@ import { useForm } from "@inertiajs/react";
 import { TripleToggle } from "@/Components/Expandable/TripleToggle";
 import NumberInput from "../NumberInput";
 import MonthsDropdown from "./MonthsDropdown";
+import { printedData } from "@/Components/PrinterModal";
 
 interface DateRange {
   startMonth: number;
@@ -16,8 +17,8 @@ export const Expandable = ({
   isPrint,
   printer_id,
 }: {
-  printedData: string;
-  setPrintedData: (printedData: string) => void;
+  printedData: printedData | undefined;
+  setPrintedData: (printedData: printedData) => void;
   isPrint: boolean;
   printer_id: number;
 }) => {
@@ -53,6 +54,8 @@ export const Expandable = ({
 
     const rangeStart = isYearOpen
       ? `&start_year=${dates?.startYear}&start_month=${dates?.startMonth}`
+      : isMonthOpen
+      ? `&start_month=${dates.startMonth}`
       : "";
 
     const url = `/${endPoint}?printer_id=${printer_id}${rangeStart}${rangeEnd}`;
@@ -64,18 +67,9 @@ export const Expandable = ({
       console.warn("isYearOpen: " + isYearOpen);
       console.warn("isMonthOpen: " + isMonthOpen);
       setPrintedData(printedData);
-      console.log("printedData: " + printedData.print_pages);
+      console.log("printedData: " + printedData);
     };
     fetchData();
-  };
-
-  const handleChange = (value: number) => {
-    setDates((prev) => ({
-      startYear: value,
-      startMonth: prev?.startMonth ?? 0,
-      endMonth: prev?.endMonth ?? 0,
-      endYear: prev?.endYear ?? 0,
-    }));
   };
 
   const max = new Date().getFullYear().toString().length;
@@ -139,6 +133,7 @@ export const Expandable = ({
                 </>
               )}
             </div>
+
             <div
               className={`${
                 isYearOpen ? "w-1/2" : "w-full"

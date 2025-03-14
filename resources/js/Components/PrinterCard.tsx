@@ -6,10 +6,15 @@ import { usePage } from "@inertiajs/react";
 import { IPView } from "./IPView";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faDesktop, faWifi } from "@fortawesome/free-solid-svg-icons";
+import {
+  PrinterCardContextProvider,
+  usePrinterCardContext,
+} from "./PrinterCardContext";
 
 const PrinterCard = ({ printer }: { printer: Printer }) => {
   const [isVisible, setIsVisible] = useState(false);
   const user = usePage().props.auth.user;
+  const { test, setTest } = usePrinterCardContext();
 
   return (
     <div
@@ -20,6 +25,13 @@ const PrinterCard = ({ printer }: { printer: Printer }) => {
         <div>
           <div className="bg-black px-4 outline outline-1 outline-neutral-soft rounded-md w-full flex justify-between">
             <div className="flex-1 border-r border-neutral-soft h-full py-2">
+              <div
+                className="bg-blue-500 border-2 rounded-md px-2 py-1 cursor-pointer select-none"
+                onClick={() => setTest("test value in printerCard")}
+              >
+                click me
+              </div>
+              <div className="bg-red-500">{test}</div>
               {printer.model}
             </div>
             <div className="pl-4 py-2">

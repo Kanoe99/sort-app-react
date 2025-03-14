@@ -48,7 +48,7 @@ const Trigger = ({ children }: PropsWithChildren) => {
 
       {open && (
         <div
-          className="fixed w-[80rem] inset-0 z-[10]"
+          className="fixed w-[110%] inset-0 z-[10]"
           onClick={() => toggleOpen()}
         ></div>
       )}
