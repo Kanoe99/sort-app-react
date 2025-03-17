@@ -26,3 +26,4 @@
 -   make second month list to start from the month selected in the first month list
 -   search is broken
 -   date search broken
+-   possibly change month data type from number | '' to number

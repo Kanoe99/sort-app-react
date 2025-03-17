@@ -1,9 +1,10 @@
-import { useState, useEffect, ChangeEvent } from "react";
+import { useState, ChangeEvent } from "react";
 import { useForm } from "@inertiajs/react";
 import { TripleToggle } from "@/Components/Expandable/TripleToggle";
 import NumberInput from "../NumberInput";
 import MonthsDropdown from "./MonthsDropdown";
 import { printedData } from "@/Components/PrinterModal";
+import { usePrinterCardContext } from "@/Components/PrinterCardContext";
 
 interface DateRange {
   startMonth: number;
@@ -29,33 +30,19 @@ export const Expandable = ({
   const [isMonthOpen, setIsMonthOpen] = useState<boolean>(false);
   const [isYearOpen, setIsYearOpen] = useState<boolean>(false);
 
-  const currentDate = new Date();
-  const pastDate = new Date(currentDate);
-  pastDate.setMonth(currentDate.getMonth() - 3);
-
-  const [dates, setDates] = useState<DateRange>({
-    startYear: pastDate.getFullYear(),
-    startMonth: pastDate.getMonth() + 1,
-    endYear: currentDate.getFullYear(),
-    endMonth: currentDate.getMonth() + 1,
-  });
-
-  useEffect(() => {
-    console.log(
-      `%c${(dates?.startYear, dates?.endYear)}`,
-      "background-color: black; color: white; padding: 10px; border: 1px solid green;"
-    );
-  }, [dates?.startYear, dates?.endYear]);
+  const { dates, setDates } = usePrinterCardContext();
+  const selectedDates = isPrint ? dates.print : dates.scan;
+  const { endYear, endMonth, startYear, startMonth } = selectedDates;
 
   const handleSearch = () => {
     const endPoint = isPrint ? "printed" : "scanned";
 
-    const rangeEnd = `&end_year=${dates?.endYear}&end_month=${dates?.endMonth}`;
+    const rangeEnd = `&end_year=${endYear}&end_month=${endMonth}`;
 
     const rangeStart = isYearOpen
-      ? `&start_year=${dates?.startYear}&start_month=${dates?.startMonth}`
+      ? `&start_year=${startYear}&start_month=${startMonth}`
       : isMonthOpen
-      ? `&start_month=${dates.startMonth}`
+      ? `&start_month=${startMonth}`
       : "";
 
     const url = `/${endPoint}?printer_id=${printer_id}${rangeStart}${rangeEnd}`;
@@ -77,7 +64,10 @@ export const Expandable = ({
   const handleMonthChange = (key: "startMonth" | "endMonth", month: number) => {
     setDates((prev) => ({
       ...prev,
-      [key]: month,
+      [isPrint ? "print" : "scan"]: {
+        ...prev[isPrint ? "print" : "scan"],
+        [key]: month,
+      },
     }));
   };
 
@@ -87,13 +77,17 @@ export const Expandable = ({
   ) => {
     setDates((prev) => ({
       ...prev,
-      [key]: year,
+      [isPrint ? "print" : "scan"]: {
+        ...prev[isPrint ? "print" : "scan"],
+        [key]: year,
+      },
     }));
   };
 
   return (
     <form className="rounded-b-lg z-[] flex flex-col justify-center min-h-[10rem] relative">
       <TripleToggle
+        isPrint={isPrint}
         isYearOpen={isYearOpen}
         isMonthOpen={isMonthOpen}
         handleIsYearOpen={setIsYearOpen}
@@ -119,15 +113,15 @@ export const Expandable = ({
               {isYearOpen && (
                 <>
                   <NumberInput
-                    value={dates.startYear === "" ? "" : dates.startYear}
-                    _placeholder={dates.startYear}
+                    value={startYear === "" ? "" : startYear}
+                    _placeholder={startYear}
                     onChange={(year) => handleYearChange("startYear", year)}
                     className="py-[0.35rem]"
                     max={max}
                   />
                   <MonthsDropdown
                     id="startMonth"
-                    month={dates.startMonth}
+                    month={startMonth !== "" ? startMonth : 0}
                     onChange={(month) => handleMonthChange("startMonth", month)}
                   />
                 </>
@@ -140,8 +134,8 @@ export const Expandable = ({
               } flex flex-col gap-2`}
             >
               <NumberInput
-                value={dates.endYear}
-                _placeholder={dates.endYear}
+                value={endYear}
+                _placeholder={endYear}
                 onChange={(year) => handleYearChange("endYear", year)}
                 className="py-[0.35rem]"
                 max={max}
@@ -150,14 +144,14 @@ export const Expandable = ({
                 <MonthsDropdown
                   id="startMonth"
                   contentFar={false}
-                  month={dates.startMonth}
+                  month={startMonth !== "" ? startMonth : 0}
                   onChange={(month) => handleMonthChange("startMonth", month)}
                 />
               )}
               <MonthsDropdown
                 id="endMonth"
                 contentFar={false}
-                month={dates.endMonth}
+                month={endMonth !== "" ? endMonth : 0}
                 onChange={(month) => handleMonthChange("endMonth", month)}
               />
             </div>

@@ -28,7 +28,6 @@ const PrinterModal = ({
   printer,
 }: PrinterModalProps) => {
   const [printedData, setPrintedData] = useState<printedData>();
-  // const { dates, setDates } = usePrinterCardContext();
 
   useEffect(() => console.log(printedData), [printedData]);
 

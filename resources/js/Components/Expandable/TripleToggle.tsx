@@ -1,17 +1,24 @@
+import { usePrinterCardContext } from "@/Components/PrinterCardContext";
+
 const TripleToggle = ({
   isYearOpen,
   isMonthOpen,
   handleIsYearOpen,
   handleIsMonthOpen,
+  isPrint,
 }: {
   isYearOpen: boolean;
   isMonthOpen: boolean;
   handleIsYearOpen: (isYearOpen: boolean) => void;
   handleIsMonthOpen: (isMonthOpen: boolean) => void;
+  isPrint: boolean;
 }) => {
-  const ym = !isMonthOpen && !isYearOpen;
-  const ymm = isMonthOpen && !isYearOpen;
-  const yym = !isMonthOpen && isYearOpen;
+  const ym_local = !isMonthOpen && !isYearOpen;
+  const ymm_local = isMonthOpen && !isYearOpen;
+  const yym_local = !isMonthOpen && isYearOpen;
+
+  const { panels, setPanels } = usePrinterCardContext();
+  const selectedPanels = isPrint ? panels.print : panels.scan;
 
   return (
     <div className="flex justify-between mx-2 mb-2">
@@ -20,10 +27,18 @@ const TripleToggle = ({
           if (isMonthOpen || isYearOpen) {
             handleIsMonthOpen(false);
             handleIsYearOpen(false);
+            setPanels((prev) => ({
+              ...prev,
+              [isPrint ? "print" : "scan"]: {
+                ym: true,
+                ymm: false,
+                yym: false,
+              },
+            }));
           }
         }}
         className={`bg-black border ${
-          ym ? "text-black bg-white" : "text-white bg-black"
+          ym_local ? "text-black bg-white" : "text-white bg-black"
         } w-[4rem] text-center font-bold p-1 rounded-lg cursor-pointer select-none`}
       >
         ГМ
@@ -33,10 +48,18 @@ const TripleToggle = ({
           if (!isMonthOpen) {
             handleIsMonthOpen(true);
             handleIsYearOpen(false);
+            setPanels((prev) => ({
+              ...prev,
+              [isPrint ? "print" : "scan"]: {
+                ym: false,
+                ymm: true,
+                yym: false,
+              },
+            }));
           }
         }}
         className={`bg-black border ${
-          ymm ? "text-black bg-white" : "text-white bg-black"
+          ymm_local ? "text-black bg-white" : "text-white bg-black"
         } w-[4rem] text-center font-bold p-1 rounded-lg cursor-pointer select-none`}
       >
         ГMМ
@@ -44,13 +67,21 @@ const TripleToggle = ({
       <div
         onClick={() => {
           if (!isYearOpen) {
-            console.log(yym + " changing yym");
+            console.log(yym_local + " changing yym_local");
             handleIsMonthOpen(false);
             handleIsYearOpen(true);
+            setPanels((prev) => ({
+              ...prev,
+              [isPrint ? "print" : "scan"]: {
+                ym: false,
+                ymm: false,
+                yym: true,
+              },
+            }));
           }
         }}
         className={`bg-black border ${
-          yym ? "text-black bg-white" : "text-white bg-black"
+          yym_local ? "text-black bg-white" : "text-white bg-black"
         } w-[4rem] text-center font-bold p-1 rounded-lg cursor-pointer select-none`}
       >
         ГГМ
