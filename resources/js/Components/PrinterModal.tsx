@@ -6,6 +6,7 @@ import { IPView } from "./IPView";
 import { Expandable } from "./Expandable/ExpandableSelector";
 import { useEffect, useState } from "react";
 import { DateSearchResults } from "@/Components/Expandable/DateSearchResults";
+import { usePrinterCardContext } from "@/Components/PrinterCardContext";
 
 interface PrinterModalProps {
   isVisible: boolean;
@@ -27,6 +28,7 @@ const PrinterModal = ({
   printer,
 }: PrinterModalProps) => {
   const [printedData, setPrintedData] = useState<printedData>();
+  // const { dates, setDates } = usePrinterCardContext();
 
   useEffect(() => console.log(printedData), [printedData]);
 

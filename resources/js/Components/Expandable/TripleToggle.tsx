@@ -1,6 +1,3 @@
-import { useContext } from "react";
-import { usePrinterCardContext } from "@/Components/PrinterCardContext";
-
 const TripleToggle = ({
   isYearOpen,
   isMonthOpen,
@@ -16,18 +13,8 @@ const TripleToggle = ({
   const ymm = isMonthOpen && !isYearOpen;
   const yym = !isMonthOpen && isYearOpen;
 
-  const { test, setTest } = usePrinterCardContext();
-
   return (
     <div className="flex justify-between mx-2 mb-2">
-      <div
-        className="bg-green-300 rounded-md border-2 border-blue-600 cursor-pointer select-none"
-        onClick={() => {
-          setTest("new test value");
-        }}
-      >
-        click here
-      </div>
       <div
         onClick={() => {
           if (isMonthOpen || isYearOpen) {

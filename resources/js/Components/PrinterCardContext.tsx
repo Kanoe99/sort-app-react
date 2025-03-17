@@ -1,20 +1,32 @@
 import React, { createContext, useContext, useState } from "react";
 
+interface DateRange {
+  startMonth: number | "";
+  startYear: number | "";
+  endMonth: number | "";
+  endYear: number | "";
+}
+
 const PrinterCardContext = createContext<{
-  test: string | null;
-  setTest: (test: string | null) => void;
+  dates: DateRange;
+  setDates: React.Dispatch<React.SetStateAction<DateRange>>;
 }>({
-  test: null,
-  setTest: () => {},
+  dates: { endYear: "", endMonth: "", startYear: "", startMonth: "" },
+  setDates: () => {}, // Placeholder function
 });
 
 export const PrinterCardContextProvider: React.FC<{
   children: React.ReactNode;
 }> = ({ children }) => {
-  const [test, setTest] = useState<string | null>(null);
+  const [dates, setDates] = useState<DateRange>({
+    endYear: "",
+    endMonth: "",
+    startYear: "",
+    startMonth: "",
+  });
 
   return (
-    <PrinterCardContext.Provider value={{ test, setTest }}>
+    <PrinterCardContext.Provider value={{ dates, setDates }}>
       {children}
     </PrinterCardContext.Provider>
   );
