@@ -172,7 +172,7 @@ class PrinterController extends Controller
 
    public function store(Request $request)
     {
-        //delete try cath in prod
+        //TODO: delete try cath in prod
         dd($request->all());
      try{
         $attributes = $request->validate([

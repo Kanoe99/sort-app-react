@@ -1,10 +1,10 @@
 import React, { createContext, useContext, useState } from "react";
 
 interface DateRange {
-  startMonth: number | "";
-  startYear: number | "";
-  endMonth: number | "";
-  endYear: number | "";
+  startMonth: number;
+  startYear: number;
+  endMonth: number;
+  endYear: number;
 }
 
 interface PS_dates {
@@ -30,8 +30,18 @@ const PrinterCardContext = createContext<{
   setPanels: React.Dispatch<React.SetStateAction<PS_panels>>;
 }>({
   dates: {
-    print: { endYear: "", endMonth: "", startYear: "", startMonth: "" },
-    scan: { endYear: "", endMonth: "", startYear: "", startMonth: "" },
+    print: {
+      endYear: new Date().getFullYear(),
+      endMonth: 1,
+      startYear: new Date().getFullYear(),
+      startMonth: 1,
+    },
+    scan: {
+      endYear: new Date().getFullYear(),
+      endMonth: 1,
+      startYear: new Date().getFullYear(),
+      startMonth: 1,
+    },
   },
   setDates: () => {},
   panels: {

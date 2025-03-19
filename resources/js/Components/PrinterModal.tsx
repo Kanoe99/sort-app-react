@@ -20,6 +20,11 @@ export interface printedData {
   end_months: number[];
   start_years: number[];
   start_months: number[];
+  search_end_year: number;
+  search_end_month: number;
+  search_start_year: number;
+  search_start_month: number;
+  error: string;
 }
 
 const PrinterModal = ({
@@ -69,19 +74,19 @@ const PrinterModal = ({
             <div className="px-4 flex flex-col gap-1 justify-between text-sm mb-4">
               <hr />
               <div className="flex justify-between my-1 text-xs">
-                <div className="flex gap-2 test-1/2 justify-between pr-8">
+                <div className="flex gap-2 test-1/2 justify-between pr-8 w-1/2">
                   <div className="py-1">
                     Всего напечатано (на {printer.sum_pages[0].end_month}.
-                    {printer.sum_pages[0].end_year}г.):{" "}
+                    {printer.sum_pages[0].end_year}):{" "}
                   </div>
                   <div className="bg-black rounded-md px-3 py-1 test-fit">
                     {printer.sum_pages[0].print_pages}
                   </div>
                 </div>
-                <div className="flex gap-2 border-l test-1/2 pl-8 justify-between">
+                <div className="flex gap-2 border-l test-1/2 pl-8 justify-between w-1/2">
                   <div className="py-1">
-                    Всего отсканировано (на {printer.sum_pages[0].end_month}.
-                    {printer.sum_pages[0].end_year}г.):{" "}
+                    отсканировано (на {printer.sum_pages[0].end_month}.
+                    {printer.sum_pages[0].end_year}):{" "}
                   </div>
                   <div className="bg-black rounded-md px-3 py-1 test-fit">
                     {printer.sum_pages[0].scan_pages}
@@ -90,7 +95,7 @@ const PrinterModal = ({
               </div>
               <hr />
               <div className="my-1 flex justify-between">
-                <div className="test-1/2">
+                <div className="w-1/2">
                   <div className="text-xs mb-2">Последние три записи:</div>
                   {printer.three_last_pages.map((page, index) => (
                     <div
@@ -98,8 +103,8 @@ const PrinterModal = ({
                       className="flex justify-between pr-8 pl-8 gap-2 mb-1"
                     >
                       <div className="text-xs py-1">
-                        с {page.start_month}.{page.start_year}г. по{" "}
-                        {page.end_month}.{page.end_year}г.
+                        с {page.start_month}.{page.start_year} по{" "}
+                        {page.end_month}.{page.end_year}
                       </div>
                       <div className="text-xs bg-black test-fit px-3 py-1 rounded-md">
                         {page.print_pages}
@@ -107,7 +112,7 @@ const PrinterModal = ({
                     </div>
                   ))}
                 </div>
-                <div className="border-l pl-8 test-1/2">
+                <div className="border-l pl-8 w-1/2">
                   <div className="text-xs mb-2">Последние три записи:</div>
                   {printer.three_last_pages.map((page, index) => (
                     <div
@@ -115,8 +120,8 @@ const PrinterModal = ({
                       className="flex gap-2 pl-8 mb-1 justify-between"
                     >
                       <div className="text-xs py-1">
-                        с {page.start_month}.{page.start_year}г. по{" "}
-                        {page.end_month}.{page.end_year}г.
+                        с {page.start_month}.{page.start_year} по{" "}
+                        {page.end_month}.{page.end_year}
                       </div>
                       <div className="text-xs bg-black test-fit px-3 py-1 rounded-md">
                         {page.scan_pages}
@@ -196,6 +201,11 @@ const PrinterModal = ({
         </div>
         {printedData && (
           <DateSearchResults
+            error={printedData.error}
+            searchEndYear={printedData.search_end_year}
+            searchEndMonth={printedData.search_end_month}
+            searchStartYear={printedData.search_start_year}
+            searchStartMonth={printedData.search_start_month}
             isPrint={printedData.isPrint}
             pages={printedData.pages}
             endYears={printedData.end_years}

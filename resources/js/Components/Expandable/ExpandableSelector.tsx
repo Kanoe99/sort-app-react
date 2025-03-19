@@ -5,12 +5,13 @@ import NumberInput from "../NumberInput";
 import MonthsDropdown from "./MonthsDropdown";
 import { printedData } from "@/Components/PrinterModal";
 import { usePrinterCardContext } from "@/Components/PrinterCardContext";
+import YearsDropdown from "@/Components/Expandable/YearsDropdown";
 
 interface DateRange {
   startMonth: number;
-  startYear: number | "";
+  startYear: number;
   endMonth: number;
-  endYear: number | "";
+  endYear: number;
 }
 
 export const Expandable = ({
@@ -112,16 +113,21 @@ export const Expandable = ({
             >
               {isYearOpen && (
                 <>
-                  <NumberInput
+                  {/* <NumberInput
                     value={startYear === "" ? "" : startYear}
                     _placeholder={startYear}
                     onChange={(year) => handleYearChange("startYear", year)}
                     className="py-[0.35rem]"
                     max={max}
+                  /> */}
+                  <YearsDropdown
+                    id="startYear"
+                    year={startYear}
+                    onChange={(year) => handleYearChange("startYear", year)}
                   />
                   <MonthsDropdown
                     id="startMonth"
-                    month={startMonth !== "" ? startMonth : 0}
+                    month={startMonth}
                     onChange={(month) => handleMonthChange("startMonth", month)}
                   />
                 </>
@@ -133,25 +139,24 @@ export const Expandable = ({
                 isYearOpen ? "w-1/2" : "w-full"
               } flex flex-col gap-2`}
             >
-              <NumberInput
-                value={endYear}
-                _placeholder={endYear}
+              <YearsDropdown
+                id="startYear"
+                contentFar={false}
+                year={endYear}
                 onChange={(year) => handleYearChange("endYear", year)}
-                className="py-[0.35rem]"
-                max={max}
               />
               {isMonthOpen && (
                 <MonthsDropdown
                   id="startMonth"
                   contentFar={false}
-                  month={startMonth !== "" ? startMonth : 0}
+                  month={startMonth}
                   onChange={(month) => handleMonthChange("startMonth", month)}
                 />
               )}
               <MonthsDropdown
                 id="endMonth"
                 contentFar={false}
-                month={endMonth !== "" ? endMonth : 0}
+                month={endMonth}
                 onChange={(month) => handleMonthChange("endMonth", month)}
               />
             </div>
