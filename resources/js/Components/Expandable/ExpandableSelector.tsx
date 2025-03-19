@@ -1,18 +1,10 @@
 import { useState, ChangeEvent } from "react";
 import { useForm } from "@inertiajs/react";
 import { TripleToggle } from "@/Components/Expandable/TripleToggle";
-import NumberInput from "../NumberInput";
 import MonthsDropdown from "./MonthsDropdown";
 import { printedData } from "@/Components/PrinterModal";
 import { usePrinterCardContext } from "@/Components/PrinterCardContext";
 import YearsDropdown from "@/Components/Expandable/YearsDropdown";
-
-interface DateRange {
-  startMonth: number;
-  startYear: number;
-  endMonth: number;
-  endYear: number;
-}
 
 export const Expandable = ({
   setPrintedData,
@@ -31,9 +23,11 @@ export const Expandable = ({
   const [isMonthOpen, setIsMonthOpen] = useState<boolean>(false);
   const [isYearOpen, setIsYearOpen] = useState<boolean>(false);
 
-  const { dates, setDates } = usePrinterCardContext();
+  const { dates, setDates, panels } = usePrinterCardContext();
   const selectedDates = isPrint ? dates.print : dates.scan;
   const { endYear, endMonth, startYear, startMonth } = selectedDates;
+  const selectedPanels = isPrint ? panels.print : panels.scan;
+  const { ym, yym, ymm } = selectedPanels;
 
   const handleSearch = () => {
     const endPoint = isPrint ? "printed" : "scanned";
@@ -113,13 +107,6 @@ export const Expandable = ({
             >
               {isYearOpen && (
                 <>
-                  {/* <NumberInput
-                    value={startYear === "" ? "" : startYear}
-                    _placeholder={startYear}
-                    onChange={(year) => handleYearChange("startYear", year)}
-                    className="py-[0.35rem]"
-                    max={max}
-                  /> */}
                   <YearsDropdown
                     id="startYear"
                     year={startYear}
