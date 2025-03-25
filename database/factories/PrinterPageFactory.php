@@ -92,6 +92,6 @@ class PrinterPageFactory extends Factory
         }
 
 
-        $createdRows = Printer::find($this->printer_id)->PrinterPage()->createMany($rows);
+        $createdRows = Printer::find($this->printer_id)->printerPages()->createMany($rows);
     }
 }

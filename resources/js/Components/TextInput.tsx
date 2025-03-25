@@ -18,22 +18,6 @@ export default forwardRef(function TextInput(
 ) {
   const inputRef = useRef<HTMLInputElement>(null);
 
-  useEffect(() => {
-    const input = inputRef.current;
-    const handleWheel = (e: WheelEvent) => e.preventDefault();
-
-    if (input) {
-      input.addEventListener("wheel", handleWheel);
-    }
-
-    // Cleanup the event listener on component unmount
-    return () => {
-      if (input) {
-        input.removeEventListener("wheel", handleWheel);
-      }
-    };
-  }, []);
-
   useImperativeHandle(ref, () => ({
     focus: () => inputRef.current?.focus(),
   }));

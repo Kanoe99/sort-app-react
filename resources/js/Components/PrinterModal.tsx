@@ -4,14 +4,15 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Printer } from "@/types";
 import { IPView } from "./IPView";
 import { Expandable } from "./Expandable/ExpandableSelector";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { DateSearchResults } from "@/Components/Expandable/DateSearchResults";
-import { usePrinterCardContext } from "@/Components/PrinterCardContext";
+import { can } from "@/helpers";
 
 interface PrinterModalProps {
   isVisible: boolean;
   setIsVisible: (prop: boolean) => void;
   printer: Printer;
+  user: any;
 }
 export interface printedData {
   isPrint: boolean;
@@ -28,11 +29,16 @@ export interface printedData {
 }
 
 const PrinterModal = ({
+  user,
   isVisible,
   setIsVisible,
   printer,
 }: PrinterModalProps) => {
   const [printedData, setPrintedData] = useState<printedData>();
+
+  printer.id === 933
+    ? console.log(printer.sum_pages && printer.three_last_pages)
+    : "";
 
   return (
     <Modal
@@ -52,7 +58,15 @@ const PrinterModal = ({
             <div className="px-5 py-3 flex-1">
               <div className="px-4 bg-black outline outline-1 outline-neutral-soft rounded-md test-full flex justify-between">
                 <div className="flex-1 border-r border-neutral-soft h-full py-2">
-                  {printer.model}
+                  {can(user, "manage_printers") ? (
+                    <button>
+                      <a href={route("printer.edit", printer.id)}>
+                        {printer.model}
+                      </a>
+                    </button>
+                  ) : (
+                    printer.model
+                  )}
                 </div>
                 <div className="pl-4 py-2">{printer.number}</div>
               </div>
@@ -71,63 +85,84 @@ const PrinterModal = ({
           <div className="px-5 py-3">
             <div className="px-4 flex flex-col gap-1 justify-between text-sm mb-4">
               <hr />
-              <div className="flex justify-between my-1 text-xs">
-                <div className="flex gap-2 test-1/2 justify-between pr-8 w-1/2">
-                  <div className="py-1">
-                    Всего напечатано (на {printer.sum_pages[0].end_month}.
-                    {printer.sum_pages[0].end_year}):{" "}
-                  </div>
-                  <div className="bg-black rounded-md px-3 py-1 test-fit">
-                    {printer.sum_pages[0].print_pages}
-                  </div>
-                </div>
-                <div className="flex gap-2 border-l test-1/2 pl-8 justify-between w-1/2">
-                  <div className="py-1">
-                    отсканировано (на {printer.sum_pages[0].end_month}.
-                    {printer.sum_pages[0].end_year}):{" "}
-                  </div>
-                  <div className="bg-black rounded-md px-3 py-1 test-fit">
-                    {printer.sum_pages[0].scan_pages}
-                  </div>
-                </div>
-              </div>
-              <hr />
-              <div className="my-1 flex justify-between">
-                <div className="w-1/2">
-                  <div className="text-xs mb-2">Последние три записи:</div>
-                  {printer.three_last_pages.map((page, index) => (
-                    <div
-                      key={index}
-                      className="flex justify-between pr-8 pl-8 gap-2 mb-1"
-                    >
-                      <div className="text-xs py-1">
-                        с {page.start_month}.{page.start_year} по{" "}
-                        {page.end_month}.{page.end_year}
+              {printer.sum_pages.length > 0 &&
+              printer.three_last_pages.length > 0 ? (
+                <div>
+                  <div className="flex justify-between my-1 text-xs">
+                    <div className="flex gap-2 test-1/2 justify-between pr-8 w-1/2">
+                      <div className="py-1">
+                        Всего напечатано (на {printer.sum_pages[0].end_month}.
+                        {printer.sum_pages[0].end_year}):{" "}
                       </div>
-                      <div className="text-xs bg-black test-fit px-3 py-1 rounded-md">
-                        {page.print_pages}
+                      <div className="bg-black rounded-md px-3 py-1 test-fit">
+                        {printer.sum_pages[0].print_pages}
                       </div>
                     </div>
-                  ))}
-                </div>
-                <div className="border-l pl-8 w-1/2">
-                  <div className="text-xs mb-2">Последние три записи:</div>
-                  {printer.three_last_pages.map((page, index) => (
-                    <div
-                      key={index}
-                      className="flex gap-2 pl-8 mb-1 justify-between"
-                    >
-                      <div className="text-xs py-1">
-                        с {page.start_month}.{page.start_year} по{" "}
-                        {page.end_month}.{page.end_year}
+                    <div className="flex gap-2 border-l test-1/2 pl-8 justify-between w-1/2">
+                      <div className="py-1">
+                        отсканировано (на {printer.sum_pages[0].end_month}.
+                        {printer.sum_pages[0].end_year}):{" "}
                       </div>
-                      <div className="text-xs bg-black test-fit px-3 py-1 rounded-md">
-                        {page.scan_pages}
+                      <div className="bg-black rounded-md px-3 py-1 test-fit">
+                        {printer.sum_pages[0].scan_pages}
                       </div>
                     </div>
-                  ))}
+                  </div>
+                  <hr />
+                  <div className="my-1 flex justify-between">
+                    <div className="w-1/2">
+                      <div className="text-xs mb-2">Последние три записи:</div>
+                      {printer.three_last_pages.map((page, index) => (
+                        <div
+                          key={index}
+                          className="flex justify-between pr-8 pl-8 gap-2 mb-1"
+                        >
+                          <div className="text-xs py-1">
+                            с {page.start_month}.{page.start_year} по{" "}
+                            {page.end_month}.{page.end_year}
+                          </div>
+                          <div className="text-xs bg-black test-fit px-3 py-1 rounded-md">
+                            {page.print_pages ? (
+                              page.print_pages
+                            ) : (
+                              <div className="text-red-500 font-bold">
+                                нет данных
+                              </div>
+                            )}
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                    <div className="border-l pl-8 w-1/2">
+                      <div className="text-xs mb-2">Последние три записи:</div>
+                      {printer.three_last_pages.map((page, index) => (
+                        <div
+                          key={index}
+                          className="flex gap-2 pl-8 mb-1 justify-between"
+                        >
+                          <div className="text-xs py-1">
+                            с {page.start_month}.{page.start_year} по{" "}
+                            {page.end_month}.{page.end_year}
+                          </div>
+                          <div className="text-xs bg-black test-fit px-3 py-1 rounded-md">
+                            {page.scan_pages ? (
+                              page.scan_pages
+                            ) : (
+                              <div className="text-red-500 font-bold">
+                                нет данных
+                              </div>
+                            )}
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
                 </div>
-              </div>
+              ) : (
+                <div className="px-4 my-1 text-red-500 font-bold">
+                  Нет данных о страницах
+                </div>
+              )}
               <hr />
               <div className="px-4 my-1">
                 Дата последнего ремонта:{" "}

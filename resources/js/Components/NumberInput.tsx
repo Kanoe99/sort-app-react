@@ -51,7 +51,7 @@ export default forwardRef(function NumberInput(
       value={value}
       type="number"
       className={
-        "mt-1 block w-full py-3 rounded-xl border-border-input text-white bg-bg-input-black focus:border-accent-main focus:ring-accent-main " +
+        "mt-1 block w-full py-2 rounded-xl border-border-input text-white bg-bg-input-black focus:border-accent-main focus:ring-accent-main " +
         className
       }
       ref={inputRef}

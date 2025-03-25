@@ -111,6 +111,7 @@ const PrinterCard = ({ printer }: { printer: Printer }) => {
           </button>
           <PrinterCardContextProvider>
             <PrinterModal
+              user={user}
               isVisible={isVisible}
               setIsVisible={setIsVisible}
               printer={printer}

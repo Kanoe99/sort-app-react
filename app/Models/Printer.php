@@ -44,16 +44,16 @@ class Printer extends Model
         return $this->belongsToMany(Tag::class);
     }
 
-    public function pages(){
+    public function printerPages(){
         return $this->hasMany(PrinterPage::class);
     }
 
     public function sumPages(){
-        return $this->pages()->where('isSum', 1);
+        return $this->printerPages()->where('isSum', 1);
     }
   
     public function threeLastPages(){
-        return $this->pages()->where('isSum', 0)->orderBy('end_year', 'desc')->limit(3);
+        return $this->printerPages()->where('isSum', 0)->orderBy('end_year', 'desc')->limit(3);
     }
   
     
@@ -64,7 +64,7 @@ class Printer extends Model
 
     public function getPages()
     {
-        return $this->pages()->where('isSum', 1)->get();
+        return $this->printerPages()->where('isSum', 1)->get();
     }
 
 }
