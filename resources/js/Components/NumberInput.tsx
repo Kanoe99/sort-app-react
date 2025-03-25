@@ -10,17 +10,10 @@ export default forwardRef(function NumberInput(
   {
     className = "",
     isFocused = false,
-    _placeholder,
     value,
-    max,
-    onChange,
     ...props
   }: InputHTMLAttributes<HTMLInputElement> & {
-    value: number | "";
-    _placeholder: number | "";
-    max: number;
     isFocused?: boolean;
-    onChange: (value: number | "") => void;
   },
   ref
 ) {
@@ -54,24 +47,13 @@ export default forwardRef(function NumberInput(
 
   return (
     <input
-      onChange={(e) => {
-        const input = e.target;
-        if (input.value === "") {
-          onChange("");
-          return;
-        }
-        if (input.value.length > max) {
-          input.value = input.value.slice(0, 4);
-        }
-        onChange(Number(input.value));
-      }}
       {...props}
-      value={value ?? ""}
-      placeholder={_placeholder.toString()}
+      value={value}
       type="number"
-      className={`mt-1 block w-full ${
-        className ?? "py-3"
-      } rounded-xl border-border-input text-white bg-bg-input-black focus:border-accent-main focus:ring-accent-main`}
+      className={
+        "mt-1 block w-full py-3 rounded-xl border-border-input text-white bg-bg-input-black focus:border-accent-main focus:ring-accent-main " +
+        className
+      }
       ref={inputRef}
     />
   );
