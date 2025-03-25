@@ -34,8 +34,6 @@ const PrinterModal = ({
 }: PrinterModalProps) => {
   const [printedData, setPrintedData] = useState<printedData>();
 
-  useEffect(() => console.log(printedData), [printedData]);
-
   return (
     <Modal
       key={printer.id}

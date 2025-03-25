@@ -24,12 +24,12 @@ class PrinterController extends Controller
         $perPage = 12;
 
         $printers = Printer::with(['tags'])->latest()->paginate($perPage);
-        $aprinters = Printer::with(['tags'])->where('attention', true)->get();
+        // $aprinters = Printer::with(['tags'])->where('attention', true)->get();
         $tags = Tag::all();
 
         return Inertia::render('Printer/Index', [
             'printers' => $printers,
-            'aprinters' => $aprinters,
+            // 'aprinters' => $aprinters,
             'tags' => $tags,
         ]);
     }
@@ -51,7 +51,7 @@ class PrinterController extends Controller
         $page = $request->input('page', 1);
         $search = $request->input('search');
     
-        $query = Printer::with(['tags'])->latest();
+        $query = Printer::with(['tags', 'sumPages', 'threeLastPages'])->latest();
 
         function qwertyToRussian($input) {
             $map = [

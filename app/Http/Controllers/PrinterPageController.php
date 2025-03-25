@@ -83,6 +83,10 @@ class PrinterPageController extends Controller
             return response()->json([
                 'error' => 'Не найдено',
                 'isPrint' => $isPrint,
+                'search_end_year' => $end_year,
+                'search_end_month' => $end_month,
+                'search_start_year' => $start_year,
+                'search_start_month' => $start_month,
             ]);
         } else {
             return response()->json([

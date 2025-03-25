@@ -61,21 +61,21 @@ const PrintersMain = ({
       ) : (
         <NotFound message={`Нет данных по запросу ${searchQuery}`} />
       )}
-      <div
-        className="grid grid-cols-3 grid-rows-4 gap-3 py-2 items-start min-h-screen"
-        style={{
-          msOverflowStyle: "none", // IE and Edge
-          scrollbarWidth: "none", // Firefox
-        }}
-      >
-        {printersData &&
-          printersData.length !== 0 &&
-          printersData.map((printer) => (
-            <PrinterCardContextProvider>
+      <PrinterCardContextProvider>
+        <div
+          className="grid grid-cols-3 grid-rows-4 gap-3 py-2 items-start min-h-screen"
+          style={{
+            msOverflowStyle: "none", // IE and Edge
+            scrollbarWidth: "none", // Firefox
+          }}
+        >
+          {printersData &&
+            printersData.length !== 0 &&
+            printersData.map((printer) => (
               <PrinterCard key={printer.id} printer={printer} />
-            </PrinterCardContextProvider>
-          ))}
-      </div>
+            ))}
+        </div>
+      </PrinterCardContextProvider>
       <div className="sticky flex-1 bottom-0 backdrop-blur-xl w-full">
         {printersData &&
           printersData.length !== 0 &&

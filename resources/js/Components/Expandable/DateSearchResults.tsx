@@ -64,29 +64,23 @@ const DateSearchResults = ({
   }
 
   return (
-    <ul className="bg-black outline w-[22rem] outline-1 max-h-[45rem] custom-scrollbar overflow-y-scroll scrollbar-thin overflow-x-hidden outline-neutral-muted text-white px-4 rounded-md py-3 font-bold">
+    <ul className="bg-black flex flex-col gap-3 outline w-[22rem] outline-1 max-h-[45rem] custom-scrollbar overflow-y-scroll scrollbar-thin overflow-x-hidden outline-neutral-muted text-white px-4 rounded-md py-3 font-bold">
+      <div>
+        <h3 className="mb-2 w-full text-blue-500">
+          {isPrint ? "напечатано" : "отсканировано"}
+        </h3>
+        <p className="px-2 py-1 mb-2 rounded-md outline outline-1 text-sm outline-neutral-muted text-blue-300">
+          Поиск {phrase}
+        </p>
+      </div>
       {!pages ? (
         <div className="flex flex-col gap-3">
-          <span className="text-blue-500">
-            {isPrint ? "напечатано" : "отсканировано"}
-          </span>
-          <p className="px-2 py-1 mb-2 rounded-md outline outline-1 text-sm outline-neutral-muted text-blue-300">
-            Поиск {phrase}
-          </p>
           <div className="rounded-md px-2 py-1 outline outline-1 outline-red-500 text-red-500">
             {error}
           </div>
         </div>
       ) : (
-        <div className="flex flex-col gap-3 w-full">
-          <h3 className="mb-2 w-full">
-            <span className="text-blue-500">
-              {isPrint ? "напечатано" : "отсканировано"}
-            </span>
-          </h3>
-          <p className="px-2 py-1 mb-2 rounded-md outline outline-1 text-sm outline-neutral-muted text-blue-300">
-            Поиск {phrase}
-          </p>
+        <div className="flex flex-col w-full">
           {pages.map((_, index) => (
             <li
               key={`date-search-${_}`}
