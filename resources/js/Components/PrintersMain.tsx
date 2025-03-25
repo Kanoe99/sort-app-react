@@ -12,12 +12,12 @@ const PrintersMain = ({
   isSearchMode: boolean;
   searchQuery: string;
 }) => {
-  const [printersData, setPrintersData] = useState<Printer[]>();
+  const [printersData, setPrintersData] = useState<Printer[]>([]);
   const [pagination, setPagination] = useState({
     current_page: 1,
     last_page: 1,
   });
-  const [searchTransliterated, setSearchTransliterated] = useState([[], ""]);
+  const [searchTransliterated, setSearchTransliterated] = useState("");
 
   const itemsPerPage = 12;
 
@@ -51,8 +51,8 @@ const PrintersMain = ({
   }, [pagination.current_page, isSearchMode, searchQuery]);
 
   return (
-    <div className="flex flex-col relative overflow-x-hidden">
-      {printersData && printersData.length !== 0 ? (
+    <div className="flex flex-col relative">
+      {printersData.length !== 0 ? (
         isSearchMode && (
           <div className="font-semibold text-xl border-l-2 flex items-center pl-4 mb-6 h-10">
             Показаны результаты по запросу "{searchTransliterated}"
@@ -69,20 +69,17 @@ const PrintersMain = ({
             scrollbarWidth: "none", // Firefox
           }}
         >
-          {printersData &&
-            printersData.length !== 0 &&
+          {printersData.length !== 0 &&
             printersData.map((printer) => (
               <PrinterCard key={printer.id} printer={printer} />
             ))}
         </div>
-      </PrinterCardContextProvider>
-      <div className="sticky flex-1 bottom-0 backdrop-blur-xl w-full">
-        {printersData &&
-          printersData.length !== 0 &&
-          pagination.last_page > 1 && (
+        <div className="sticky flex-1 bottom-0 backdrop-blur-xl w-full">
+          {printersData.length !== 0 && pagination.last_page > 1 && (
             <Pagination pagination={pagination} setPagination={setPagination} />
           )}
-      </div>
+        </div>
+      </PrinterCardContextProvider>
     </div>
   );
 };
