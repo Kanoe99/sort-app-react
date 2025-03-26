@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Storage;
 use Carbon\Carbon;
 use Inertia\Inertia;
 use \App\Http\Resources\PrinterResource;
+use \App\Http\Resources\PrinterPageResource;
 use App\Services\TagService;
 use App\Services\DepartmentService;
 
@@ -37,8 +38,10 @@ class PrinterController extends Controller
 
     public function edit(Printer $printer)
     {
+
         return Inertia::render('Printer/Edit', [
-            'printer' => new PrinterResource($printer),            
+            'printer' => new PrinterResource($printer),
+            'printer_pages' => PrinterPageResource::collection(PrinterPage::where('printer_id', $printer->id)->get()),
             'department_heads' => (new DepartmentService)->getDepartmentHeads()
             
         ]);

@@ -20,9 +20,11 @@ import IsLocalDropdown from "@/Components/IsLocalDropdown";
 
 export default function Edit({
   printer,
+  printer_pages,
   department_heads,
 }: {
   printer: Printer;
+  printer_pages: any;
   department_heads: string[];
 }) {
   const { data, setData, processing, errors, put, clearErrors, reset } =
@@ -95,8 +97,9 @@ export default function Edit({
   };
 
   const now = new Date().toLocaleDateString();
+  const sums = printer_pages.data.filter((page) => page.isSum == true)[0];
 
-  console.log(printer);
+  console.log(sums);
 
   return (
     <AuthenticatedLayout
@@ -114,7 +117,6 @@ export default function Edit({
             <form onSubmit={editPrinter} className="w-full flex flex-col gap-4">
               <div>
                 <InputLabel htmlFor="type" value="Тип оборудования" />
-
                 <TextInput
                   id="type"
                   placeholder="Принтер"
@@ -403,7 +405,7 @@ export default function Edit({
                     placeholder="5873"
                     className=""
                     pattern="\d*"
-                    value={data.number}
+                    value={sums.print_pages}
                     onChange={(e) => {
                       {
                         const value = parseInt(e.target.value);
@@ -424,7 +426,7 @@ export default function Edit({
                     placeholder="5873"
                     className=""
                     pattern="\d*"
-                    value={data.number}
+                    value={sums.scan_pages}
                     onChange={(e) => {
                       {
                         const value = parseInt(e.target.value);
@@ -438,59 +440,59 @@ export default function Edit({
               </div>
               <hr className="my-5" />
               <div className="overflow-x-hidden h-fit flex flex-col gap-2 max-h-[35rem] custom-scrollbar scroll-padding overflow-y-auto scrollbar-thin pr-3">
-                {Array.from({ length: 2 }, (_, i) => i + 1).map(
-                  (element, index) => (
-                    <div
-                      key={element + "list"}
-                      className="flex gap-2 h-fit max-h-[40rem] px-2 py-1 rounded-md bg-white/5 border-[1px] border-black"
-                    >
-                      <div>
-                        <TextInput
-                          type="number"
-                          id="number"
-                          placeholder="5873"
-                          className=""
-                          pattern="\d*"
-                          value={data.number}
-                          onChange={(e) => {
-                            {
-                              const value = parseInt(e.target.value);
-                              setData("number", value);
-                            }
-                          }}
-                          isFocused
-                          autoComplete="number"
-                        />
-                        <div className="text-xs px-4 mt-1">
-                          с <span className="text-blue-300">{now}</span> по{" "}
-                          <span className="text-blue-300">{now}</span>
-                        </div>
+                {printer_pages.data.map((printer_page, index) => (
+                  <div
+                    key={printer_page + "list"}
+                    className="flex gap-2 h-fit max-h-[40rem] px-2 py-1 pb-2 rounded-md bg-white/5 border-[1px] border-black"
+                  >
+                    <div>
+                      <TextInput
+                        type="number"
+                        id="number"
+                        placeholder={
+                          printer_page.print_pages ? "1234" : "нет данных"
+                        }
+                        className=""
+                        pattern=""
+                        value={printer_page.print_pages}
+                        onChange={(e) => {
+                          {
+                            const value = parseInt(e.target.value);
+                            setData("number", value);
+                          }
+                        }}
+                        isFocused
+                        autoComplete="number"
+                      />
+                      <div className="text-xs px-4 mt-1">
+                        с <span className="text-blue-300">{now}</span> по{" "}
+                        <span className="text-blue-300">{now}</span>
                       </div>
-                      <div>
-                        <TextInput
-                          type="number"
-                          id="number"
-                          placeholder="5873"
-                          className=""
-                          pattern="\d*"
-                          value={data.number}
-                          onChange={(e) => {
-                            {
-                              const value = parseInt(e.target.value);
-                              setData("number", value);
-                            }
-                          }}
-                          isFocused
-                          autoComplete="number"
-                        />
-                        {/* <div className="text-xs px-4 mt-1">
+                    </div>
+                    <div>
+                      <TextInput
+                        type="number"
+                        id="number"
+                        placeholder="5873"
+                        className=""
+                        pattern="\d*"
+                        value={printer_page.scan_pages}
+                        onChange={(e) => {
+                          {
+                            const value = parseInt(e.target.value);
+                            setData("number", value);
+                          }
+                        }}
+                        isFocused
+                        autoComplete="number"
+                      />
+                      {/* <div className="text-xs px-4 mt-1">
                         с <span className="text-blue-300">{now}</span> по{" "}
                         <span className="text-blue-300">{now}</span>
                       </div> */}
-                      </div>
                     </div>
-                  )
-                )}
+                  </div>
+                ))}
               </div>
             </div>
           </div>
