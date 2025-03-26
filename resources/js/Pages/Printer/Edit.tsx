@@ -10,13 +10,14 @@ import IPBool from "@/Components/IPBool";
 import { useState } from "react";
 import IP from "@/Components/IP";
 import TextAreaInput from "@/Components/TextAreaInput";
-import { Printer } from "@/types";
+import { Printer, PrinterPages } from "@/types";
 import DangerButton from "@/Components/DangerButton";
 import Modal from "@/Components/Modal";
 import SecondaryButton from "@/Components/SecondaryButton";
 import IsNetworkCapableDropdown from "@/Components/IsNetworkCapableDropdown";
 import DepartmentDropdown from "@/Components/DepartmentDropdown";
 import IsLocalDropdown from "@/Components/IsLocalDropdown";
+import PrintPagesInput from "@/Components/PrintPagesInput";
 
 export default function Edit({
   printer,
@@ -24,7 +25,7 @@ export default function Edit({
   department_heads,
 }: {
   printer: Printer;
-  printer_pages: any;
+  printer_pages: PrinterPages[];
   department_heads: string[];
 }) {
   const { data, setData, processing, errors, put, clearErrors, reset } =
@@ -97,9 +98,11 @@ export default function Edit({
   };
 
   const now = new Date().toLocaleDateString();
-  const sums = printer_pages.data.filter((page) => page.isSum == true)[0];
+  const sums = printer_pages.filter(
+    (page: PrinterPages) => page.isSum === 1
+  )[0];
 
-  console.log(sums);
+  console.log(printer_pages);
 
   return (
     <AuthenticatedLayout
@@ -399,7 +402,7 @@ export default function Edit({
               <div className="flex gap-2">
                 <div className="w-1/2">
                   <div className="px-4 font-bold text-gray-300">напечатано</div>
-                  <TextInput
+                  <PrintPagesInput
                     type="number"
                     id="number"
                     placeholder="5873"
@@ -420,7 +423,7 @@ export default function Edit({
                   <div className="px-4 font-bold text-gray-300">
                     отсканировано
                   </div>
-                  <TextInput
+                  <PrintPagesInput
                     type="number"
                     id="number"
                     placeholder="5873"
@@ -440,14 +443,14 @@ export default function Edit({
               </div>
               <hr className="my-5" />
               <div className="overflow-x-hidden h-fit flex flex-col gap-2 max-h-[35rem] custom-scrollbar scroll-padding overflow-y-auto scrollbar-thin pr-3">
-                {printer_pages.data.map((printer_page, index) => (
+                {printer_pages.map((printer_page, index) => (
                   <div
-                    key={printer_page + "list"}
+                    key={index.toString() + printer_page.end_year.toString()}
                     className="flex gap-2 h-fit max-h-[40rem] px-2 py-1 pb-2 rounded-md bg-white/5 border-[1px] border-black"
                   >
                     <div>
-                      <TextInput
-                        type="number"
+                      <PrintPagesInput
+                        type="text"
                         id="number"
                         placeholder={
                           printer_page.print_pages ? "1234" : "нет данных"
@@ -470,7 +473,7 @@ export default function Edit({
                       </div>
                     </div>
                     <div>
-                      <TextInput
+                      <PrintPagesInput
                         type="number"
                         id="number"
                         placeholder="5873"

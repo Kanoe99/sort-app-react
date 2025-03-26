@@ -32,21 +32,19 @@ class PrinterController extends Controller
             'printers' => $printers,
             // 'aprinters' => $aprinters,
             'tags' => $tags,
-        ]);
+        ]); 
     }
 
 
     public function edit(Printer $printer)
     {
-
         return Inertia::render('Printer/Edit', [
             'printer' => new PrinterResource($printer),
-            'printer_pages' => PrinterPageResource::collection(PrinterPage::where('printer_id', $printer->id)->get()),
-            'department_heads' => (new DepartmentService)->getDepartmentHeads()
-            
+            'printer_pages' => PrinterPageResource::collection(PrinterPage::where('printer_id', $printer->id)->get())->toArray(request()), // Convert collection to array
+            'department_heads' => (new DepartmentService)->getDepartmentHeads(),
         ]);
     }
-
+    
     public function searchPrinters(Request $request)
     {
    

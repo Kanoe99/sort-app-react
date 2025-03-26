@@ -64,7 +64,7 @@ export type Printer = {
   three_last_pages: PrintPage[];
 };
 
-export type PrintPage = {
+export type PrinterPages = {
   created_at: string;
   end_month: number;
   end_year: number;
