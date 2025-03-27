@@ -12,8 +12,12 @@ export default forwardRef(function TextInput(
     className = "",
     max,
     isFocused = false,
+    disabled = false,
     ...props
-  }: InputHTMLAttributes<HTMLInputElement> & { isFocused?: boolean },
+  }: InputHTMLAttributes<HTMLInputElement> & {
+    isFocused?: boolean;
+    disabled?: boolean;
+  },
   ref
 ) {
   const inputRef = useRef<HTMLInputElement>(null);
@@ -30,6 +34,7 @@ export default forwardRef(function TextInput(
 
   return (
     <input
+      disabled={disabled}
       {...props}
       type={type}
       className={`mt-1 block w-full ${

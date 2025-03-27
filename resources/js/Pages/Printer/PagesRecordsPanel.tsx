@@ -1,0 +1,271 @@
+import { FormEventHandler, useEffect, useRef, useState } from "react";
+
+import PrimaryButton from "@/Components/PrimaryButton";
+import PrintPagesInput from "@/Components/PrintPagesInput";
+import { PrinterPages } from "@/types";
+import { months, startingMonths } from "@/utils/months";
+
+interface PagesRecordsPanelProps {
+  printer_pages: PrinterPages[];
+  setData: (key: string, value: PrinterPages[]) => void;
+  processing: boolean;
+  editPrinter: FormEventHandler;
+}
+
+const PagesRecordsPanel = ({
+  printer_pages,
+  setData,
+  processing,
+  editPrinter,
+}: PagesRecordsPanelProps) => {
+  const contentRef = useRef<HTMLDivElement>(null);
+  const [isMaxHeightReached, setIsMaxHeightReached] = useState(false);
+  const [printerPages, setPrinterPages] =
+    useState<PrinterPages[]>(printer_pages);
+
+  const date = new Date();
+  const now = {
+    year: date.getFullYear(),
+    month: date.getMonth(),
+  };
+  const sums = printerPages.filter((page: PrinterPages) => page.isSum === 1)[0];
+  const pagesNoSum = printerPages.slice(1, printerPages.length).reverse();
+
+  useEffect(() => {
+    const checkOverflow = () => {
+      const el = contentRef.current;
+      if (!el) return;
+      if (el.scrollHeight > el.clientHeight) {
+        setIsMaxHeightReached(true);
+      } else {
+        setIsMaxHeightReached(false);
+      }
+    };
+
+    checkOverflow();
+    window.addEventListener("resize", checkOverflow);
+
+    return () => window.removeEventListener("resize", checkOverflow);
+  }, [printer_pages]);
+
+  const changePrinterPagesValues = (
+    printerPages: PrinterPages[],
+    key: "print_pages" | "scan_pages",
+    value: string,
+    index: number
+  ) => {
+    return printerPages.map((page, i) => {
+      return index === i
+        ? {
+            ...page,
+            [key]: value,
+          }
+        : page;
+    });
+  };
+
+  console.log("printerPages: ", printerPages);
+  console.log("pagesNoSum: ", pagesNoSum);
+
+  return (
+    <div
+      //bg-accent-underline bg-accent-underline sm:bg-red-500 md:bg-green-500 lg:bg-yellow-500 xl:bg-blue-500 2xl:bg-purple-500 3xl:bg-pink-500
+      className="fixed
+      
+      2xl:right-20 3xl:right-60 xl:right-20 lg:right-5 right-5 z-40 pb-10"
+    >
+      <div className="flex flex-col justify-between p-6 shadow-sm sm:rounded-lg bg-bg-main">
+        <div>
+          <div className="flex flex-col gap-2">
+            <div className="flex flex-col gap-2 w-full">
+              {/*here*/}
+              <div className="flex justify-between gap-2">
+                <div className="w-1/2">
+                  <div className="px-4 font-bold text-gray-300">напечатано</div>
+                </div>
+                <div className="w-1/2">
+                  <div className="px-4 font-bold text-gray-300">
+                    отсканировано
+                  </div>
+                </div>
+              </div>
+              <hr />
+              <div className="text-xs px-4 mt-1">
+                новая запись с{" "}
+                <span className="text-blue-300">
+                  {
+                    startingMonths[
+                      printerPages[printerPages.length - 1].end_month - 1
+                    ]
+                  }{" "}
+                  {printerPages[printerPages.length - 1].end_year}
+                </span>{" "}
+                по{" "}
+                <span className="text-blue-300">
+                  {months[now.month]} {now.year}
+                </span>
+              </div>
+              <div
+                // key={index.toString() + printer_page.end_year.toString()}
+                className="flex gap-2 h-fit w-full px-2 py-1 pb-2"
+              >
+                <div className="w-1/2">
+                  <PrintPagesInput
+                    type="text"
+                    id="number"
+                    placeholder={"5872"}
+                    className=""
+                    pattern=""
+                    // value={printer_page.print_pages}
+
+                    isFocused
+                    autoComplete="number"
+                  />
+                </div>
+                <div className="w-1/2">
+                  <PrintPagesInput
+                    type="number"
+                    id="number"
+                    placeholder="5873"
+                    className=""
+                    pattern="\d*"
+                    // value={printer_page.scan_pages}
+
+                    autoComplete="number"
+                  />
+                </div>
+              </div>
+            </div>
+            <hr />
+            <div className="flex flex-col gap-2 w-full px-2 py-1 pb-2 rounded-md bg-white/5 border-[1px] border-black">
+              <div className="flex gap-2">
+                <div className="w-1/2">
+                  <PrintPagesInput
+                    disabled={true}
+                    type="text"
+                    id="number"
+                    placeholder="5873"
+                    className=""
+                    // pattern="\d*"
+                    value={sums.print_pages}
+                    isFocused
+                    // autoComplete="number"
+                  />
+                </div>
+                <div className="w-1/2">
+                  <PrintPagesInput
+                    disabled={true}
+                    type="text"
+                    // id="number"
+                    placeholder="5874"
+                    className=""
+                    // pattern="\d*"
+                    value={sums.scan_pages}
+                    isFocused
+                    // autoComplete="number"
+                  />
+                </div>
+              </div>
+              <div className="text-xs px-4 mt-1">
+                всего с{" "}
+                <span className="text-blue-300">
+                  {startingMonths[printerPages[1].start_month - 1]}{" "}
+                  {printerPages[1].start_year}
+                </span>{" "}
+                по{" "}
+                <span className="text-blue-300">
+                  {months[printerPages[printerPages.length - 1].end_month - 1]}{" "}
+                  {printerPages[printerPages.length - 1].end_year}
+                </span>
+              </div>
+            </div>
+          </div>
+
+          <hr className="my-5" />
+          <div
+            ref={contentRef}
+            className={`overflow-x-hidden h-fit flex flex-col gap-2 mb-[1.2rem] max-h-[21.3rem] custom-scrollbar scroll-padding overflow-y-auto scrollbar-thin ${
+              isMaxHeightReached ? "pr-3" : ""
+            }`}
+          >
+            {pagesNoSum.map((printer_page, index) => (
+              <div
+                key={index.toString() + printer_page.end_year.toString()}
+                className="flex gap-2 h-fit max-h-[40rem] px-2 py-1 pb-2 rounded-md bg-white/5 border-[1px] border-black"
+              >
+                <div>
+                  <PrintPagesInput
+                    type="text"
+                    // id="number"
+                    placeholder={"5874"}
+                    className=""
+                    pattern=""
+                    value={printer_page.print_pages}
+                    onChange={(e) => {
+                      {
+                        const value = changePrinterPagesValues(
+                          printerPages,
+                          "print_pages",
+                          e.target.value,
+                          index
+                        );
+                        setPrinterPages(value);
+                        setData("printerPages", value);
+                      }
+                    }}
+                    // autoComplete="number"
+                  />
+                  <div className="text-xs px-4 mt-1">
+                    с{" "}
+                    <span className="text-blue-300">
+                      {startingMonths[printer_page.start_month - 1]}{" "}
+                      {printer_page.start_year}
+                    </span>{" "}
+                    по{" "}
+                    <span className="text-blue-300">
+                      {" "}
+                      {months[printer_page.end_month - 1]}{" "}
+                      {printer_page.end_year}
+                    </span>
+                  </div>
+                </div>
+                <div>
+                  <PrintPagesInput
+                    type="number"
+                    // id="number"
+                    placeholder="5875"
+                    className=""
+                    pattern="\d*"
+                    value={printer_page.scan_pages}
+                    onChange={(e) => {
+                      {
+                        const value = changePrinterPagesValues(
+                          printerPages,
+                          "scan_pages",
+                          e.target.value,
+                          index
+                        );
+                        setPrinterPages(value);
+                        setData("printerPages", value);
+                      }
+                    }}
+                    // autoComplete="number"
+                  />
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+        <PrimaryButton
+          onClick={(e) => editPrinter(e)}
+          disabled={processing}
+          className="w-[calc(100%)] !py-4 mt-2"
+        >
+          сохранить
+        </PrimaryButton>
+      </div>
+    </div>
+  );
+};
+
+export { PagesRecordsPanel };

@@ -1,3 +1,5 @@
+import { months, startingMonths } from "@/utils/months";
+
 interface DateSearchResultsProps {
   endYears: number[];
   endMonths: number[];
@@ -25,29 +27,6 @@ const DateSearchResults = ({
   searchStartMonth,
   error,
 }: DateSearchResultsProps) => {
-  const months = [
-    "январь",
-    "февраль",
-    "март",
-    "апрель",
-    "май",
-    "июнь",
-    "июль",
-    "август",
-    "сентябрь",
-    "октябрь",
-    "ноябрь",
-    "декабрь",
-  ];
-  const startingMonths = months.map((month) => {
-    const last_letter = month.length - 1;
-    month =
-      month[last_letter] !== "т"
-        ? month.slice(0, last_letter) + "я"
-        : month + "а";
-    return month;
-  });
-
   let phrase;
   if (searchEndYear && searchStartYear && searchStartMonth && searchEndMonth) {
     phrase = `с ${startingMonths[searchStartMonth - 1]} 

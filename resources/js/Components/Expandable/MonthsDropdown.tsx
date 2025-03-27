@@ -1,12 +1,6 @@
-import {
-  forwardRef,
-  InputHTMLAttributes,
-  useEffect,
-  useImperativeHandle,
-  useRef,
-  useState,
-} from "react";
+import { useState } from "react";
 
+import { monthsUpper } from "@/utils/months";
 import DropDownMonth from "@/Components/DropDownMonth";
 
 interface MonthsDropdownProps {
@@ -22,27 +16,12 @@ export default function MonthsDropdown({
   onChange,
   contentFar,
 }: MonthsDropdownProps) {
-  const months = [
-    "ЯНВАРЬ",
-    "ФЕВРАЛЬ",
-    "МАРТ",
-    "АПРЕЛЬ",
-    "МАЙ",
-    "ИЮНЬ",
-    "ИЮЛЬ",
-    "АВГУСТ",
-    "СЕНТЯБРЬ",
-    "ОКТЯБРЬ",
-    "НОЯБРЬ",
-    "ДЕКАБРЬ",
-  ];
-
   const [activeMonth, setActiveMonth] = useState<string | null>(
-    months[month - 1]
+    monthsUpper[month - 1]
   );
 
   const handleClick = (month: string) => {
-    const monthIndex = months.indexOf(month) + 1;
+    const monthIndex = monthsUpper.indexOf(month) + 1;
     setActiveMonth(month);
     onChange?.(monthIndex);
   };
@@ -65,7 +44,7 @@ export default function MonthsDropdown({
         contentFar={contentFar}
       >
         <div className="font-semibold">
-          {months.map((month) => (
+          {monthsUpper.map((month) => (
             <DropDownMonth.Option
               key={month}
               onClick={() => handleClick(month)}

@@ -17,7 +17,7 @@ import SecondaryButton from "@/Components/SecondaryButton";
 import IsNetworkCapableDropdown from "@/Components/IsNetworkCapableDropdown";
 import DepartmentDropdown from "@/Components/DepartmentDropdown";
 import IsLocalDropdown from "@/Components/IsLocalDropdown";
-import PrintPagesInput from "@/Components/PrintPagesInput";
+import { PagesRecordsPanel } from "@/Pages/Printer/PagesRecordsPanel";
 
 export default function Edit({
   printer,
@@ -45,6 +45,7 @@ export default function Edit({
       department_head: string;
       PC_name: string;
       isLocal: boolean;
+      printer_pages: PrinterPages[];
     }>({
       isLocal: printer.isLocal,
       PC_name: printer.PC_name,
@@ -61,6 +62,7 @@ export default function Edit({
       comment: printer.comment,
       fixDate: printer.fixDate,
       isIPv4: printer.isIPv4,
+      printer_pages: printer_pages,
     });
 
   const [hasIP, setHasIP] = useState(printer.IP ? true : false);
@@ -97,25 +99,22 @@ export default function Edit({
     });
   };
 
-  const now = new Date().toLocaleDateString();
-  const sums = printer_pages.filter(
-    (page: PrinterPages) => page.isSum === 1
-  )[0];
-
   console.log(printer_pages);
 
   return (
     <AuthenticatedLayout
       header={
-        <h2 className="text-2xl mx-auto w-[40%] font-semibold leading-tight text-gray-200">
-          Редактировать {printer.type} {printer.number}
+        <h2 className="text-2xl 3xl:ml-[10rem] ml-0 text-nowrap font-semibold leading-tight text-gray-200">
+          <span className="text-xl"> редактировать </span>
+          <span className="inline-block mx-3">{printer.model}</span>{" "}
+          <span className="text-gray-500">№{printer.number}</span>
         </h2>
       }
     >
       <Head title={`Редактировать ${printer.model}`} />
 
-      <div className="flex mx-auto justify-center gap-8">
-        <div className=" mb-4 shadow-sm sm:rounded-lg bg-bg-main w-[40%]">
+      <div className="flex 3xl:ml-[20rem] 2xl:ml-[10rem] xl:ml-[5rem] justify-start gap-8">
+        <div className=" mb-4 w-[50%] shadow-sm sm:rounded-lg bg-bg-main">
           <div className="p-6 text-gray-100 flex gap-8">
             <form onSubmit={editPrinter} className="w-full flex flex-col gap-4">
               <div>
@@ -396,117 +395,12 @@ export default function Edit({
             </form>
           </div>
         </div>
-        <div>
-          <div className="flex flex-col justify-between p-6 shadow-sm sm:rounded-lg bg-bg-main">
-            <div>
-              <div className="flex gap-2">
-                <div className="w-1/2">
-                  <div className="px-4 font-bold text-gray-300">напечатано</div>
-                  <PrintPagesInput
-                    type="number"
-                    id="number"
-                    placeholder="5873"
-                    className=""
-                    pattern="\d*"
-                    value={sums.print_pages}
-                    onChange={(e) => {
-                      {
-                        const value = parseInt(e.target.value);
-                        setData("number", value);
-                      }
-                    }}
-                    isFocused
-                    autoComplete="number"
-                  />
-                </div>
-                <div className="w-1/2">
-                  <div className="px-4 font-bold text-gray-300">
-                    отсканировано
-                  </div>
-                  <PrintPagesInput
-                    type="number"
-                    id="number"
-                    placeholder="5873"
-                    className=""
-                    pattern="\d*"
-                    value={sums.scan_pages}
-                    onChange={(e) => {
-                      {
-                        const value = parseInt(e.target.value);
-                        setData("number", value);
-                      }
-                    }}
-                    isFocused
-                    autoComplete="number"
-                  />
-                </div>
-              </div>
-              <hr className="my-5" />
-              <div className="overflow-x-hidden h-fit flex flex-col gap-2 max-h-[35rem] custom-scrollbar scroll-padding overflow-y-auto scrollbar-thin pr-3">
-                {printer_pages.map((printer_page, index) => (
-                  <div
-                    key={index.toString() + printer_page.end_year.toString()}
-                    className="flex gap-2 h-fit max-h-[40rem] px-2 py-1 pb-2 rounded-md bg-white/5 border-[1px] border-black"
-                  >
-                    <div>
-                      <PrintPagesInput
-                        type="text"
-                        id="number"
-                        placeholder={
-                          printer_page.print_pages ? "1234" : "нет данных"
-                        }
-                        className=""
-                        pattern=""
-                        value={printer_page.print_pages}
-                        onChange={(e) => {
-                          {
-                            const value = parseInt(e.target.value);
-                            setData("number", value);
-                          }
-                        }}
-                        isFocused
-                        autoComplete="number"
-                      />
-                      <div className="text-xs px-4 mt-1">
-                        с <span className="text-blue-300">{now}</span> по{" "}
-                        <span className="text-blue-300">{now}</span>
-                      </div>
-                    </div>
-                    <div>
-                      <PrintPagesInput
-                        type="number"
-                        id="number"
-                        placeholder="5873"
-                        className=""
-                        pattern="\d*"
-                        value={printer_page.scan_pages}
-                        onChange={(e) => {
-                          {
-                            const value = parseInt(e.target.value);
-                            setData("number", value);
-                          }
-                        }}
-                        isFocused
-                        autoComplete="number"
-                      />
-                      {/* <div className="text-xs px-4 mt-1">
-                        с <span className="text-blue-300">{now}</span> по{" "}
-                        <span className="text-blue-300">{now}</span>
-                      </div> */}
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </div>
-          <PrimaryButton
-            onClick={(e) => editPrinter(e)}
-            disabled={processing}
-            className="w-[calc(100%)] !py-4 mt-2"
-          >
-            сохранить
-          </PrimaryButton>
-        </div>
+        <PagesRecordsPanel
+          printer_pages={printer_pages}
+          setData={setData}
+          processing={processing}
+          editPrinter={editPrinter}
+        />
       </div>
     </AuthenticatedLayout>
   );

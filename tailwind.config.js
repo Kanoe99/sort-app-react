@@ -24,6 +24,9 @@ export default {
 		//   animation: {
 		// 	slideInOut: 'slideInOut 3s ease-in-out', // 3-second animation
 		//   },
+		screens: {
+			'3xl': '1920px',
+		},
   		fontFamily: {
   			sans: [
   				'Figtree',
