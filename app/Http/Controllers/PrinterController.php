@@ -305,6 +305,7 @@ class PrinterController extends Controller
 
    public function update(Request $request, Printer $printer)
     {
+        dd($request->all());
         $fields = array_keys($request->except('IPBool'));
     
         $oldData = Printer::select($fields)->findOrFail($printer->id)->toArray();
@@ -322,7 +323,7 @@ class PrinterController extends Controller
             'type' => ['required', 'string', 'max:255'],
             'model' => ['required', 'string', 'max:255'],
             'counter' => ['required', 'numeric', 'min:1', 'max:999999999999999'],
-            'number' => ['required', 'numeric', 'min:1', 'max:999999999999999', 'unique:printers,number,' . $printer->id],
+            // 'number' => ['required', 'numeric', 'min:1', 'max:999999999999999', 'unique:printers,number,' . $printer->id],
             'location' => ['required', 'string', 'max:255'],
             'status' => ['required', 'string', 'max:255'],
             'comment' => ['nullable', 'string', 'max:255'],
@@ -339,9 +340,9 @@ class PrinterController extends Controller
             'model.required' => 'Укажите модель принтера.',
             'counter.required' => 'Укажите счётчик страниц.',
             'counter.max' => 'Номер поменьше надо (максимум: 999999999999999)',
-            'number.required' => 'Укажите номер принтера.',
-            'number.max' => 'Номер поменьше надо (максимум: 999999999999999)',
-            'number.unique' => 'Инвентарный номер уже существует!',
+            // 'number.required' => 'Укажите номер принтера.',
+            // 'number.max' => 'Номер поменьше надо (максимум: 999999999999999)',
+            // 'number.unique' => 'Инвентарный номер уже существует!',
             'location.required' => 'Укажите локацию принтера.',
             'status.required' => 'Укажите статус принтера.',
             'logo.*.mimes' => 'Только PNG, JPG или JPEG!',
@@ -427,6 +428,8 @@ class PrinterController extends Controller
     
         $attributes['logo'] = json_encode($logoPaths);
     
+        
+
         // Update the printer
         $printer->update(Arr::except($attributes, 'tags'));
     

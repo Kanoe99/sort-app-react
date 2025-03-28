@@ -71,10 +71,10 @@ const PrinterCard = ({ printer }: { printer: Printer }) => {
             <FontAwesomeIcon
               icon={faDesktop}
               className={`${
-                printer.isLocal ? "text-green-500" : "text-red-500"
+                printer.PC_name !== null ? "text-green-500" : "text-red-500"
               }`}
             />
-            <h3>{printer.isLocal ? printer.PC_name : "Не подключён"}</h3>
+            <h3>{printer.PC_name ?? "Не подключён"}</h3>
           </div>
 
           <div className="flex px-4 gap-2">

@@ -40,6 +40,8 @@ const PrinterModal = ({
     ? console.log(printer.sum_pages && printer.three_last_pages)
     : "";
 
+  console.log(printer);
+
   return (
     <Modal
       key={printer.id}
@@ -68,7 +70,13 @@ const PrinterModal = ({
                     printer.model
                   )}
                 </div>
-                <div className="pl-4 py-2">{printer.number}</div>
+                <div className="pl-4 py-2">
+                  {printer.number ?? (
+                    <span className="text-red-500 select-none">
+                      Нет инвентарного номера
+                    </span>
+                  )}
+                </div>
               </div>
               <div className="text-sm font-bold mb-2 mt-1 px-4">
                 {printer.type}
@@ -195,10 +203,10 @@ const PrinterModal = ({
                 <FontAwesomeIcon
                   icon={faDesktop}
                   className={`${
-                    printer.isLocal ? "text-green-500" : "text-red-500"
+                    printer.PC_name !== null ? "text-green-500" : "text-red-500"
                   }`}
                 />
-                <h3>{printer.isLocal ? printer.PC_name : "Не подключён"}</h3>
+                <h3>{printer.PC_name ?? "Не подключён"}</h3>
               </div>
 
               <div className="flex px-4 gap-2">

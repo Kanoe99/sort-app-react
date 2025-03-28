@@ -16,7 +16,7 @@ class PrinterFactory extends Factory
      *
      * @return array<string, mixed>
      */
-    public function definition(): array
+    public function definition(): array 
     {
         $prefixes = ['принтер', 'HP', 'станок'];
         $names = ['Samsung', 'LaserJet'];
@@ -51,18 +51,13 @@ class PrinterFactory extends Factory
             'department' => $department,
             'department_head' => $department_head,
             'network_capable' =>$network_capable[array_rand($network_capable)],
-            'isLocal' => $isLocal,
             'PC_name' => $PC_name,
-            'counterDate' => now()->format('Y-m-d H:i:s'),
             'fixDate' =>  $fixDate[array_rand($fixDate)],
             'model' => $model,
-            'hasNumber' => !$hasNumber,
             'number' => !$hasNumber ? $this->faker->unique()->numberBetween(1000, 9999) : null,
             'location' => 'Location ' . rand(1, 100),
             'status' => $statuses[array_rand($statuses)],
             'comment' => $this->faker->text(200),
-            'attention' => $this->faker->boolean(),
-            'counter' => $this->faker->numberBetween(100, 9999),
             'isIPv4' => $isIPv4,
             'IP' => $ip,
         ];

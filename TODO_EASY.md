@@ -24,3 +24,5 @@
 -   delete current page passed in getPrinters method or figure out why it is there
 -   for set range found this record
 -   make second month list to start from the month selected in the first month list
+-   reverse records displayed order without altering db
+-   don't forget 1st should not have records at all, 2nd should have 1 field empty

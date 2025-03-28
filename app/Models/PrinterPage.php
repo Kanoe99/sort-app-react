@@ -13,11 +13,6 @@ class PrinterPage extends Model
     use HasFactory;
 
     protected $fillable = [
-        'start_month',
-        'start_year',
-        'end_month',
-        'end_year',
-        'is_sum',
         'print_pages',
         'scan_pages'
     ];

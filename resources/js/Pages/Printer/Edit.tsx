@@ -18,6 +18,7 @@ import IsNetworkCapableDropdown from "@/Components/IsNetworkCapableDropdown";
 import DepartmentDropdown from "@/Components/DepartmentDropdown";
 import IsLocalDropdown from "@/Components/IsLocalDropdown";
 import { PagesRecordsPanel } from "@/Pages/Printer/PagesRecordsPanel";
+import HasNumberDropdown from "@/Components/HasNumberDropdown";
 
 export default function Edit({
   printer,
@@ -45,7 +46,7 @@ export default function Edit({
       department_head: string;
       PC_name: string;
       isLocal: boolean;
-      printer_pages: PrinterPages[];
+      printer_pages_no_sum: PrinterPages[];
     }>({
       isLocal: printer.isLocal,
       PC_name: printer.PC_name,
@@ -62,12 +63,13 @@ export default function Edit({
       comment: printer.comment,
       fixDate: printer.fixDate,
       isIPv4: printer.isIPv4,
-      printer_pages: printer_pages,
+      printer_pages_no_sum: printer_pages.slice(1),
     });
 
   const [hasIP, setHasIP] = useState(printer.IP ? true : false);
   const [isLocal, setIsLocal] = useState(printer.isLocal);
   const [isIPv4, setIsIPv4] = useState(printer.isIPv4);
+  const [hasNumber, setHasNumber] = useState(printer.number !== null);
   const [IPData, setIPData] = useState({
     IPv4Data: printer.isIPv4 ? printer.IP : "",
     IPv6Data: !printer.isIPv4 ? printer.IP : "",
@@ -99,8 +101,6 @@ export default function Edit({
     });
   };
 
-  console.log(printer_pages);
-
   return (
     <AuthenticatedLayout
       header={
@@ -114,133 +114,152 @@ export default function Edit({
       <Head title={`Редактировать ${printer.model}`} />
 
       <div className="flex 3xl:ml-[20rem] 2xl:ml-[10rem] xl:ml-[5rem] justify-start gap-8">
-        <div className=" mb-4 w-[50%] shadow-sm sm:rounded-lg bg-bg-main">
-          <div className="p-6 text-gray-100 flex gap-8">
-            <form onSubmit={editPrinter} className="w-full flex flex-col gap-4">
-              <div>
-                <InputLabel htmlFor="type" value="Тип оборудования" />
-                <TextInput
-                  id="type"
-                  placeholder="Принтер"
-                  className=""
-                  value={data.type}
-                  onChange={(e) => setData("type", e.target.value)}
-                  isFocused
-                  autoComplete="type"
-                />
+        <form
+          onSubmit={editPrinter}
+          className="flex flex-col gap-4 mb-4 w-[50%] shadow-sm sm:rounded-lg bg-bg-main p-6 text-gray-100"
+        >
+          <div>
+            <InputLabel htmlFor="type" value="Тип оборудования" />
 
-                <InputError className="mt-2" message={errors.type} />
-              </div>
+            <TextInput
+              id="type"
+              placeholder="Принтер"
+              className=""
+              value={data.type}
+              onChange={(e) => setData("type", e.target.value)}
+              isFocused
+              autoComplete="type"
+            />
 
-              <div>
-                <InputLabel htmlFor="model" value="Модель" />
+            <InputError className="mt-2" message={errors.type} />
+          </div>
 
-                <TextInput
-                  id="model"
-                  placeholder="Samsung 400"
-                  className=""
-                  value={data.model}
-                  onChange={(e) => setData("model", e.target.value)}
-                  isFocused
-                  autoComplete="model"
-                />
+          <div>
+            <InputLabel htmlFor="model" value="Модель" />
 
-                <InputError className="mt-2" message={errors.model} />
-              </div>
+            <TextInput
+              id="model"
+              placeholder="Samsung 400"
+              className=""
+              value={data.model}
+              onChange={(e) => setData("model", e.target.value)}
+              isFocused
+              autoComplete="model"
+            />
 
-              <div>
-                <InputLabel htmlFor="number" value="Номер" />
+            <InputError className="mt-2" message={errors.model} />
+          </div>
 
-                <TextInput
-                  type="number"
-                  id="number"
-                  placeholder="5873"
-                  className=""
-                  pattern="\d*"
-                  value={data.number}
-                  onChange={(e) => {
-                    {
-                      const value = parseInt(e.target.value);
-                      setData("number", value);
-                    }
-                  }}
-                  isFocused
-                  autoComplete="number"
-                />
+          {/* TODO: make 2 items dropdown into generic component */}
 
-                <InputError className="mt-2" message={errors.number} />
-              </div>
+          <div>
+            <InputLabel htmlFor="hasNumber" value="Есть инвентарный номер?" />
 
-              <div>
-                <InputLabel
-                  htmlFor="network_capable"
-                  value="Есть возможность сделать сетевым?"
-                />
+            <HasNumberDropdown
+              hasNumber={hasNumber}
+              setData={setData}
+              id="hasNumber"
+              setHasNumber={setHasNumber}
+              className="mt-1 block w-full py-3 rounded-xl"
+              isFocused
+            />
+          </div>
 
-                <IsNetworkCapableDropdown
-                  value={data.network_capable}
-                  id="network_capable"
-                  className=""
-                  isFocused
-                  autoComplete="network_capable"
-                  setData={setData}
-                />
+          {hasNumber && (
+            <div>
+              <InputLabel htmlFor="number" value="Номер" />
 
-                <InputError className="mt-2" message={errors.network_capable} />
-              </div>
+              <TextInput
+                type="number"
+                id="number"
+                placeholder="5873"
+                className=""
+                pattern="\d*"
+                value={data.number}
+                onChange={(e) => {
+                  {
+                    const value = parseInt(e.target.value);
+                    setData("number", value);
+                  }
+                }}
+                isFocused
+                autoComplete="number"
+              />
 
-              <div>
-                <InputLabel htmlFor="department_head" value="Ответственный" />
+              <InputError className="mt-2" message={errors.number} />
+            </div>
+          )}
 
-                <DepartmentDropdown
-                  db_head={printer.department_head}
-                  id="department_head"
-                  className=""
-                  department_heads={department_heads}
-                  isFocused
-                  autoComplete="department_head"
-                  setData={setData}
-                />
+          <div>
+            <InputLabel
+              htmlFor="network_capable"
+              value="Есть возможность сделать сетевым?"
+            />
 
-                <InputError className="mt-2" message={errors.department_head} />
-              </div>
+            <IsNetworkCapableDropdown
+              id="network_capable"
+              className=""
+              isFocused
+              network_capable={printer.network_capable}
+              autoComplete="network_capable"
+              setData={setData}
+            />
 
-              <div>
-                <InputLabel htmlFor="location" value="Кабинет" />
+            <InputError className="mt-2" message={errors.network_capable} />
+          </div>
 
-                <TextInput
-                  id="location"
-                  placeholder="318"
-                  className=""
-                  value={data.location}
-                  onChange={(e) => setData("location", e.target.value)}
-                  isFocused
-                  autoComplete="location"
-                />
+          <div>
+            <InputLabel htmlFor="department_head" value="Ответственный" />
 
-                <InputError className="mt-2" message={errors.location} />
-              </div>
+            <DepartmentDropdown
+              db_head={printer.department_head}
+              id="department_head"
+              className=""
+              department_heads={department_heads}
+              isFocused
+              autoComplete="department_head"
+              setData={setData}
+            />
 
-              <div>
-                <InputLabel htmlFor="isLocal" value="Локальный?" />
+            <InputError className="mt-2" message={errors.department_head} />
+          </div>
 
-                <IsLocalDropdown
-                  setData={setData}
-                  id="isLocal"
-                  isLocal={isLocal}
-                  setIsLocal={setIsLocal}
-                  className="mt-1 block w-full py-3 rounded-xl"
-                  isFocused
-                />
+          <div>
+            <InputLabel htmlFor="location" value="Кабинет" />
 
-                <InputError className="mt-2" message={errors.isLocal} />
-              </div>
+            <TextInput
+              id="location"
+              placeholder="318"
+              className=""
+              value={data.location}
+              onChange={(e) => setData("location", e.target.value)}
+              isFocused
+              autoComplete="location"
+            />
 
-              {/* {isLocal && (
-                <div>
-                <InputLabel htmlFor="PC_name" value="Имя компьютера" />
-                
-                <TextInput
+            <InputError className="mt-2" message={errors.location} />
+          </div>
+
+          <div>
+            <InputLabel htmlFor="isLocal" value="Локальный?" />
+
+            <IsLocalDropdown
+              setData={setData}
+              id="isLocal"
+              isLocal={isLocal}
+              setIsLocal={setIsLocal}
+              className="mt-1 block w-full py-3 rounded-xl"
+              isFocused
+            />
+
+            <InputError className="mt-2" message={errors.isLocal} />
+          </div>
+
+          {isLocal && (
+            <div>
+              <InputLabel htmlFor="PC_name" value="Имя компьютера" />
+
+              <TextInput
                 id="PC_name"
                 placeholder="p66-computer"
                 className=""
@@ -248,155 +267,105 @@ export default function Edit({
                 onChange={(e) => setData("PC_name", e.target.value)}
                 isFocused
                 autoComplete="PC_name"
-                />
-                
-                <InputError className="mt-2" message={errors.PC_name} />
-                </div>
-                )} */}
+              />
 
-              <div>
-                <InputLabel htmlFor="IPBool" value="Есть IP?" />
+              <InputError className="mt-2" message={errors.PC_name} />
+            </div>
+          )}
 
-                <IPBool
-                  setHasIP={setHasIP}
-                  setData={setData}
-                  hasIP={hasIP}
-                  id="IPBool"
-                  className="mt-1 block w-full py-3 rounded-xl"
-                  isFocused
-                  autoComplete="IPBool"
-                />
+          <div>
+            <InputLabel htmlFor="IPBool" value="Есть IP?" />
 
-                <InputError className="mt-2" message={errors.IPBool} />
-              </div>
+            <IPBool
+              setData={setData}
+              id="IPBool"
+              className="mt-1 block w-full py-3 rounded-xl"
+              isFocused
+              autoComplete="IPBool"
+              hasIP={hasIP}
+              setHasIP={setHasIP}
+            />
 
-              {hasIP && (
-                <div>
-                  <InputLabel
-                    htmlFor="IP"
-                    value={`${isIPv4 ? "IPv4" : "IPv6"}`}
-                  />
-                  <IP
-                    isIPv4={isIPv4}
-                    setIsIPv4={setIsIPv4}
-                    IPData={isIPv4 ? IPData.IPv4Data : IPData.IPv6Data}
-                    setIPData={setIPData}
-                  />
-                  <InputError className="mt-2" message={errors.IP} />
-                </div>
-              )}
-
-              <div>
-                <InputLabel htmlFor="status" value="Статус" />
-
-                <TextInput
-                  id="status"
-                  placeholder="В эксплуатации"
-                  className=""
-                  value={data.status}
-                  onChange={(e) => setData("status", e.target.value)}
-                  isFocused
-                  autoComplete="status"
-                />
-
-                <InputError className="mt-2" message={errors.status} />
-              </div>
-
-              <div>
-                <InputLabel
-                  htmlFor="comment"
-                  value="Комментарий"
-                  optional={true}
-                />
-
-                <TextAreaInput
-                  id="comment"
-                  className="block w-full"
-                  value={data.comment ?? ""}
-                  onChange={(e) => setData("comment", e.target.value)}
-                />
-
-                <InputError className="mt-2" message={errors.comment} />
-              </div>
-
-              <div>
-                <InputLabel htmlFor="counter" value="Счётчик страниц" />
-                <TextInput
-                  type="number"
-                  id="counter"
-                  placeholder="1234"
-                  className=""
-                  value={data.counter}
-                  onChange={(e) => setData("counter", e.target.value)}
-                  isFocused
-                  autoComplete="counter"
-                />
-                <InputError className="mt-2" message={errors.counter} />
-              </div>
-
-              <div>
-                <InputLabel
-                  htmlFor="fixDate"
-                  value="Дата последнего ремонта"
-                  optional={true}
-                />
-
-                <DateInput
-                  id=""
-                  placeholder="В эксплуатации"
-                  className=""
-                  value={data.fixDate ?? ""}
-                  onChange={(e) => setData("fixDate", e.target.value)}
-                  isFocused
-                  autoComplete="fixDate"
-                />
-
-                <InputError className="mt-2" message={errors.fixDate} />
-              </div>
-
-              <div className="flex items-center gap-4 justify-center">
-                <PrimaryButton
-                  disabled={processing}
-                  className="w-[calc(100%_-_0.2rem)] !py-4"
-                >
-                  сохранить
-                </PrimaryButton>
-                <DangerButton
-                  onClick={() => setIsModalVisible(true)}
-                  disabled={processing}
-                  className="w-[calc(30%_-_0.2rem)] !py-4"
-                >
-                  удалить
-                </DangerButton>
-                <Modal show={isModalVisible} onClose={closeModal}>
-                  <section className="p-6">
-                    <h2 className="text-lg font-medium text-gray-100">
-                      Вы уверены?
-                    </h2>
-                    <p className="mt-1 text-sm text-gray-400">
-                      Вы удалите {printer.model} №{printer.number} (
-                      {printer.type})
-                    </p>
-                    <div className="flex justify-end gap-4 mt-6">
-                      <SecondaryButton onClick={closeModal}>
-                        Отмена
-                      </SecondaryButton>
-                      <DangerButton
-                        onClick={handleDelete}
-                        disabled={processing}
-                        className="w-[calc(30%_-_0.2rem)] !py-4"
-                      >
-                        удалить
-                      </DangerButton>
-                    </div>
-                  </section>
-                </Modal>
-              </div>
-            </form>
+            <InputError className="mt-2" message={errors.IPBool} />
           </div>
-        </div>
+
+          {hasIP && (
+            <div>
+              <InputLabel htmlFor="IP" value={`${isIPv4 ? "IPv4" : "IPv6"}`} />
+              <IP
+                onChange={() => {
+                  setData("isIPv4", isIPv4);
+                }}
+                isIPv4={isIPv4}
+                setIsIPv4={setIsIPv4}
+                IPData={isIPv4 ? IPData.IPv4Data : IPData.IPv6Data}
+                setIPData={setIPData}
+              />
+              <InputError className="mt-2" message={errors.IP} />
+            </div>
+          )}
+
+          <div>
+            <InputLabel htmlFor="status" value="Статус" />
+
+            <TextInput
+              id="status"
+              placeholder="В эксплуатации"
+              className=""
+              value={data.status}
+              onChange={(e) => setData("status", e.target.value)}
+              isFocused
+              autoComplete="status"
+            />
+
+            <InputError className="mt-2" message={errors.status} />
+          </div>
+
+          <div>
+            <InputLabel htmlFor="comment" value="Комментарий" optional={true} />
+
+            <TextAreaInput
+              id="comment"
+              className="block w-full"
+              value={data.comment}
+              onChange={(e) => setData("comment", e.target.value)}
+            />
+
+            <InputError className="mt-2" message={errors.comment} />
+          </div>
+
+          <div>
+            <InputLabel
+              htmlFor="fixDate"
+              value="Дата последнего ремонта"
+              optional={true}
+            />
+
+            <DateInput
+              id=""
+              placeholder="В эксплуатации"
+              className=""
+              value={data.fixDate}
+              onChange={(e) => setData("fixDate", e.target.value)}
+              isFocused
+              autoComplete="fixDate"
+            />
+
+            <InputError className="mt-2" message={errors.fixDate} />
+          </div>
+
+          <div className="flex items-center gap-4 justify-center">
+            <PrimaryButton
+              disabled={processing}
+              className="w-[calc(100%_-_0.2rem)] !py-4"
+            >
+              сохранить
+            </PrimaryButton>
+          </div>
+        </form>
         <PagesRecordsPanel
-          printer_pages={printer_pages}
+          sums={printer_pages.slice(0, 1)[0]}
+          printer_pages_no_sum={printer_pages.slice(1)}
           setData={setData}
           processing={processing}
           editPrinter={editPrinter}

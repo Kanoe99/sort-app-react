@@ -54,11 +54,7 @@ class DatabaseSeeder extends Seeder
             'password' => '11111111a',
         ])->assignRole(RolesEnum::Admin);
 
-        Printer::factory(1000)->withTags()->create(new Sequence([
-            'attention' => false,
-        ], [
-            'attention' => true,
-        ]))->each(function($printer){
+        Printer::factory(1000)->withTags()->create()->each(function($printer){
             PrinterPage::factory()->getPrinterId($printer->id)->generateData();
         });
     }

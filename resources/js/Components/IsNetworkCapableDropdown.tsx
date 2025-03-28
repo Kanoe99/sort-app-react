@@ -16,17 +16,14 @@ export default forwardRef(function TextInput(
     value,
   }: InputHTMLAttributes<HTMLInputElement> & {
     isFocused?: boolean;
-    network_capable?: "Есть возможность" | "Нет возможности" | "Сетевой";
-    setData: (
-      key: string,
-      value: "Есть возможность" | "Нет возможности" | "Сетевой"
-    ) => void;
+    network_capable?: string;
+    setData: (key: string, value: string) => void;
   },
   ref
 ) {
-  const [isNetworkCapable, setIsNetworkCapable] = useState<
-    "Есть возможность" | "Нет возможности" | "Сетевой"
-  >(network_capable ?? "Нет возможности");
+  const [isNetworkCapable, setIsNetworkCapable] = useState<string>(
+    network_capable ?? "Нет возможности"
+  );
   const localRef = useRef<HTMLInputElement>(null);
 
   const handleClick = (

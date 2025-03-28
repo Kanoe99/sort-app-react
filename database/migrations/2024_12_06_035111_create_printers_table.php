@@ -19,7 +19,6 @@ return new class extends Migration {
             $table->string('department');
             $table->string('department_head');
 
-            $table->boolean('isLocal');
             $table->string('PC_name')->nullable();
 
             $table->string('network_capable');
@@ -27,7 +26,6 @@ return new class extends Migration {
             $table->string('model');
 
             // Number became unique
-            $table->boolean('hasNumber');
             $table->unsignedMediumInteger('number')->nullable();
             $table->unique('number')->whereNotNull('number');
 
@@ -41,13 +39,9 @@ return new class extends Migration {
 
             $table->string('status');
             $table->string('comment')->nullable();
-            $table->boolean('attention')->default(false);
             $table->string('logo')->nullable();
 
-            // New
-            $table->unsignedMediumInteger('counter'); // Assuming this is still a string
-            $table->dateTime('counterDate'); // Change to datetime
-            $table->dateTime('fixDate')->nullable(); // Change to datetime
+            $table->dateTime('fixDate')->nullable();
 
             $table->timestamps();
             $table->index('location');
