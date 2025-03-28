@@ -2,17 +2,18 @@
 
 namespace App\Http\Controllers;
 
+
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use Carbon\Carbon;
 use Inertia\Inertia;
+
 use \App\Http\Resources\PrinterResource;
 use \App\Http\Resources\PrinterPageResource;
 use App\Services\TagService;
 use App\Services\DepartmentService;
-
 use App\Models\Printer;
 use App\Models\PrinterPage;
 use App\Http\Controllers\PrinterPageController;
@@ -180,7 +181,6 @@ class PrinterController extends Controller
             'network_capable' => ['required', 'string', 'max:255'],
             "PC_name" => ['required' , 'string', 'max:255'],
             'department_head' => ['required', 'string', 'max:255'],
-            'isLocal' => ['required', 'boolean'],
             'type' => ['required', 'string', 'max:255'],
             'model' => ['required', 'string', 'max:255'],
             'counter' => ['required', 'unique:printers,number', 'numeric', 'min:1', 'max:999999999999999'],
@@ -196,8 +196,6 @@ class PrinterController extends Controller
             'network_capable.required' => 'Есть ли возможность сделать сетевым?',
             'PC_name.required' => 'Укажите имя компьютера.',
             'department_head.required' => 'Укажите ответственное лицо.',
-            'isLocal.required' => 'Требуется указать является ли принтер локальным!',
-            'isLocal.boolean' => 'Только да или нет!',
             'type.required' => 'Укажите модель принтера.',
             'model.required' => 'Укажите модель принтера.',
             'hasNumber.required' => 'Есть инвентарный номер?',
@@ -304,26 +302,26 @@ class PrinterController extends Controller
     //update
 
    public function update(Request $request, Printer $printer)
-    {
-        dd($request->all());
-        $fields = array_keys($request->except('IPBool'));
+   {
+        // dd($request->printer_pages_no_sum);
+        $fields = array_keys($request->except(['IPBool', 'isLocal', 'hasNumber']));
     
         $oldData = Printer::select($fields)->findOrFail($printer->id)->toArray();
         $newData = $request->only($fields);
+
+        // dd($oldData);
 
         $refreshed = $newData != $oldData;
     
       
 
-    //   try{
+        //   try{
         $attributes = $request->validate([
-            'isLocal' => ['required', 'boolean'],
             'department_head' => ['required', 'string', 'max:255'],
             'network_capable' => ['required', 'string', 'max:255'],
             'type' => ['required', 'string', 'max:255'],
             'model' => ['required', 'string', 'max:255'],
-            'counter' => ['required', 'numeric', 'min:1', 'max:999999999999999'],
-            // 'number' => ['required', 'numeric', 'min:1', 'max:999999999999999', 'unique:printers,number,' . $printer->id],
+            'number' => ['required', 'numeric', 'min:1', 'max:999999999999999', 'unique:printers,number,' . $printer->id],
             'location' => ['required', 'string', 'max:255'],
             'status' => ['required', 'string', 'max:255'],
             'comment' => ['nullable', 'string', 'max:255'],
@@ -332,26 +330,22 @@ class PrinterController extends Controller
             'logo.*' => ['nullable', 'mimes:jpg,jpeg,png'],
             'isIPv4' => ['required', 'boolean']
         ], [
-            'isLocal.required' => 'Требуется указать является ли принтер локальным!',
-            'isLocal.boolean' => 'Только да или нет!',
             'department_head.required' => 'Укажите ответственное лицо.',
             'network_capable.required' => 'Есть ли возможность сделать сетевым?',
             'type.required' => 'Укажите модель принтера.',
             'model.required' => 'Укажите модель принтера.',
-            'counter.required' => 'Укажите счётчик страниц.',
-            'counter.max' => 'Номер поменьше надо (максимум: 999999999999999)',
-            // 'number.required' => 'Укажите номер принтера.',
-            // 'number.max' => 'Номер поменьше надо (максимум: 999999999999999)',
-            // 'number.unique' => 'Инвентарный номер уже существует!',
+            'number.required' => 'Укажите номер принтера.',
+            'number.max' => 'Номер поменьше надо (максимум: 999999999999999)',
+            'number.unique' => 'Инвентарный номер уже существует!',
             'location.required' => 'Укажите локацию принтера.',
             'status.required' => 'Укажите статус принтера.',
             'logo.*.mimes' => 'Только PNG, JPG или JPEG!',
             'isIPv4.required' => 'Требуется указать тип IP адреса!',
             'isIPv4.boolean' => 'Только IPv4 или IPv6!'
         ]);
-    //   }catch(\Illuminate\Validation\ValidationException $e){
-    //     dd($e->errors());
-    //   }
+        //   }catch(\Illuminate\Validation\ValidationException $e){
+        //     dd($e->errors());
+        //   }
 
         function lowercaseRussianOnly($text)
         {
@@ -365,7 +359,6 @@ class PrinterController extends Controller
         $attributes['location'] = lowercaseRussianOnly($attributes['location']);
         $attributes['status'] = lowercaseRussianOnly($attributes['status']);
         $attributes['comment'] = $request->filled('comment') ? lowercaseRussianOnly($attributes['comment']) : null;
-        $attributes['counter'] = lowercaseRussianOnly($attributes['counter']);
         $attributes['department'] = (new DepartmentService)->getDepartment($attributes['department_head']);
     
         // Validate IP if required
@@ -382,7 +375,7 @@ class PrinterController extends Controller
             $attributes['IP'] = null;
         }
         
-        if($request->isLocal == true){
+        if($request->PC_name){
             $request->validate([
                 'PC_name' => ['required', 'string', 'max:255']
             ],
@@ -428,7 +421,17 @@ class PrinterController extends Controller
     
         $attributes['logo'] = json_encode($logoPaths);
     
-        
+        foreach($request->printer_pages_no_sum as $page){
+            $printerPage = $printer->printerPages()->where('printer_id', $page['printer_id'])->where('isSum', 0)->first();
+
+            // dd($printerPage);
+            if($printerPage){
+                $printerPage->update([
+                    'print_pages' => $page['print_pages'],
+                    'scan_pages' => $page['scan_pages'],
+                ]);
+            }
+        }
 
         // Update the printer
         $printer->update(Arr::except($attributes, 'tags'));

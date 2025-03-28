@@ -18,6 +18,7 @@ class PrinterPageResource extends JsonResource
     public function toArray(Request $request): array
     {
         return [
+            'printer_id' => $this->printer_id,
             'start_month' => $this->start_month,
             'start_year' => $this->start_year,
             'end_month' => $this->end_month,

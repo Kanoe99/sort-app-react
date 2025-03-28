@@ -26,3 +26,4 @@
 -   make second month list to start from the month selected in the first month list
 -   reverse records displayed order without altering db
 -   don't forget 1st should not have records at all, 2nd should have 1 field empty
+-   oldData in printerController.php update method behaves weird;
