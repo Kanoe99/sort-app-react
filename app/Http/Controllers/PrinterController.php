@@ -175,7 +175,7 @@ class PrinterController extends Controller
    public function store(Request $request)
     {
         //TODO: delete try cath in prod
-        dd($request->all());
+        // dd($request->all());
      try{
         $attributes = $request->validate([
             'network_capable' => ['required', 'string', 'max:255'],
@@ -301,9 +301,10 @@ class PrinterController extends Controller
     //store
     //update
 
-   public function update(Request $request, Printer $printer)
-   {
+  public function update(Request $request, Printer $printer)
+    {
         // dd($request->printer_pages_no_sum);
+        // dd($request->all());
         $fields = array_keys($request->except(['IPBool', 'isLocal', 'hasNumber']));
     
         $oldData = Printer::select($fields)->findOrFail($printer->id)->toArray();
@@ -420,18 +421,74 @@ class PrinterController extends Controller
         }
     
         $attributes['logo'] = json_encode($logoPaths);
-    
-        foreach($request->printer_pages_no_sum as $page){
-            $printerPage = $printer->printerPages()->where('printer_id', $page['printer_id'])->where('isSum', 0)->first();
 
-            // dd($printerPage);
-            if($printerPage){
-                $printerPage->update([
-                    'print_pages' => $page['print_pages'],
-                    'scan_pages' => $page['scan_pages'],
+
+        $calculatedSum = ['print_pages' => 0, 'scan_pages' => 0];
+        foreach($request->printer_pages_no_sum as $page){
+            $calculatedSum['print_pages'] += $page['print_pages'];
+            $calculatedSum['scan_pages'] += $page['scan_pages'];
+        }
+
+        $rpp_no_sum = $request->printer_pages_no_sum;
+        $printerPages = $printer->printerPages()->where('printer_id', $rpp_no_sum[0]['printer_id'])->get();
+        // dd($printerPages);
+        // dd($printerPages);
+        // $pagesNoSumDatabase = array_slice($printerPages.items, 1);
+        
+        $tempPages = [];
+        if($printerPages){
+            foreach($printerPages as $index => $page){
+                // dd($page);
+                if($index === 0){
+                    array_push($tempPages, ['print_pages' => $calculatedSum['print_pages'], 'scan_pages' => $calculatedSum['scan_pages']]);
+                }
+                else{
+                    if($page['print_pages'] !== null || $page['scan_pages'] !== null){
+                        array_push($tempPages, ['print_pages' => $page['print_pages'], 'scan_pages' => $page['scan_pages']]);
+                    }
+                    
+                }
+            }
+        }
+
+        // dd($request->printer_pages_no_sum);
+        if((count($printerPages) - 1) !== count($rpp_no_sum)){
+            if(($rpp_no_sum[count($rpp_no_sum) - 1]['print_pages'] !== null) || ($rpp_no_sum[count($rpp_no_sum) - 1]['scan_pages'] !== null)){
+                array_push($tempPages, [
+                    'print_pages' => $rpp_no_sum[count($rpp_no_sum) - 1]['print_pages'],
+                    'scan_pages' => $rpp_no_sum[count($rpp_no_sum) - 1]['scan_pages']
                 ]);
             }
         }
+        
+        
+        $date = new DateTime();
+        $now = [
+            'year' => $date->format('Y'),
+            'month' => $date->format('n'),
+        ];
+        foreach($tempPages as $index => $pageData){
+            if(isset($printerPages[$index])){
+                // Existing record, update it
+                $printerPages[$index]->update([
+                    'print_pages' => $pageData['print_pages'],
+                    'scan_pages' => $pageData['scan_pages'],
+                ]);
+            } else {
+                // New record, create it
+                $printer->printerPages()->create([
+                    'printer_id' => $rpp_no_sum[0]['printer_id'],
+                    'start_month' => $rpp_no_sum[sizeof($printerPages) - 1]['end_month'],
+                    'start_year' => $rpp_no_sum[sizeof($printerPages) - 1]['end_year'],
+                    'end_month' => $now['month'],
+                    'end_year' => $now['year'],
+                    'isSum' => 0,
+                    'print_pages' => $pageData['print_pages'],
+                    'scan_pages' => $pageData['scan_pages'],
+                ]);
+            }
+        }
+        
 
         // Update the printer
         $printer->update(Arr::except($attributes, 'tags'));
@@ -459,7 +516,7 @@ class PrinterController extends Controller
 
 
 
-    public function destroy(Printer $printer)
+  public function destroy(Printer $printer)
     {
             $printer->delete();
             return redirect('/main')->with(['success' => 'Принтер удалён.', 'refreshed' => true, 'time'=> time()]);

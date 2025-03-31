@@ -65,17 +65,14 @@ export type Printer = {
 };
 
 export type PrinterPages = {
-  created_at: string;
   end_month: number;
   end_year: number;
-  id: number;
-  isSum: number;
-  print_pages: number;
-  printer_id: number;
-  scan_pages: number;
   start_year: number;
   start_month: number;
-  updated_at: string;
+  isSum: number;
+  printer_id: number;
+  print_pages: number | null;
+  scan_pages: number | null;
 };
 
 export type PageProps<

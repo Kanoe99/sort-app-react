@@ -48,6 +48,22 @@ const PagesRecordsPanel = ({
     return () => window.removeEventListener("resize", checkOverflow);
   }, [printer_pages_no_sum]);
 
+  useEffect(() => {
+    setPrinterPagesNoSum((prev) => [
+      ...prev,
+      {
+        end_month: now.month,
+        end_year: now.year,
+        start_year: printerPagesNoSum[printerPagesNoSum.length - 1].end_year,
+        start_month: printerPagesNoSum[printerPagesNoSum.length - 1].end_month,
+        isSum: 0,
+        printer_id: printerPagesNoSum[0].printer_id,
+        print_pages: null,
+        scan_pages: null,
+      },
+    ]);
+  }, []);
+
   const changePrinterPagesValues = (
     printerPagesNoSum: PrinterPages[],
     key: "print_pages" | "scan_pages",
@@ -114,8 +130,19 @@ const PagesRecordsPanel = ({
                     placeholder={"5872"}
                     className=""
                     pattern=""
-                    // value={printer_page.print_pages}
-
+                    onChange={(e) => {
+                      {
+                        const value = changePrinterPagesValues(
+                          printerPagesNoSum,
+                          "print_pages",
+                          e.target.value,
+                          printerPagesNoSum.length - 1
+                        );
+                        setPrinterPagesNoSum(value);
+                        setData("printer_pages_no_sum", value);
+                      }
+                    }}
+                    // value={newPagesNoSum?.print_pages}
                     isFocused
                     autoComplete="number"
                   />
@@ -127,6 +154,18 @@ const PagesRecordsPanel = ({
                     placeholder="5873"
                     className=""
                     pattern="\d*"
+                    onChange={(e) => {
+                      {
+                        const value = changePrinterPagesValues(
+                          printerPagesNoSum,
+                          "scan_pages",
+                          e.target.value,
+                          printerPagesNoSum.length - 1
+                        );
+                        setPrinterPagesNoSum(value);
+                        setData("printer_pages_no_sum", value);
+                      }
+                    }}
                     // value={printer_page.scan_pages}
 
                     autoComplete="number"
@@ -145,7 +184,7 @@ const PagesRecordsPanel = ({
                     placeholder="5873"
                     className=""
                     // pattern="\d*"
-                    value={sums.print_pages}
+                    value={sums.print_pages ?? ""}
                     isFocused
                     // autoComplete="number"
                   />
@@ -158,7 +197,7 @@ const PagesRecordsPanel = ({
                     placeholder="5874"
                     className=""
                     // pattern="\d*"
-                    value={sums.scan_pages}
+                    value={sums.scan_pages ?? ""}
                     isFocused
                     // autoComplete="number"
                   />
@@ -199,12 +238,12 @@ const PagesRecordsPanel = ({
                 <div>
                   <div className="flex gap-2">
                     <PrintPagesInput
-                      type="text"
+                      type="number"
                       // id="number"
                       placeholder={"5874"}
                       className=""
-                      pattern=""
-                      value={printerPagesNoSum[index].print_pages}
+                      pattern="\d*"
+                      value={printerPagesNoSum[index].print_pages ?? ""}
                       onChange={(e) => {
                         {
                           const value = changePrinterPagesValues(
@@ -217,7 +256,6 @@ const PagesRecordsPanel = ({
                           setData("printer_pages_no_sum", value);
                         }
                       }}
-                      // autoComplete="number"
                     />
                     <PrintPagesInput
                       type="number"
@@ -225,7 +263,7 @@ const PagesRecordsPanel = ({
                       placeholder="5875"
                       className=""
                       pattern="\d*"
-                      value={printerPagesNoSum[index].scan_pages}
+                      value={printerPagesNoSum[index].scan_pages ?? ""}
                       onChange={(e) => {
                         {
                           const value = changePrinterPagesValues(
@@ -238,7 +276,6 @@ const PagesRecordsPanel = ({
                           setData("printer_pages_no_sum", value);
                         }
                       }}
-                      // autoComplete="number"
                     />
                   </div>
                   <div className="text-xs px-4 mt-1">
