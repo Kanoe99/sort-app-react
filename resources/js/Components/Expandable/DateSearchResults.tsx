@@ -59,7 +59,7 @@ const DateSearchResults = ({
           </div>
         </div>
       ) : (
-        <div className="flex flex-col w-full">
+        <div className="flex gap-2 flex-col w-full">
           {pages.map((_, index) => (
             <li
               key={`date-search-${_}`}

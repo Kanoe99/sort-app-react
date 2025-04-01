@@ -22,11 +22,13 @@ import HasNumberDropdown from "@/Components/HasNumberDropdown";
 
 export default function Edit({
   printer,
-  printer_pages,
+  sums,
+  printer_pages_no_sum,
   department_heads,
 }: {
   printer: Printer;
-  printer_pages: PrinterPages[];
+  sums: PrinterPages[];
+  printer_pages_no_sum: PrinterPages[];
   department_heads: string[];
 }) {
   const { data, setData, processing, errors, put, clearErrors, reset } =
@@ -63,7 +65,7 @@ export default function Edit({
       comment: printer.comment,
       fixDate: printer.fixDate,
       isIPv4: printer.isIPv4,
-      printer_pages_no_sum: printer_pages.slice(1),
+      printer_pages_no_sum: printer_pages_no_sum,
     });
 
   const [hasIP, setHasIP] = useState(printer.IP ? true : false);
@@ -364,8 +366,8 @@ export default function Edit({
           </div>
         </form>
         <PagesRecordsPanel
-          sums={printer_pages.slice(0, 1)[0]}
-          printer_pages_no_sum={printer_pages.slice(1)}
+          sums={sums[0]}
+          printer_pages_no_sum={printer_pages_no_sum}
           setData={setData}
           processing={processing}
           editPrinter={editPrinter}

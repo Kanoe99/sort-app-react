@@ -18,6 +18,7 @@ use App\Models\Printer;
 use App\Models\PrinterPage;
 use App\Http\Controllers\PrinterPageController;
 use App\Models\Tag;
+use DateTime;
 
 class PrinterController extends Controller
 {
@@ -41,7 +42,8 @@ class PrinterController extends Controller
     {
         return Inertia::render('Printer/Edit', [
             'printer' => new PrinterResource($printer),
-            'printer_pages' => PrinterPageResource::collection(PrinterPage::where('printer_id', $printer->id)->get())->toArray(request()), // Convert collection to array
+            'sums' => PrinterPageResource::collection(PrinterPage::where('printer_id', $printer->id)->get()->slice(0, 1))->toArray(request()),
+            'printer_pages_no_sum' => PrinterPageResource::collection(PrinterPage::where('printer_id', $printer->id)->get()->slice(1))->toArray(request()), // Convert collection to array
             'department_heads' => (new DepartmentService)->getDepartmentHeads(),
         ]);
     }
@@ -430,26 +432,22 @@ class PrinterController extends Controller
         }
 
         $rpp_no_sum = $request->printer_pages_no_sum;
+        // dd($rpp_no_sum);
         $printerPages = $printer->printerPages()->where('printer_id', $rpp_no_sum[0]['printer_id'])->get();
         // dd($printerPages);
         // dd($printerPages);
         // $pagesNoSumDatabase = array_slice($printerPages.items, 1);
         
         $tempPages = [];
-        if($printerPages){
-            foreach($printerPages as $index => $page){
-                // dd($page);
-                if($index === 0){
-                    array_push($tempPages, ['print_pages' => $calculatedSum['print_pages'], 'scan_pages' => $calculatedSum['scan_pages']]);
-                }
-                else{
-                    if($page['print_pages'] !== null || $page['scan_pages'] !== null){
-                        array_push($tempPages, ['print_pages' => $page['print_pages'], 'scan_pages' => $page['scan_pages']]);
-                    }
-                    
-                }
+        array_push($tempPages, ['print_pages' => $calculatedSum['print_pages'], 'scan_pages' => $calculatedSum['scan_pages']]);
+
+        foreach($rpp_no_sum as $index => $page){
+                if($rpp_no_sum[$index]['print_pages'] !== null || $rpp_no_sum[$index]['scan_pages'] !== null){
+                array_push($tempPages, ['print_pages' => $page['print_pages'], 'scan_pages' => $page['scan_pages']]);
             }
         }
+
+        // dd($tempPages);
 
         // dd($request->printer_pages_no_sum);
         if((count($printerPages) - 1) !== count($rpp_no_sum)){
@@ -460,7 +458,6 @@ class PrinterController extends Controller
                 ]);
             }
         }
-        
         
         $date = new DateTime();
         $now = [
@@ -474,12 +471,12 @@ class PrinterController extends Controller
                     'print_pages' => $pageData['print_pages'],
                     'scan_pages' => $pageData['scan_pages'],
                 ]);
-            } else {
-                // New record, create it
-                $printer->printerPages()->create([
+            }
+             else {
+                    $printer->printerPages()->create([
                     'printer_id' => $rpp_no_sum[0]['printer_id'],
-                    'start_month' => $rpp_no_sum[sizeof($printerPages) - 1]['end_month'],
-                    'start_year' => $rpp_no_sum[sizeof($printerPages) - 1]['end_year'],
+                    'start_month' => $printerPages[sizeof($printerPages) - 1]['end_month'],
+                    'start_year' => $printerPages[sizeof($printerPages) - 1]['end_year'],
                     'end_month' => $now['month'],
                     'end_year' => $now['year'],
                     'isSum' => 0,

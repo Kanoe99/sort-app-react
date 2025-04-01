@@ -13,8 +13,14 @@ class PrinterPage extends Model
     use HasFactory;
 
     protected $fillable = [
+        'printer_id',
         'print_pages',
-        'scan_pages'
+        'scan_pages',
+        'end_year',
+        'end_month',
+        'start_year',
+        'start_month',
+        'isSum'
     ];
 
     public function printer():BelongsTo
