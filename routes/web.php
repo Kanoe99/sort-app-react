@@ -43,6 +43,7 @@ Route::middleware('auth')->group(function () {
         Route::get('/search', [PrinterController::class, 'searchPrinters']);
         Route::get('/printed', [PrinterPageController::class, 'printed']);
         Route::get('/scanned', [PrinterPageController::class, 'scanned']);
+        Route::get('/printer', [PrinterPageController::class, 'getPrinterPages']);
 
 
         Route::resource('printer', PrinterController::class)

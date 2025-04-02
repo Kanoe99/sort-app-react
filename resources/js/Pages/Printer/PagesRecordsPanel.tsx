@@ -58,21 +58,6 @@ const PagesRecordsPanel = ({
     return () => window.removeEventListener("resize", checkOverflow);
   }, [printer_pages_no_sum]);
 
-  // useEffect(() => {
-  //   setNewPagesNoSum([
-  //     {
-  //       end_year: now.year,
-  //       end_month: now.month,
-  //       start_year: printerPagesNoSum[printerPagesNoSum.length - 1].end_year,
-  //       start_month: printerPagesNoSum[printerPagesNoSum.length - 1].end_month,
-  //       isSum: 0,
-  //       printer_id: printerPagesNoSum[0].printer_id,
-  //       print_pages: null,
-  //       scan_pages: null,
-  //     },
-  //   ]);
-  // }, []);
-
   const changePrinterPagesValues = (
     printerPagesNoSum: PrinterPages[],
     key: "print_pages" | "scan_pages",
@@ -217,8 +202,8 @@ const PagesRecordsPanel = ({
               <div className="text-xs px-4 mt-1">
                 всего с{" "}
                 <span className="text-blue-300">
-                  {startingMonths[printerPagesNoSum[1].start_month - 1]}{" "}
-                  {printerPagesNoSum[1].start_year}
+                  {startingMonths[printerPagesNoSum[0].start_month - 1]}{" "}
+                  {printerPagesNoSum[0].start_year}
                 </span>{" "}
                 по{" "}
                 <span className="text-blue-300">
@@ -241,7 +226,7 @@ const PagesRecordsPanel = ({
               isMaxHeightReached ? "pr-3" : ""
             }`}
           >
-            {printer_pages_no_sum.map((printer_page, index) => (
+            {printerPagesNoSum.map((printer_page, index) => (
               <div
                 key={index.toString() + printer_page.end_year.toString()}
                 className="flex gap-2 h-fit max-h-[40rem] px-2 py-1 pb-2 rounded-md bg-white/5 border-[1px] border-black"
