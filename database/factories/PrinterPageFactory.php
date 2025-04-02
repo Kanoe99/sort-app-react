@@ -39,8 +39,8 @@ class PrinterPageFactory extends Factory
             'end_month' => $end_month,
             'end_year' => $end_year,
             'isSum' => $isSum,
-            'print_pages' => $print_pages,
-            'scan_pages' => $scan_pages,
+            'print_pages' => strval($print_pages),
+            'scan_pages' => strval($scan_pages),
         ];
     }
 

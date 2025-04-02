@@ -71,8 +71,8 @@ export type PrinterPages = {
   start_month: number;
   isSum: number;
   printer_id: number;
-  print_pages: number | null;
-  scan_pages: number | null;
+  print_pages: string;
+  scan_pages: string;
 };
 
 export type PageProps<

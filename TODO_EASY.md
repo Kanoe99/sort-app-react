@@ -27,3 +27,4 @@
 -   reverse records displayed order without altering db
 -   don't forget 1st should not have records at all, 2nd should have 1 field empty
 -   oldData in printerController.php update method behaves weird;
+-   no number causes update to fail

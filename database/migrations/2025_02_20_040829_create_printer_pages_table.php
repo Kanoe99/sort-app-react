@@ -20,8 +20,8 @@ return new class extends Migration
             $table->integer('end_month')->check('end_month >= 1 and end_month <= 12');
             $table->integer('end_year')->check('end_year >= 1925');
             $table->boolean('isSum')->default(false);
-            $table->unsignedBigInteger('print_pages')->nullable();
-            $table->unsignedBigInteger('scan_pages')->nullable();
+            $table->string('print_pages');
+            $table->string('scan_pages');
         });
     }
 

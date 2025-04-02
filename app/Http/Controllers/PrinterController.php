@@ -43,7 +43,7 @@ class PrinterController extends Controller
         return Inertia::render('Printer/Edit', [
             'printer' => new PrinterResource($printer),
             'sums' => PrinterPageResource::collection(PrinterPage::where('printer_id', $printer->id)->get()->slice(0, 1))->toArray(request()),
-            'printer_pages_no_sum' => PrinterPageResource::collection(PrinterPage::where('printer_id', $printer->id)->get()->slice(1))->toArray(request()), // Convert collection to array
+            'printer_pages_no_sum' => PrinterPageResource::collection(PrinterPage::where('printer_id', $printer->id)->get()->slice(1)->values())->toArray(request()), // Convert collection to array
             'department_heads' => (new DepartmentService)->getDepartmentHeads(),
         ]);
     }
@@ -305,6 +305,7 @@ class PrinterController extends Controller
 
   public function update(Request $request, Printer $printer)
     {
+        $rpp_no_sum = $request->printer_pages_no_sum;
         // dd($request->printer_pages_no_sum);
         // dd($request->all());
         $fields = array_keys($request->except(['IPBool', 'isLocal', 'hasNumber']));
@@ -426,20 +427,20 @@ class PrinterController extends Controller
 
 
         $calculatedSum = ['print_pages' => 0, 'scan_pages' => 0];
-        foreach($request->printer_pages_no_sum as $page){
+        foreach($rpp_no_sum as $page){
             $calculatedSum['print_pages'] += $page['print_pages'];
             $calculatedSum['scan_pages'] += $page['scan_pages'];
         }
 
-        $rpp_no_sum = $request->printer_pages_no_sum;
         // dd($rpp_no_sum);
-        $printerPages = $printer->printerPages()->where('printer_id', $rpp_no_sum[0]['printer_id'])->get();
+        $printerPages = $printer->printerPages()->where('printer_id', $printer['id'])->get();
         // dd($printerPages);
         // dd($printerPages);
         // $pagesNoSumDatabase = array_slice($printerPages.items, 1);
         
         $tempPages = [];
         array_push($tempPages, ['print_pages' => $calculatedSum['print_pages'], 'scan_pages' => $calculatedSum['scan_pages']]);
+        // dd($tempPages);
 
         foreach($rpp_no_sum as $index => $page){
                 if($rpp_no_sum[$index]['print_pages'] !== null || $rpp_no_sum[$index]['scan_pages'] !== null){
@@ -447,17 +448,20 @@ class PrinterController extends Controller
             }
         }
 
+        // dd($rpp_no_sum);
         // dd($tempPages);
 
         // dd($request->printer_pages_no_sum);
-        if((count($printerPages) - 1) !== count($rpp_no_sum)){
-            if(($rpp_no_sum[count($rpp_no_sum) - 1]['print_pages'] !== null) || ($rpp_no_sum[count($rpp_no_sum) - 1]['scan_pages'] !== null)){
-                array_push($tempPages, [
-                    'print_pages' => $rpp_no_sum[count($rpp_no_sum) - 1]['print_pages'],
-                    'scan_pages' => $rpp_no_sum[count($rpp_no_sum) - 1]['scan_pages']
-                ]);
-            }
-        }
+        // if((count($printerPages) - 1) !== count($rpp_no_sum)){
+        //     if(($rpp_no_sum[count($rpp_no_sum) - 1]['print_pages'] !== null) || ($rpp_no_sum[count($rpp_no_sum) - 1]['scan_pages'] !== null)){
+        //         array_push($tempPages, [
+        //             'print_pages' => $rpp_no_sum[count($rpp_no_sum) - 1]['print_pages'],
+        //             'scan_pages' => $rpp_no_sum[count($rpp_no_sum) - 1]['scan_pages']
+        //         ]);
+        //     }
+        // }
+
+        // dd($tempPages);
         
         $date = new DateTime();
         $now = [
@@ -466,22 +470,21 @@ class PrinterController extends Controller
         ];
         foreach($tempPages as $index => $pageData){
             if(isset($printerPages[$index])){
-                // Existing record, update it
                 $printerPages[$index]->update([
-                    'print_pages' => $pageData['print_pages'],
-                    'scan_pages' => $pageData['scan_pages'],
+                    'print_pages' => isset($pageData['print_pages']) ? trim($pageData['print_pages']) : '',
+                    'scan_pages' => isset($pageData['scan_pages']) ? trim($pageData['scan_pages']) : '',
                 ]);
             }
-             else {
+            else {
                     $printer->printerPages()->create([
                     'printer_id' => $rpp_no_sum[0]['printer_id'],
-                    'start_month' => $printerPages[sizeof($printerPages) - 1]['end_month'],
-                    'start_year' => $printerPages[sizeof($printerPages) - 1]['end_year'],
+                    'start_month' => $printerPages[count($printerPages) - 1]['end_month'],
+                    'start_year' => $printerPages[count($printerPages) - 1]['end_year'],
                     'end_month' => $now['month'],
                     'end_year' => $now['year'],
                     'isSum' => 0,
-                    'print_pages' => $pageData['print_pages'],
-                    'scan_pages' => $pageData['scan_pages'],
+                    'print_pages' => isset($pageData['print_pages']) ? trim($pageData['print_pages']) : '',
+                    'scan_pages' => isset($pageData['scan_pages']) ? trim($pageData['scan_pages']) : '',
                 ]);
             }
         }

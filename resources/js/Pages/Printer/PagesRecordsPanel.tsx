@@ -24,18 +24,22 @@ const PagesRecordsPanel = ({
   const [isMaxHeightReached, setIsMaxHeightReached] = useState(false);
   const [printerPagesNoSum, setPrinterPagesNoSum] =
     useState<PrinterPages[]>(printer_pages_no_sum);
-  // const [newPagesNoSum, setNewPagesNoSum] = useState<
-  //   Pick<PrinterPages, "print_pages" | "scan_pages">
-  // >({
-  //   print_pages: null,
-  //   scan_pages: null,
-  // });
-
   const date = new Date();
   const now = {
     year: date.getFullYear(),
     month: date.getMonth(),
   };
+  const [newPagesNoSum, setNewPagesNoSum] = useState<PrinterPages>({
+    end_year: now.year,
+    end_month: now.month,
+    start_year: printer_pages_no_sum[printer_pages_no_sum.length - 1].end_year,
+    start_month:
+      printer_pages_no_sum[printer_pages_no_sum.length - 1].end_month,
+    isSum: 0,
+    printer_id: printerPagesNoSum[0].printer_id,
+    print_pages: "",
+    scan_pages: "",
+  });
 
   useEffect(() => {
     const checkOverflow = () => {
@@ -54,21 +58,20 @@ const PagesRecordsPanel = ({
     return () => window.removeEventListener("resize", checkOverflow);
   }, [printer_pages_no_sum]);
 
-  useEffect(() => {
-    setPrinterPagesNoSum([
-      ...printer_pages_no_sum,
-      {
-        end_year: now.year,
-        end_month: now.month,
-        start_year: printerPagesNoSum[printerPagesNoSum.length - 1].end_year,
-        start_month: printerPagesNoSum[printerPagesNoSum.length - 1].end_month,
-        isSum: 0,
-        printer_id: printerPagesNoSum[0].printer_id,
-        print_pages: null,
-        scan_pages: null,
-      },
-    ]);
-  }, []);
+  // useEffect(() => {
+  //   setNewPagesNoSum([
+  //     {
+  //       end_year: now.year,
+  //       end_month: now.month,
+  //       start_year: printerPagesNoSum[printerPagesNoSum.length - 1].end_year,
+  //       start_month: printerPagesNoSum[printerPagesNoSum.length - 1].end_month,
+  //       isSum: 0,
+  //       printer_id: printerPagesNoSum[0].printer_id,
+  //       print_pages: null,
+  //       scan_pages: null,
+  //     },
+  //   ]);
+  // }, []);
 
   const changePrinterPagesValues = (
     printerPagesNoSum: PrinterPages[],
@@ -80,17 +83,14 @@ const PagesRecordsPanel = ({
       index === i
         ? {
             ...page,
-            [key]: Number(value),
+            [key]: value,
           }
         : page
     );
   };
-
-  console.log(
-    "THIS SUPPOSED TO BE A PROBLEM: ",
-    printerPagesNoSum.length
-    // printerPagesNoSum[printerPagesNoSum.length - 1].end_month - 1
-  );
+  useEffect(() => {
+    setPrinterPagesNoSum(printer_pages_no_sum);
+  }, [printer_pages_no_sum]);
 
   return (
     <div
@@ -137,50 +137,48 @@ const PagesRecordsPanel = ({
               >
                 <div className="w-1/2">
                   <PrintPagesInput
-                    type="number"
+                    type="text"
                     id="number"
                     placeholder={"5872"}
                     className=""
                     pattern=""
-                    value={
-                      printerPagesNoSum[printerPagesNoSum.length - 1][
-                        "print_pages"
-                      ] ?? ""
-                    }
+                    value={newPagesNoSum.print_pages}
                     onChange={(e) => {
                       const records = changePrinterPagesValues(
-                        printerPagesNoSum,
+                        [newPagesNoSum],
                         "print_pages",
                         e.target.value,
-                        printerPagesNoSum.length - 1
+                        0
                       );
-                      setPrinterPagesNoSum(records);
-                      setData("printer_pages_no_sum", records);
+                      setNewPagesNoSum(records[0]);
+                      setData("printer_pages_no_sum", [
+                        ...printerPagesNoSum,
+                        records[0],
+                      ]);
                     }}
                     isFocused
                   />
                 </div>
                 <div className="w-1/2">
                   <PrintPagesInput
-                    type="number"
+                    type="text"
                     // id="number"
                     placeholder="5873"
                     className=""
                     pattern="\d*"
-                    value={
-                      printerPagesNoSum[printerPagesNoSum.length - 1][
-                        "scan_pages"
-                      ] ?? ""
-                    }
+                    value={newPagesNoSum.scan_pages}
                     onChange={(e) => {
                       const records = changePrinterPagesValues(
-                        printerPagesNoSum,
+                        [newPagesNoSum],
                         "scan_pages",
                         e.target.value,
-                        printerPagesNoSum.length - 1
+                        0
                       );
-                      setPrinterPagesNoSum(records);
-                      setData("printer_pages_no_sum", records);
+                      setNewPagesNoSum(records[0]);
+                      setData("printer_pages_no_sum", [
+                        ...printerPagesNoSum,
+                        records[0],
+                      ]);
                     }}
                   />
                 </div>
@@ -192,12 +190,12 @@ const PagesRecordsPanel = ({
                 <div className="w-1/2">
                   <PrintPagesInput
                     disabled={true}
-                    type="number"
+                    type="text"
                     // id="number"
                     placeholder="5873"
                     className=""
                     // pattern="\d*"
-                    value={sums.print_pages ?? ""}
+                    value={sums.print_pages}
                     isFocused
                     // autoComplete="number"
                   />
@@ -205,12 +203,12 @@ const PagesRecordsPanel = ({
                 <div className="w-1/2">
                   <PrintPagesInput
                     disabled={true}
-                    type="number"
+                    type="text"
                     // id="number"
                     placeholder="5874"
                     className=""
                     // pattern="\d*"
-                    value={sums.scan_pages ?? ""}
+                    value={sums.scan_pages}
                     isFocused
                     // autoComplete="number"
                   />
@@ -251,12 +249,12 @@ const PagesRecordsPanel = ({
                 <div>
                   <div className="flex gap-2">
                     <PrintPagesInput
-                      type="number"
+                      type="text"
                       // id="number"
                       placeholder={"5874"}
                       className=""
                       pattern="\d*"
-                      value={printerPagesNoSum[index].print_pages ?? ""}
+                      value={printerPagesNoSum[index].print_pages}
                       onChange={(e) => {
                         {
                           const records = changePrinterPagesValues(
@@ -271,12 +269,12 @@ const PagesRecordsPanel = ({
                       }}
                     />
                     <PrintPagesInput
-                      type="number"
+                      type="text"
                       // id="number"
                       placeholder="5875"
                       className=""
                       pattern="\d*"
-                      value={printerPagesNoSum[index].scan_pages ?? ""}
+                      value={printerPagesNoSum[index].scan_pages}
                       onChange={(e) => {
                         {
                           const records = changePrinterPagesValues(
