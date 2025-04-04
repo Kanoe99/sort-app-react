@@ -444,74 +444,61 @@ class PrinterController extends Controller
             $calculatedSum['scan_pages'] += $page['scan_pages'];
         }
 
-        $printerPages = $printer->printerPages;
-        
-        $tempPages = [];
-        array_push($tempPages, ['print_pages' => $calculatedSum['print_pages'], 'scan_pages' => $calculatedSum['scan_pages']]);
-        // dd($rpp_no_sum);
-        // dd($tempPages);
-
-        foreach($rpp_no_sum as $index => $page){
-                if($rpp_no_sum[$index]['print_pages'] !== null || $rpp_no_sum[$index]['scan_pages'] !== null){
-                array_push($tempPages, ['print_pages' => $page['print_pages'], 'scan_pages' => $page['scan_pages']]);
-            }
-        }
-        // dd($rpp_no_sum);
-        // dd($tempPages);
-
-        
         $date = new DateTime();
         $now = [
             'year' => $date->format('Y'),
             'month' => $date->format('n'),
         ];
+
+        $printerPages = $printer->printerPages;
+        $requestPages = $request->printer_pages_no_sum;
         
-        foreach($tempPages as $index => $pageData){
-            if(isset($printerPages[$index])){
-                $printerPages[$index]->update([
-                    'print_pages' => isset($pageData['print_pages']) ? trim($pageData['print_pages']) : '',
-                    'scan_pages' => isset($pageData['scan_pages']) ? trim($pageData['scan_pages']) : '',
-                ]);
-            }
-           
-        }
-        if (count($tempPages) < count($printerPages)) {
-            try {
-                // Slice the collection starting from the index equal to count($tempPages)
-                $extraPages = $printerPages->slice(count($tempPages))->all();
-                
-                // Check if extraPages has data before attempting to delete
-                if (!empty($extraPages)) {
-                    foreach ($extraPages as $page) {
-                        $page->delete();
-                    }
+        // Assume index 0 is the sum entry
+        $dbNonSumEntries = $printerPages->slice(1)->values();
+        $requestEntryCount = count($requestPages);
+        
+        foreach ($requestPages as $index => $pageData) {
+            $dbEntry = $dbNonSumEntries->get($index);
+            
+            if ($dbEntry) {
+                if ($pageData['print_pages'] !== null || $pageData['scan_pages'] !== null) {
+                    $dbEntry->update([
+                        'print_pages' => $pageData['print_pages'] ?? '',
+                        'scan_pages' => $pageData['scan_pages'] ?? '',
+                    ]);
+                } else {
+                    $dbEntry->delete();
                 }
-            } catch (\Exception $e) {
-                Log::error('Error deleting printer page: ' . $e->getMessage());
+            } else {
+                $lastValidEntry = $printerPages->last();
+                $requestLastEntry = collect($requestPages)->last();
+                
+              if($requestLastEntry['print_pages'] !== null || $requestLastEntry['scan_pages'] !== null){
+                $printer->printerPages()->create([
+                    'printer_id' => $printer->id,
+                    'start_month' => $lastValidEntry->end_month,
+                    'start_year' => $lastValidEntry->end_year,
+                    'end_month' => $now['month'],
+                    'end_year' => $now['year'],
+                    'isSum' => 0,
+                    'print_pages' => $pageData['print_pages'] ?? '',
+                    'scan_pages' => $pageData['scan_pages'] ?? '',
+                ]);
+              }
             }
         }
         
+        if ($dbNonSumEntries->count() > $requestEntryCount) {
+            $dbNonSumEntries->slice($requestEntryCount)->each->delete();
+        }
         
-      
-
-        // dd($printerPages);
-
-        $printer->printerPages()->create([
-            'printer_id' => $rpp_no_sum[0]['printer_id'],
-            'start_month' => $printerPages[count($printerPages) - 1]['end_month'],
-            'start_year' => $printerPages[count($printerPages) - 1]['end_year'],
-            'end_month' => $now['month'],
-            'end_year' => $now['year'],
-            'isSum' => 0,
-            'print_pages' => isset($pageData['print_pages']) ? trim($pageData['print_pages']) : '',
-            'scan_pages' => isset($pageData['scan_pages']) ? trim($pageData['scan_pages']) : '',
-        ]);
+        $printerPages[0]->update([
+            'print_pages' => $calculatedSum['print_pages'],
+            'scan_pages' => $calculatedSum['scan_pages']
+    ]);
         
-
-        // Update the printer
         $printer->update(Arr::except($attributes, 'tags'));
     
-        // Update tags
         if ($request->filled('tags')) {
             $newTags = array_unique(array_map('trim', explode(',', $request->tags)));
             $printer->tags()->sync([]);

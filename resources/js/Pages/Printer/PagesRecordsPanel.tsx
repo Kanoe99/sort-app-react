@@ -11,6 +11,7 @@ interface PagesRecordsPanelProps {
   processing: boolean;
   editPrinter: FormEventHandler;
   sums: PrinterPages;
+  printer_id: number;
 }
 
 const PagesRecordsPanel = ({
@@ -19,6 +20,7 @@ const PagesRecordsPanel = ({
   setData,
   processing,
   editPrinter,
+  printer_id,
 }: PagesRecordsPanelProps) => {
   const contentRef = useRef<HTMLDivElement>(null);
   const [isMaxHeightReached, setIsMaxHeightReached] = useState(false);
@@ -32,11 +34,16 @@ const PagesRecordsPanel = ({
   const [newPagesNoSum, setNewPagesNoSum] = useState<PrinterPages>({
     end_year: now.year,
     end_month: now.month,
-    start_year: printer_pages_no_sum[printer_pages_no_sum.length - 1].end_year,
+    start_year:
+      printer_pages_no_sum.length !== 0
+        ? printer_pages_no_sum[printer_pages_no_sum.length - 1].end_year
+        : now.year,
     start_month:
-      printer_pages_no_sum[printer_pages_no_sum.length - 1].end_month,
+      printer_pages_no_sum.length !== 0
+        ? printer_pages_no_sum[printer_pages_no_sum.length - 1].end_month
+        : now.month,
     isSum: 0,
-    printer_id: printerPagesNoSum[0].printer_id,
+    printer_id: printer_id,
     print_pages: "",
     scan_pages: "",
   });
@@ -105,11 +112,15 @@ const PagesRecordsPanel = ({
                 <span className="text-blue-300">
                   {
                     startingMonths[
-                      printerPagesNoSum[printerPagesNoSum.length - 1]
-                        .end_month - 1
+                      printer_pages_no_sum.length !== 0
+                        ? printerPagesNoSum[printerPagesNoSum.length - 1]
+                            .end_month - 1
+                        : now.month
                     ]
                   }{" "}
-                  {printerPagesNoSum[printerPagesNoSum.length - 1].end_year}
+                  {printer_pages_no_sum.length !== 0
+                    ? printerPagesNoSum[printerPagesNoSum.length - 1].end_year
+                    : now.year}
                 </span>{" "}
                 по{" "}
                 <span className="text-blue-300">

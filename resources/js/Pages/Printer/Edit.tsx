@@ -363,6 +363,7 @@ export default function Edit({
           </div>
         </form>
         <PagesRecordsPanel
+          printer_id={printer.id}
           sums={sums[0]}
           printer_pages_no_sum={printer_pages_no_sum}
           setData={setData}
