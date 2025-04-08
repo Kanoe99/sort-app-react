@@ -25,15 +25,11 @@ return new class extends Migration {
 
             $table->string('model');
 
-            // Number became unique
             $table->unsignedMediumInteger('number')->nullable();
-            $table->unique('number')->whereNotNull('number');
 
 
             $table->string('location');
 
-            // Update
-            // Should have a checkbox
             $table->string('IP')->unique()->nullable();
             $table->boolean('isIPv4');
 

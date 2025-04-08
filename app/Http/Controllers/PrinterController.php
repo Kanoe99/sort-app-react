@@ -40,6 +40,14 @@ class PrinterController extends Controller
 
     public function edit(Printer $printer)
     {
+        $printerPages = $printer->printerPages;
+        if(count($printerPages) === 1){
+            $printerPages[0]->update([
+                'print_pages' => 0,
+                'scan_pages' => 0
+                ]);
+        }
+
         return Inertia::render('Printer/Edit', [
             'printer' => new PrinterResource($printer),
             'sums' => PrinterPageResource::collection(PrinterPage::where('printer_id', $printer->id)->get()->slice(0, 1))->toArray(request()),
@@ -317,18 +325,16 @@ class PrinterController extends Controller
 
   public function update(Request $request, Printer $printer)
     {
-        $rpp_no_sum = $request->printer_pages_no_sum;
-        // dd($rpp_no_sum);
-        // dd($request->printer_pages_no_sum);
-        // dd($request->all());
-        $fields = array_keys($request->except(['IPBool', 'isLocal', 'hasNumber']));
+        $printerPages = $printer->printerPages;
+        $requestPages = $request->printer_pages_no_sum;
+        $fields = array_keys($request->all());
     
         $oldData = Printer::select($fields)->findOrFail($printer->id)->toArray();
         $newData = $request->only($fields);
 
-        // dd($oldData);
-
         $refreshed = $newData != $oldData;
+
+        // dd($request->all());
     
       
 
@@ -338,27 +344,33 @@ class PrinterController extends Controller
             'network_capable' => ['required', 'string', 'max:255'],
             'type' => ['required', 'string', 'max:255'],
             'model' => ['required', 'string', 'max:255'],
-            'number' => ['required', 'numeric', 'min:1', 'max:999999999999999', 'unique:printers,number,' . $printer->id],
             'location' => ['required', 'string', 'max:255'],
             'status' => ['required', 'string', 'max:255'],
             'comment' => ['nullable', 'string', 'max:255'],
             'tags' => ['nullable', 'string'],
             'attention' => ['nullable'],
             'logo.*' => ['nullable', 'mimes:jpg,jpeg,png'],
-            'isIPv4' => ['required', 'boolean']
+            'isIPv4' => ['required', 'boolean'],
+            'printer_pages_no_sum' => ['required', 'array'],
+            'printer_pages_no_sum.*.print_pages' => ['numeric', 'nullable', 'max:999999999999999'],
+            'printer_pages_no_sum.*.scan_pages' => ['numeric', 'nullable', 'max:999999999999999']
         ], [
             'department_head.required' => 'Укажите ответственное лицо.',
             'network_capable.required' => 'Есть ли возможность сделать сетевым?',
             'type.required' => 'Укажите модель принтера.',
             'model.required' => 'Укажите модель принтера.',
-            'number.required' => 'Укажите номер принтера.',
-            'number.max' => 'Номер поменьше надо (максимум: 999999999999999)',
-            'number.unique' => 'Инвентарный номер уже существует!',
             'location.required' => 'Укажите локацию принтера.',
             'status.required' => 'Укажите статус принтера.',
             'logo.*.mimes' => 'Только PNG, JPG или JPEG!',
             'isIPv4.required' => 'Требуется указать тип IP адреса!',
-            'isIPv4.boolean' => 'Только IPv4 или IPv6!'
+            'isIPv4.boolean' => 'Только IPv4 или IPv6!',
+            'printer_pages_no_sum.required' => 'printer_pages_no_sum[] куда делись?',
+            'printer_pages_no_sum.array' => 'почему datatype is not an array?',
+            'printer_pages_no_sum.*.print_pages.numeric' => 'Только цифры',
+            'printer_pages_no_sum.*.print_pages.max' => 'нельзя больше 999999999999999',
+            'printer_pages_no_sum.*.scan_pages.numeric' => 'Только цифры',
+            'printer_pages_no_sum.*.scan_pages.max' => 'нельзя больше 999999999999999',
+
         ]);
         //   }catch(\Illuminate\Validation\ValidationException $e){
         //     dd($e->errors());
@@ -378,8 +390,21 @@ class PrinterController extends Controller
         $attributes['comment'] = $request->filled('comment') ? lowercaseRussianOnly($attributes['comment']) : null;
         $attributes['department'] = (new DepartmentService)->getDepartment($attributes['department_head']);
     
-        // Validate IP if required
-        if ($request->IPBool === 'Есть') {
+        if($request->hasNumber){
+            $request->validate([
+                'number' => ['required', 'numeric', 'min:1', 'max:999999999999999', 'unique:printers,number,' . $printer->id],
+            ],[
+                'number.required' => 'Укажите номер принтера.',
+                'number.max' => 'Номер поменьше надо (максимум: 999999999999999)',
+                'number.unique' => 'Инвентарный номер уже существует!',
+            ]);
+            $attributes['number'] = $request->number;
+        }
+        else{
+            $attributes['number'] = null;
+        }
+
+        if ($request->IP) {
             $request->validate([
                 'IP' => ['required', 'unique:printers,IP,' . $printer->id, 'ip'],
             ], [
@@ -388,7 +413,8 @@ class PrinterController extends Controller
                 'IP.ip' => 'IP адрес должен быть верным.', 
             ]);
             $attributes['IP'] = $request->IP;
-        } else {
+        }
+        else{
             $attributes['IP'] = null;
         }
         
@@ -404,42 +430,43 @@ class PrinterController extends Controller
         else{
             $attributes['PC_name'] = null;
         }
+
         
-        // Update 'attention' field
-        $attributes['attention'] = $request->has('attention') ? 1 : 0;
+        if ($request->filled('fixDate')) {
+            $fixDate = $request->input('fixDate');
     
-        // Update counter date if counter changes
-        if ($printer->counter != $request->counter) {
-            $attributes['counterDate'] = Carbon::now()->format('Y-m-d');
-        }
-    
-        // Handle logo updates
-        $existingLogos = json_decode($printer->logo, true) ?? [];
-        $logoPaths = $existingLogos;
-    
-        // Remove logos marked for deletion
-        if ($request->filled('removed_logos')) {
-            $removedLogos = json_decode($request->removed_logos, true);
-            foreach ($removedLogos as $removedLogo) {
-                if (in_array($removedLogo, $existingLogos)) {
-                    Storage::disk('public')->delete($removedLogo);
-                    $logoPaths = array_diff($logoPaths, [$removedLogo]);
-                }
+            if (preg_match('/^\d{4}-\d{2}-\d{2}$/', $fixDate)) {
+                $attributes['fixDate'] = Carbon::createFromFormat('Y-m-d', $fixDate)->format('Y-m-d');
+            } else {
+                return back()->withErrors(['fixDate' => 'Некорректная дата.']);
             }
         }
     
-        if ($request->file('logo')) {
-            $folderName = $request->IP ?? 'default';
-            foreach ($request->file('logo') as $file) {
-                $logoPaths[] = $file->store("logos/{$folderName}", 'public');
-            }
-        }
+        // $existingLogos = json_decode($printer->logo, true) ?? [];
+        // $logoPaths = $existingLogos;
     
-        $attributes['logo'] = json_encode($logoPaths);
+        // if ($request->filled('removed_logos')) {
+        //     $removedLogos = json_decode($request->removed_logos, true);
+        //     foreach ($removedLogos as $removedLogo) {
+        //         if (in_array($removedLogo, $existingLogos)) {
+        //             Storage::disk('public')->delete($removedLogo);
+        //             $logoPaths = array_diff($logoPaths, [$removedLogo]);
+        //         }
+        //     }
+        // }
+    
+        // if ($request->file('logo')) {
+        //     $folderName = $request->IP ?? 'default';
+        //     foreach ($request->file('logo') as $file) {
+        //         $logoPaths[] = $file->store("logos/{$folderName}", 'public');
+        //     }
+        // }
+    
+        // $attributes['logo'] = json_encode($logoPaths);
 
 
         $calculatedSum = ['print_pages' => 0, 'scan_pages' => 0];
-        foreach($rpp_no_sum as $page){
+        foreach($requestPages as $page){
             $calculatedSum['print_pages'] += $page['print_pages'];
             $calculatedSum['scan_pages'] += $page['scan_pages'];
         }
@@ -449,11 +476,7 @@ class PrinterController extends Controller
             'year' => $date->format('Y'),
             'month' => $date->format('n'),
         ];
-
-        $printerPages = $printer->printerPages;
-        $requestPages = $request->printer_pages_no_sum;
         
-        // Assume index 0 is the sum entry
         $dbNonSumEntries = $printerPages->slice(1)->values();
         $requestEntryCount = count($requestPages);
         
@@ -492,10 +515,15 @@ class PrinterController extends Controller
             $dbNonSumEntries->slice($requestEntryCount)->each->delete();
         }
         
+        count($requestPages) === 0 ? 
         $printerPages[0]->update([
+            'print_pages' => 0,
+            'scan_pages' => 0
+            ]):
+         $printerPages[0]->update([
             'print_pages' => $calculatedSum['print_pages'],
             'scan_pages' => $calculatedSum['scan_pages']
-    ]);
+            ]);
         
         $printer->update(Arr::except($attributes, 'tags'));
     

@@ -30,7 +30,7 @@ export default forwardRef(function TextInput(
     value: "Есть возможность" | "Нет возможности" | "Сетевой"
   ) => {
     setIsNetworkCapable(value);
-    setData("network_capable", isNetworkCapable);
+    setData("network_capable", value);
   };
 
   useImperativeHandle(ref, () => ({

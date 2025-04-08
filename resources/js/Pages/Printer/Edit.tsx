@@ -16,6 +16,7 @@ import DepartmentDropdown from "@/Components/DepartmentDropdown";
 import IsLocalDropdown from "@/Components/IsLocalDropdown";
 import { PagesRecordsPanel } from "@/Pages/Printer/PagesRecordsPanel";
 import HasNumberDropdown from "@/Components/HasNumberDropdown";
+import { useMotionValueEvent } from "framer-motion";
 
 export default function Edit({
   printer,
@@ -32,32 +33,26 @@ export default function Edit({
     useForm<{
       type: string;
       model: string;
-      counter: string;
-      number: undefined | number;
+      number: number | null;
       location: string;
       status: string;
       fixDate: string;
-      IPBool: string;
       IP: string;
       comment: string;
       isIPv4: boolean;
       network_capable: string;
       department_head: string;
       PC_name: string;
-      isLocal: boolean;
       printer_pages_no_sum: PrinterPages[];
     }>({
-      isLocal: printer.isLocal,
       PC_name: printer.PC_name,
       department_head: printer.department_head,
       network_capable: printer.network_capable,
       type: printer.type,
       model: printer.model,
-      counter: printer.counter,
       number: printer.number,
       location: printer.location,
       status: printer.status,
-      IPBool: printer.IP !== null ? "Есть" : "Нету",
       IP: printer.IP,
       comment: printer.comment,
       fixDate: printer.fixDate,
@@ -66,7 +61,7 @@ export default function Edit({
     });
 
   const [hasIP, setHasIP] = useState(printer.IP ? true : false);
-  const [isLocal, setIsLocal] = useState(printer.isLocal);
+  const [isLocal, setIsLocal] = useState(printer.PC_name ? true : false);
   const [isIPv4, setIsIPv4] = useState(printer.isIPv4);
   const [hasNumber, setHasNumber] = useState(printer.number !== null);
   const [IPData, setIPData] = useState({
@@ -74,6 +69,8 @@ export default function Edit({
     IPv6Data: !printer.isIPv4 ? printer.IP : "",
   });
   const [isModalVisible, setIsModalVisible] = useState(false);
+  const [number, setNumber] = useState(printer.number ?? "");
+  const [PC_name, setPC_name] = useState(printer.PC_name ?? "");
 
   const closeModal = () => {
     setIsModalVisible(false);
@@ -100,13 +97,37 @@ export default function Edit({
     });
   };
 
+  // const handleIPData = () => {
+  //   setIPData(IPData);
+  // };
+
+  useEffect(() => {
+    hasNumber ? setData("number", number) : setData("number", null);
+  }, [hasNumber]);
+
+  useEffect(() => {
+    isLocal ? setData("PC_name", PC_name) : setData("PC_name", "");
+  }, [isLocal]);
+
+  useEffect(() => {
+    hasIP
+      ? setData("IP", isIPv4 ? IPData.IPv4Data : IPData.IPv6Data)
+      : setData("IP", "");
+  }, [hasIP]);
+
   return (
     <AuthenticatedLayout
       header={
         <h2 className="text-2xl 3xl:ml-[10rem] ml-0 text-nowrap font-semibold leading-tight text-gray-200">
           <span className="text-xl"> редактировать </span>
           <span className="inline-block mx-3">{printer.model}</span>{" "}
-          <span className="text-gray-500">№{printer.number}</span>
+          {printer.number ? (
+            <span className="text-gray-500">№{printer.number}</span>
+          ) : (
+            <span className="text-red-500 text-sm">
+              инвентарный номер отсутствует
+            </span>
+          )}
         </h2>
       }
     >
@@ -174,10 +195,11 @@ export default function Edit({
                 placeholder="5873"
                 className=""
                 pattern="\d*"
-                value={data.number}
+                value={number}
                 onChange={(e) => {
                   {
                     const value = parseInt(e.target.value);
+                    setNumber(value);
                     setData("number", value);
                   }
                 }}
@@ -250,8 +272,6 @@ export default function Edit({
               className="mt-1 block w-full py-3 rounded-xl"
               isFocused
             />
-
-            <InputError className="mt-2" message={errors.isLocal} />
           </div>
 
           {isLocal && (
@@ -263,7 +283,10 @@ export default function Edit({
                 placeholder="p66-computer"
                 className=""
                 value={data.PC_name}
-                onChange={(e) => setData("PC_name", e.target.value)}
+                onChange={(e) => {
+                  setPC_name(e.target.value);
+                  setData("PC_name", e.target.value);
+                }}
                 isFocused
                 autoComplete="PC_name"
               />
@@ -284,8 +307,6 @@ export default function Edit({
               hasIP={hasIP}
               setHasIP={setHasIP}
             />
-
-            <InputError className="mt-2" message={errors.IPBool} />
           </div>
 
           {hasIP && (
