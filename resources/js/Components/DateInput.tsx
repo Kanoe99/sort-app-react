@@ -8,7 +8,6 @@ import {
 
 export default forwardRef(function TextInput(
   {
-    type = "date",
     className = "",
     isFocused = false,
     ...props
@@ -31,7 +30,8 @@ export default forwardRef(function TextInput(
     <>
       <input
         {...props}
-        type={type}
+        value=""
+        type="date"
         className={
           "text-white rounded-xl mt-1 block w-full py-3 shadow-sm border-gray-700 bg-bg-input-black focus:border-accent-main focus:ring-accent-main " +
           className

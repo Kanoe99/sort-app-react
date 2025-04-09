@@ -4,7 +4,8 @@ import PrimaryButton from "@/Components/PrimaryButton";
 import PrintPagesInput from "@/Components/PrintPagesInput";
 import { PrinterPages } from "@/types";
 import { months, startingMonths } from "@/utils/months";
-import { SinglePagesRecord } from "./SinglePagesRecord";
+import { SinglePagesRecord } from "@/Pages/Printer/SinglePagesRecord";
+import { DatePicker } from "@/Components/DatePicker";
 
 interface PagesRecordsPanelProps {
   printer_pages_no_sum: PrinterPages[];
@@ -87,11 +88,6 @@ const PagesRecordsPanel = ({
     setPrinterPagesNoSum(printer_pages_no_sum);
   }, [printer_pages_no_sum]);
 
-  const handleCalendrier = () => {
-    calendrierRef.current?.showPicker?.();
-    calendrierRef.current?.click();
-  };
-
   return (
     <div
       //bg-accent-underline bg-accent-underline sm:bg-red-500 md:bg-green-500 lg:bg-yellow-500 xl:bg-blue-500 2xl:bg-purple-500 3xl:bg-pink-500
@@ -99,24 +95,6 @@ const PagesRecordsPanel = ({
       
       2xl:right-20 3xl:right-60 xl:right-20 lg:right-5 right-5 z-40 pb-10"
     >
-      <div className="px-2 py-1 rounded-md border-2 border-white bg-blue-300 flex flex-col gap-0">
-        <div className="flex flex-col gap-1">
-          <div
-            className="bg-red-400 relative px-2 py-1 rounded-md w-fit cursor-pointer select-none"
-            onClick={handleCalendrier}
-          >
-            <input
-              type="date"
-              className="absolute left-0 top-10 text-black h-0 w-0 p-0 m-0 border-0 outline-0 ring-0"
-              ref={calendrierRef}
-            />
-            trigger
-          </div>
-          <div className="bg-blue-700 rounded-md border-2 w-fit border-white px-2 py-1 text-white">
-            results
-          </div>
-        </div>
-      </div>
       <div className="flex flex-col justify-between p-6 shadow-sm sm:rounded-lg bg-bg-main">
         <div>
           <div className="flex flex-col gap-2">
@@ -133,27 +111,23 @@ const PagesRecordsPanel = ({
                 </div>
               </div>
               <hr />
-              <div className="text-xs px-4 mt-1">
-                новая запись с{" "}
-                <span className="text-blue-300">
-                  {
-                    startingMonths[
-                      printer_pages_no_sum.length !== 0
-                        ? printer_pages_no_sum[printer_pages_no_sum.length - 1]
-                            .end_month - 1
-                        : now.month
-                    ]
-                  }{" "}
-                  {printer_pages_no_sum.length !== 0
+              <DatePicker
+                text="новая запись"
+                end_year={now.year}
+                end_month={now.month}
+                start_year={
+                  printer_pages_no_sum.length !== 0
                     ? printer_pages_no_sum[printer_pages_no_sum.length - 1]
                         .end_year
-                    : now.year}
-                </span>{" "}
-                по{" "}
-                <span className="text-blue-300">
-                  {months[now.month]} {now.year}
-                </span>
-              </div>
+                    : now.year
+                }
+                start_month={
+                  printer_pages_no_sum.length !== 0
+                    ? printer_pages_no_sum[printer_pages_no_sum.length - 1]
+                        .end_month - 1
+                    : now.month
+                }
+              />
               <div
                 // key={index.toString() + printer_page.end_year.toString()}
                 className="flex gap-2 h-fit w-full px-2 py-1 pb-2"
@@ -237,38 +211,34 @@ const PagesRecordsPanel = ({
                   />
                 </div>
               </div>
-              <div className="text-xs px-4 mt-1">
-                всего с{" "}
-                <span className="text-blue-300">
-                  {
-                    startingMonths[
-                      printer_pages_no_sum.length !== 0
-                        ? printer_pages_no_sum[printer_pages_no_sum.length - 1]
-                            .end_month - 1
-                        : now.month
-                    ]
-                  }{" "}
-                  {printer_pages_no_sum.length !== 0
+              <DatePicker
+                text="всего"
+                isSum={true}
+                end_year={
+                  printer_pages_no_sum.length !== 0
                     ? printer_pages_no_sum[printer_pages_no_sum.length - 1]
                         .end_year
-                    : now.year}
-                </span>{" "}
-                по{" "}
-                <span className="text-blue-300">
-                  {
-                    months[
-                      printer_pages_no_sum.length !== 0
-                        ? printer_pages_no_sum[printer_pages_no_sum.length - 1]
-                            .end_month - 1
-                        : now.month
-                    ]
-                  }{" "}
-                  {printer_pages_no_sum.length !== 0
+                    : now.year
+                }
+                end_month={
+                  printer_pages_no_sum.length !== 0
+                    ? printer_pages_no_sum[printer_pages_no_sum.length - 1]
+                        .end_month - 1
+                    : now.month
+                }
+                start_year={
+                  printer_pages_no_sum.length !== 0
                     ? printer_pages_no_sum[printer_pages_no_sum.length - 1]
                         .end_year
-                    : now.year}
-                </span>
-              </div>
+                    : now.year
+                }
+                start_month={
+                  printer_pages_no_sum.length !== 0
+                    ? printer_pages_no_sum[printer_pages_no_sum.length - 1]
+                        .end_month - 1
+                    : now.month
+                }
+              />
             </div>
           </div>
 
@@ -281,6 +251,7 @@ const PagesRecordsPanel = ({
           >
             {printerPagesNoSum.map((printer_pages, index) => (
               <SinglePagesRecord
+                key={index.toString() + crypto.randomUUID()}
                 index={index}
                 printer_pages={printer_pages}
                 changePrinterPagesValues={changePrinterPagesValues}

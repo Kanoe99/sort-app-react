@@ -2,7 +2,7 @@ import { useRef, useState } from "react";
 
 import PrintPagesInput from "@/Components/PrintPagesInput";
 import { PrinterPages } from "@/types";
-import { DatePicker } from "@/Pages/Printer/DatePicker";
+import { DatePicker } from "@/Components/DatePicker";
 
 interface SinglePagesRecordProps {
   index: number;
@@ -72,10 +72,18 @@ const SinglePagesRecord = ({
         />
       </div>
       <DatePicker
-        hasRecords={hasRecords}
-        now={now}
-        printerPagesNoSum={printerPagesNoSum}
-        printer_pages={printer_pages}
+        start_month={
+          hasRecords
+            ? printerPagesNoSum[printerPagesNoSum.length - 1].end_month - 1
+            : now.month
+        }
+        start_year={
+          hasRecords
+            ? printerPagesNoSum[printerPagesNoSum.length - 1].end_year
+            : now.year
+        }
+        end_month={hasRecords ? printer_pages.end_month - 1 : now.month}
+        end_year={printer_pages.end_year}
       />
     </div>
   );
