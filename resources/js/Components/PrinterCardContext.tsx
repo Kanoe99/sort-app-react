@@ -69,15 +69,15 @@ export const PrinterCardContextProvider: React.FC<{
   const [dates, setDates] = useState<PS_dates>({
     print: {
       startYear: pastDate.getFullYear(),
-      startMonth: pastDate.getMonth() + 1,
+      startMonth: pastDate.getMonth(),
       endYear: currentDate.getFullYear(),
-      endMonth: currentDate.getMonth() + 1,
+      endMonth: currentDate.getMonth(),
     },
     scan: {
       startYear: pastDate.getFullYear(),
-      startMonth: pastDate.getMonth() + 1,
+      startMonth: pastDate.getMonth(),
       endYear: currentDate.getFullYear(),
-      endMonth: currentDate.getMonth() + 1,
+      endMonth: currentDate.getMonth(),
     },
   });
 

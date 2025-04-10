@@ -17,11 +17,11 @@ export default function MonthsDropdown({
   contentFar,
 }: MonthsDropdownProps) {
   const [activeMonth, setActiveMonth] = useState<string | null>(
-    monthsUpper[month - 1]
+    monthsUpper[month]
   );
 
   const handleClick = (month: string) => {
-    const monthIndex = monthsUpper.indexOf(month) + 1;
+    const monthIndex = monthsUpper.indexOf(month);
     setActiveMonth(month);
     onChange?.(monthIndex);
   };

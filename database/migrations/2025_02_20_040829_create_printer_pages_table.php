@@ -15,9 +15,9 @@ return new class extends Migration
             $table->id();
             $table->timestamps();
             $table->foreignId('printer_id')->constrained()->onDelete('cascade');
-            $table->integer('start_month')->check('start_month >= 1 and start_month <= 12')->nullable();
+            $table->integer('start_month')->check('start_month >= 0 and start_month <= 11')->nullable();
             $table->integer('start_year')->check('start_year >= 1925')->nullable();
-            $table->integer('end_month')->check('end_month >= 1 and end_month <= 12');
+            $table->integer('end_month')->check('end_month >= 0 and end_month <= 11');
             $table->integer('end_year')->check('end_year >= 1925');
             $table->boolean('isSum')->default(false);
             $table->string('print_pages');

@@ -64,6 +64,7 @@ const PickerButton = ({
     >
       {isStarting ? startingMonths[date.month] : months[date.month]} {date.year}{" "}
       <input
+        tabIndex={-1}
         onChange={(e) => {
           const dateStr = e.target.value;
           const date = new Date(dateStr);
@@ -116,7 +117,7 @@ const DatePicker = ({
   });
 
   return end_year === start_year && end_month === start_month ? (
-    <div className="text-blue-500 px-4 mt-1 text-xs">
+    <div className="text-blue-500 px-4 mt-1 text-sm">
       {text ? text + " " : ""}за{" "}
       <PickerButton
         isStarting={false}
@@ -126,8 +127,8 @@ const DatePicker = ({
       />
     </div>
   ) : (
-    <div className="text-xs px-4 mt-1 text-blue-500">
-      c{" "}
+    <div className="text-sm px-4 mt-1 text-blue-500">
+      {text ? text + " " : ""}c{" "}
       <PickerButton
         isStarting={true}
         month={start_month}

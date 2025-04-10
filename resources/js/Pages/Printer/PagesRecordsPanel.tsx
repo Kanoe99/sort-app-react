@@ -1,9 +1,7 @@
 import { FormEventHandler, useEffect, useRef, useState } from "react";
-
 import PrimaryButton from "@/Components/PrimaryButton";
 import PrintPagesInput from "@/Components/PrintPagesInput";
 import { PrinterPages } from "@/types";
-import { months, startingMonths } from "@/utils/months";
 import { SinglePagesRecord } from "@/Pages/Printer/SinglePagesRecord";
 import { DatePicker } from "@/Components/DatePicker";
 
@@ -25,81 +23,79 @@ const PagesRecordsPanel = ({
   printer_id,
 }: PagesRecordsPanelProps) => {
   const contentRef = useRef<HTMLDivElement>(null);
-  const calendrierRef = useRef<HTMLInputElement>(null);
   const [isMaxHeightReached, setIsMaxHeightReached] = useState(false);
-  const [printerPagesNoSum, setPrinterPagesNoSum] =
-    useState<PrinterPages[]>(printer_pages_no_sum);
+  const [printerPagesNoSumReversed, setPrinterPagesNoSumReversed] = useState<
+    PrinterPages[]
+  >([...printer_pages_no_sum].reverse());
+
   const date = new Date();
   const now = {
     year: date.getFullYear(),
     month: date.getMonth(),
   };
-  const [newPagesNoSum, setNewPagesNoSum] = useState<PrinterPages>({
-    end_year: now.year,
-    end_month: now.month,
-    start_year:
-      printer_pages_no_sum.length !== 0
-        ? printer_pages_no_sum[printer_pages_no_sum.length - 1].end_year
-        : now.year,
-    start_month:
-      printer_pages_no_sum.length !== 0
-        ? printer_pages_no_sum[printer_pages_no_sum.length - 1].end_month
-        : now.month,
-    isSum: 0,
-    printer_id: printer_id,
-    print_pages: "",
-    scan_pages: "",
-  });
 
+  const getNewRecordDefaults = () => {
+    const lastRecord = printer_pages_no_sum[printer_pages_no_sum.length - 1];
+    return {
+      end_year: now.year,
+      end_month: now.month,
+      start_year: lastRecord?.end_year || now.year,
+      start_month: lastRecord?.end_month || now.month,
+      isSum: 0,
+      printer_id: printer_id,
+      print_pages: "",
+      scan_pages: "",
+    };
+  };
+
+  const [newPagesNoSum, setNewPagesNoSum] = useState<PrinterPages>(
+    getNewRecordDefaults()
+  );
+
+  // Update reversed list when props change
+  useEffect(() => {
+    setPrinterPagesNoSumReversed([...printer_pages_no_sum].reverse());
+    setNewPagesNoSum(getNewRecordDefaults());
+  }, [printer_pages_no_sum]);
+
+  // Check for overflow
   useEffect(() => {
     const checkOverflow = () => {
       const el = contentRef.current;
       if (!el) return;
-      if (el.scrollHeight > el.clientHeight) {
-        setIsMaxHeightReached(true);
-      } else {
-        setIsMaxHeightReached(false);
-      }
+      setIsMaxHeightReached(el.scrollHeight > el.clientHeight);
     };
 
     checkOverflow();
     window.addEventListener("resize", checkOverflow);
-
     return () => window.removeEventListener("resize", checkOverflow);
   }, [printer_pages_no_sum]);
 
   const changePrinterPagesValues = (
-    printerPagesNoSum: PrinterPages[],
+    records: PrinterPages[],
     key: "print_pages" | "scan_pages",
     value: string,
     index: number
   ): PrinterPages[] => {
-    return printerPagesNoSum.map((page, i) =>
-      index === i
-        ? {
-            ...page,
-            [key]: value,
-          }
-        : page
+    return records.map((page, i) =>
+      index === i ? { ...page, [key]: value } : page
     );
   };
 
-  useEffect(() => {
-    setPrinterPagesNoSum(printer_pages_no_sum);
-  }, [printer_pages_no_sum]);
+  const handleSave = (e: React.FormEvent) => {
+    console.log("Before save - month:", newPagesNoSum.end_month);
+    editPrinter(e);
+    setNewPagesNoSum(getNewRecordDefaults());
+  };
+
+  const hasRecords = printer_pages_no_sum.length > 0;
 
   return (
-    <div
-      //bg-accent-underline bg-accent-underline sm:bg-red-500 md:bg-green-500 lg:bg-yellow-500 xl:bg-blue-500 2xl:bg-purple-500 3xl:bg-pink-500
-      className="fixed
-      
-      2xl:right-20 3xl:right-60 xl:right-20 lg:right-5 right-5 z-40 pb-10"
-    >
+    <div className="fixed right-5 lg:right-5 xl:right-20 2xl:right-20 3xl:right-60 z-40 pb-10">
       <div className="flex flex-col justify-between p-6 shadow-sm sm:rounded-lg bg-bg-main">
         <div>
           <div className="flex flex-col gap-2">
             <div className="flex flex-col gap-2 w-full">
-              {/*here*/}
               <div className="flex justify-between gap-2">
                 <div className="w-1/2">
                   <div className="px-4 font-bold text-gray-300">напечатано</div>
@@ -111,46 +107,30 @@ const PagesRecordsPanel = ({
                 </div>
               </div>
               <hr />
+
+              {/* New Record Input */}
               <DatePicker
                 text="новая запись"
                 end_year={now.year}
                 end_month={now.month}
-                start_year={
-                  printer_pages_no_sum.length !== 0
-                    ? printer_pages_no_sum[printer_pages_no_sum.length - 1]
-                        .end_year
-                    : now.year
-                }
-                start_month={
-                  printer_pages_no_sum.length !== 0
-                    ? printer_pages_no_sum[printer_pages_no_sum.length - 1]
-                        .end_month - 1
-                    : now.month
-                }
+                start_year={newPagesNoSum.start_year}
+                start_month={newPagesNoSum.start_month}
               />
-              <div
-                // key={index.toString() + printer_page.end_year.toString()}
-                className="flex gap-2 h-fit w-full px-2 py-1 pb-2"
-              >
+              <div className="flex gap-2 h-fit w-full px-2 py-1 pb-2">
                 <div className="w-1/2">
                   <PrintPagesInput
                     type="text"
-                    id="number"
-                    placeholder={"5872"}
-                    className=""
-                    pattern=""
+                    placeholder="5872"
                     value={newPagesNoSum.print_pages}
                     onChange={(e) => {
-                      const records = changePrinterPagesValues(
-                        [newPagesNoSum],
-                        "print_pages",
-                        e.target.value,
-                        0
-                      );
-                      setNewPagesNoSum(records[0]);
+                      const updated = {
+                        ...newPagesNoSum,
+                        print_pages: e.target.value,
+                      };
+                      setNewPagesNoSum(updated);
                       setData("printer_pages_no_sum", [
-                        ...printerPagesNoSum,
-                        records[0],
+                        ...printer_pages_no_sum,
+                        updated,
                       ]);
                     }}
                     isFocused
@@ -159,22 +139,17 @@ const PagesRecordsPanel = ({
                 <div className="w-1/2">
                   <PrintPagesInput
                     type="text"
-                    // id="number"
                     placeholder="5873"
-                    className=""
-                    pattern="\d*"
                     value={newPagesNoSum.scan_pages}
                     onChange={(e) => {
-                      const records = changePrinterPagesValues(
-                        [newPagesNoSum],
-                        "scan_pages",
-                        e.target.value,
-                        0
-                      );
-                      setNewPagesNoSum(records[0]);
+                      const updated = {
+                        ...newPagesNoSum,
+                        scan_pages: e.target.value,
+                      };
+                      setNewPagesNoSum(updated);
                       setData("printer_pages_no_sum", [
-                        ...printerPagesNoSum,
-                        records[0],
+                        ...printer_pages_no_sum,
+                        updated,
                       ]);
                     }}
                   />
@@ -182,32 +157,24 @@ const PagesRecordsPanel = ({
               </div>
             </div>
             <hr />
+
+            {/* Sums Display */}
             <div className="flex flex-col gap-2 w-full px-2 py-1 pb-2 rounded-md bg-white/5 border-[1px] border-black">
               <div className="flex gap-2">
                 <div className="w-1/2">
                   <PrintPagesInput
-                    disabled={true}
+                    disabled
                     type="text"
-                    // id="number"
                     placeholder="5873"
-                    className=""
-                    // pattern="\d*"
                     value={sums.print_pages}
-                    isFocused
-                    // autoComplete="number"
                   />
                 </div>
                 <div className="w-1/2">
                   <PrintPagesInput
-                    disabled={true}
+                    disabled
                     type="text"
-                    // id="number"
                     placeholder="5874"
-                    className=""
-                    // pattern="\d*"
                     value={sums.scan_pages}
-                    isFocused
-                    // autoComplete="number"
                   />
                 </div>
               </div>
@@ -215,27 +182,25 @@ const PagesRecordsPanel = ({
                 text="всего"
                 isSum={true}
                 end_year={
-                  printer_pages_no_sum.length !== 0
-                    ? printer_pages_no_sum[printer_pages_no_sum.length - 1]
-                        .end_year
-                    : now.year
+                  hasRecords ? printerPagesNoSumReversed[0].end_year : now.year
                 }
                 end_month={
-                  printer_pages_no_sum.length !== 0
-                    ? printer_pages_no_sum[printer_pages_no_sum.length - 1]
-                        .end_month - 1
+                  hasRecords
+                    ? printerPagesNoSumReversed[0].end_month
                     : now.month
                 }
                 start_year={
-                  printer_pages_no_sum.length !== 0
-                    ? printer_pages_no_sum[printer_pages_no_sum.length - 1]
-                        .end_year
+                  hasRecords
+                    ? printerPagesNoSumReversed[
+                        printerPagesNoSumReversed.length - 1
+                      ].start_year
                     : now.year
                 }
                 start_month={
-                  printer_pages_no_sum.length !== 0
-                    ? printer_pages_no_sum[printer_pages_no_sum.length - 1]
-                        .end_month - 1
+                  hasRecords
+                    ? printerPagesNoSumReversed[
+                        printerPagesNoSumReversed.length - 1
+                      ].start_month
                     : now.month
                 }
               />
@@ -243,49 +208,30 @@ const PagesRecordsPanel = ({
           </div>
 
           <hr className="my-5" />
+
+          {/* Records List */}
           <div
             ref={contentRef}
             className={`overflow-x-hidden h-fit flex flex-col gap-2 mb-[1.2rem] max-h-[21.3rem] custom-scrollbar scroll-padding overflow-y-auto scrollbar-thin ${
               isMaxHeightReached ? "pr-3" : ""
             }`}
           >
-            {printerPagesNoSum.map((printer_pages, index) => (
+            {printerPagesNoSumReversed.map((printer_pages, index) => (
               <SinglePagesRecord
-                key={index.toString() + crypto.randomUUID()}
-                index={index}
                 printer_pages={printer_pages}
+                key={`${printer_pages.start_year}-${printer_pages.start_month}-${index}`}
+                index={index}
                 changePrinterPagesValues={changePrinterPagesValues}
-                hasRecords={printer_pages_no_sum.length !== 0}
-                now={now}
-                printerPagesNoSum={printerPagesNoSum}
-                setPrinterPagesNoSum={setPrinterPagesNoSum}
+                printerPagesNoSumReversed={printerPagesNoSumReversed}
+                setPrinterPagesNoSumReversed={setPrinterPagesNoSumReversed}
                 setData={setData}
               />
             ))}
           </div>
         </div>
+
         <PrimaryButton
-          onClick={(e) => {
-            editPrinter(e);
-            setNewPagesNoSum({
-              end_year: now.year,
-              end_month: now.month,
-              start_year:
-                printer_pages_no_sum.length !== 0
-                  ? printer_pages_no_sum[printer_pages_no_sum.length - 1]
-                      .end_year
-                  : now.year,
-              start_month:
-                printer_pages_no_sum.length !== 0
-                  ? printer_pages_no_sum[printer_pages_no_sum.length - 1]
-                      .end_month
-                  : now.month,
-              isSum: 0,
-              printer_id: printer_id,
-              print_pages: "",
-              scan_pages: "",
-            });
-          }}
+          onClick={handleSave}
           disabled={processing}
           className="w-[calc(100%)] !py-4 mt-2"
         >

@@ -29,16 +29,14 @@ const DateSearchResults = ({
 }: DateSearchResultsProps) => {
   let phrase;
   if (searchEndYear && searchStartYear && searchStartMonth && searchEndMonth) {
-    phrase = `с ${startingMonths[searchStartMonth - 1]} 
-    ${searchStartYear}  по ${months[searchEndMonth - 1]} 
+    phrase = `с ${startingMonths[searchStartMonth]} 
+    ${searchStartYear}  по ${months[searchEndMonth]} 
     ${searchEndYear} `;
   } else if (searchEndYear && searchStartMonth && searchEndMonth) {
-    phrase = `с ${startingMonths[searchStartMonth - 1]}  по ${
-      months[searchEndMonth - 1]
-    } 
+    phrase = `с ${startingMonths[searchStartMonth]}  по ${months[searchEndMonth]} 
     ${searchEndYear} `;
   } else if (searchEndYear && searchEndMonth) {
-    phrase = `за ${months[searchEndMonth - 1]} 
+    phrase = `за ${months[searchEndMonth]} 
     ${searchEndYear} `;
   }
 

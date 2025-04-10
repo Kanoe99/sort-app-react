@@ -24,8 +24,8 @@ class PrinterPageFactory extends Factory
     {
         $start_year = rand($start_year, $end_year);
 
-        $start_month = rand(1, 12);
-        $end_month = $start_year === $end_year ? rand($start_month, 12) : rand(1, 12);
+        $start_month = rand(0, 11);
+        $end_month = $start_year === $end_year ? rand($start_month, 11) : rand(0, 11);
 
         // Ensure printer_id is set before returning data
         if ($this->printer_id === null) {

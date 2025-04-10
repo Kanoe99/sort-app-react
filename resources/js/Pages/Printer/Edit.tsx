@@ -118,16 +118,23 @@ export default function Edit({
   return (
     <AuthenticatedLayout
       header={
-        <h2 className="text-2xl 3xl:ml-[10rem] ml-0 text-nowrap font-semibold leading-tight text-gray-200">
-          <span className="text-xl"> редактировать </span>
-          <span className="inline-block mx-3">{printer.model}</span>{" "}
-          {printer.number ? (
-            <span className="text-gray-500">№{printer.number}</span>
-          ) : (
-            <span className="text-red-500 text-sm">
-              инвентарный номер отсутствует
-            </span>
-          )}
+        <h2 className="text-2xl 3xl:ml-[10rem] ml-0 text-nowrap font-semibold leading-tight text-gray-200 flex gap-20">
+          <div className="text-sm underline cursor-pointer hover:text-blue-400 select-none">
+            <a href={`/printer/${printer.id - 1}/edit`}>предыдущий</a>
+          </div>
+          <div>
+            <span className="inline-block mx-3">{printer.model}</span>{" "}
+            {printer.number ? (
+              <span className="text-gray-500">№{printer.number}</span>
+            ) : (
+              <span className="text-red-500 text-sm">
+                инвентарный номер отсутствует
+              </span>
+            )}
+          </div>
+          <div className="text-sm underline cursor-pointer hover:text-blue-400 select-none">
+            <a href={`/printer/${printer.id + 1}/edit`}>следующий</a>
+          </div>
         </h2>
       }
     >
