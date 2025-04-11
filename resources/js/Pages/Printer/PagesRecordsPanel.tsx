@@ -39,8 +39,8 @@ const PagesRecordsPanel = ({
     return {
       end_year: now.year,
       end_month: now.month,
-      start_year: lastRecord?.end_year || now.year,
-      start_month: lastRecord?.end_month || now.month,
+      start_year: lastRecord?.end_year ?? now.year,
+      start_month: lastRecord?.end_month ?? now.month,
       isSum: 0,
       printer_id: printer_id,
       print_pages: "",
@@ -54,7 +54,6 @@ const PagesRecordsPanel = ({
 
   // Update reversed list when props change
   useEffect(() => {
-    setPrinterPagesNoSumReversed([...printer_pages_no_sum].reverse());
     setNewPagesNoSum(getNewRecordDefaults());
   }, [printer_pages_no_sum]);
 
@@ -82,10 +81,23 @@ const PagesRecordsPanel = ({
     );
   };
 
+  useEffect(() => {
+    console.log(newPagesNoSum);
+  }, [newPagesNoSum]);
+
   const handleSave = (e: React.FormEvent) => {
-    console.log("Before save - month:", newPagesNoSum.end_month);
+    if (
+      newPagesNoSum.scan_pages.length !== 0 ||
+      newPagesNoSum.print_pages.length !== 0
+    ) {
+      setPrinterPagesNoSumReversed([
+        newPagesNoSum,
+        ...printerPagesNoSumReversed.filter(
+          (item) => item.print_pages !== "" || item.scan_pages !== ""
+        ),
+      ]);
+    }
     editPrinter(e);
-    setNewPagesNoSum(getNewRecordDefaults());
   };
 
   const hasRecords = printer_pages_no_sum.length > 0;
@@ -111,8 +123,8 @@ const PagesRecordsPanel = ({
               {/* New Record Input */}
               <DatePicker
                 text="новая запись"
-                end_year={now.year}
-                end_month={now.month}
+                end_year={newPagesNoSum.end_year}
+                end_month={newPagesNoSum.end_month}
                 start_year={newPagesNoSum.start_year}
                 start_month={newPagesNoSum.start_month}
               />

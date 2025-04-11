@@ -325,6 +325,7 @@ class PrinterController extends Controller
 
   public function update(Request $request, Printer $printer)
     {
+        // dd($request->all());
         $printerPages = $printer->printerPages;
         $requestPages = $request->printer_pages_no_sum;
         $fields = array_keys($request->all());
@@ -493,6 +494,7 @@ class PrinterController extends Controller
                     $dbEntry->delete();
                 }
             } else {
+                // dd($pageData);
                 $lastValidEntry = $printerPages->last();
                 $requestLastEntry = collect($requestPages)->last();
                 
@@ -501,8 +503,8 @@ class PrinterController extends Controller
                     'printer_id' => $printer->id,
                     'start_month' => $lastValidEntry->end_month,
                     'start_year' => $lastValidEntry->end_year,
-                    'end_month' => $now['month'],
-                    'end_year' => $now['year'],
+                    'end_month' => $pageData['end_month'],
+                    'end_year' => $pageData['end_year'],
                     'isSum' => 0,
                     'print_pages' => $pageData['print_pages'] ?? '',
                     'scan_pages' => $pageData['scan_pages'] ?? '',

@@ -1,7 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 
 import { months, startingMonths } from "@/utils/months";
-import { validateHeaderValue } from "http";
 
 interface DatePickerProps {
   end_year: number;
@@ -49,10 +48,6 @@ const PickerButton = ({
     month: month,
   });
 
-  useEffect(() => {
-    console.log(isOpened);
-  }, [isOpened]);
-
   return (
     <span
       className={`${
@@ -68,16 +63,16 @@ const PickerButton = ({
         onChange={(e) => {
           const dateStr = e.target.value;
           const date = new Date(dateStr);
+          console.log("date month: ", date.getMonth());
           if (isNaN(date.getTime())) {
             setDate({ year: year, month: month });
             setIsOpened(false);
             suppressNextFocus.current = true;
             return;
           }
-          setDate({ year: date.getFullYear(), month: date.getMonth() });
+          setDate({ year: date.getFullYear(), month: date.getMonth() - 1 });
           setIsOpened(false);
           suppressNextFocus.current = true;
-          console.log(e.target.value);
         }}
         onFocus={() => {
           if (suppressNextFocus.current) {
