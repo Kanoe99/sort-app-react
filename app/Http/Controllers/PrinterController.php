@@ -325,7 +325,8 @@ class PrinterController extends Controller
 
   public function update(Request $request, Printer $printer)
     {
-        // dd($request->all());
+        dd($request->all());
+
         $printerPages = $printer->printerPages;
         $requestPages = $request->printer_pages_no_sum;
         $fields = array_keys($request->all());
@@ -497,6 +498,9 @@ class PrinterController extends Controller
                 // dd($pageData);
                 $lastValidEntry = $printerPages->last();
                 $requestLastEntry = collect($requestPages)->last();
+
+
+                //check for the overlapping or adding records for same month in here and add where edit too
                 
               if($requestLastEntry['print_pages'] !== null || $requestLastEntry['scan_pages'] !== null){
                 $printer->printerPages()->create([

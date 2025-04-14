@@ -3,6 +3,14 @@ import { PrinterPages } from "@/types";
 import { DatePicker } from "@/Components/DatePicker";
 
 interface SinglePagesRecordProps {
+  changeRecordDatesValues: (
+    index: number,
+    records: PrinterPages[],
+    year: "end_year" | "start_year",
+    month: "end_month" | "start_month",
+    year_value: number,
+    month_value: number
+  ) => PrinterPages[];
   printer_pages: PrinterPages;
   index: number;
   changePrinterPagesValues: (
@@ -17,6 +25,7 @@ interface SinglePagesRecordProps {
 }
 
 const SinglePagesRecord = ({
+  changeRecordDatesValues,
   printer_pages,
   index,
   changePrinterPagesValues,
@@ -59,6 +68,9 @@ const SinglePagesRecord = ({
         />
       </div>
       <DatePicker
+        setData={setData}
+        pagesData={printer_pages}
+        changeRecordDatesValues={changeRecordDatesValues}
         start_month={printer_pages.start_month}
         start_year={printer_pages.start_year}
         end_month={printer_pages.end_month}
