@@ -29,3 +29,4 @@
 -   oldData in printerController.php update method behaves weird;
 -   no number causes update to fail
 -   fix ip update
+-   make context for pages records panel

@@ -11,6 +11,8 @@ interface DatePickerProps {
   text?: string;
   isSum?: boolean;
   pagesData: PrinterPages;
+  printer_pages_no_sum: PrinterPages[];
+  index: number;
   changeRecordDatesValues: (
     index: number,
     records: PrinterPages[],
@@ -20,6 +22,7 @@ interface DatePickerProps {
     month_value: number
   ) => PrinterPages[];
   setData: (key: string, value: PrinterPages[]) => void;
+  isNew?: boolean;
 }
 
 const PickerButton = ({
@@ -29,13 +32,28 @@ const PickerButton = ({
   isSum,
   pagesData,
   setData,
+  printer_pages_no_sum,
+  changeRecordDatesValues,
+  index,
+  isNew,
 }: {
+  isNew: boolean;
+  index: number;
   year: number;
   month: number;
   isStarting: boolean;
   isSum: boolean;
   pagesData: PrinterPages;
   setData: (key: string, value: PrinterPages[]) => void;
+  printer_pages_no_sum: PrinterPages[];
+  changeRecordDatesValues: (
+    index: number,
+    records: PrinterPages[],
+    year: "end_year" | "start_year",
+    month: "end_month" | "start_month",
+    year_value: number,
+    month_value: number
+  ) => PrinterPages[];
 }) => {
   const calendrierRef = useRef<HTMLInputElement>(null);
   const handleCalendrier = (isSum: boolean) => {
@@ -47,7 +65,7 @@ const PickerButton = ({
   };
   const suppressNextFocus = useRef(false);
   const [isOpened, setIsOpened] = useState<boolean>(false);
-  const [date, setDate] = useState<{ year: number; month: number }>({
+  const [dates, setDate] = useState<{ year: number; month: number }>({
     year: year,
     month: month,
   });
@@ -55,6 +73,8 @@ const PickerButton = ({
   useEffect(() => {
     setDate({ year, month });
   }, [year, month]);
+
+  console.log("pagesData:", pagesData);
 
   return (
     <span
@@ -65,7 +85,8 @@ const PickerButton = ({
         handleCalendrier(isSum);
       }}
     >
-      {isStarting ? startingMonths[date.month] : months[date.month]} {date.year}{" "}
+      {isStarting ? startingMonths[dates.month] : months[dates.month]}{" "}
+      {dates.year}{" "}
       <input
         tabIndex={-1}
         onChange={(e) => {
@@ -79,16 +100,33 @@ const PickerButton = ({
             return;
           }
           setDate({ year: date.getFullYear(), month: date.getMonth() - 1 });
-          const updated = {
-            ...pagesData,
-            ...(isStarting
-              ? { start_year: date.getFullYear(), start_month: date.getMonth() }
-              : {
-                  end_year: date.getFullYear(),
-                  end_month: date.getMonth(),
-                }),
-          };
-          setData("printer_pages_no_sum", [...printer_pages_no_sum]);
+          const updated = changeRecordDatesValues(
+            index,
+            [...printer_pages_no_sum].reverse(),
+            isStarting ? "start_year" : "end_year",
+            isStarting ? "start_month" : "end_month",
+            date.getFullYear(),
+            date.getMonth()
+          );
+          const new_updated = [
+            ...printer_pages_no_sum,
+            {
+              ...pagesData,
+              ...(isStarting
+                ? {
+                    start_year: date.getFullYear(),
+                    start_month: date.getMonth(),
+                  }
+                : {
+                    end_year: date.getFullYear(),
+                    end_month: date.getMonth(),
+                  }),
+            },
+          ];
+
+          const values: PrinterPages[] = isNew ? new_updated : updated;
+          setData("printer_pages_no_sum", values);
+          // const records = changeRecordDatesValues();
           setIsOpened(false);
           suppressNextFocus.current = true;
         }}
@@ -116,12 +154,19 @@ const DatePicker = ({
   isSum = false,
   changeRecordDatesValues,
   setData,
+  printer_pages_no_sum,
+  index,
+  isNew = false,
 }: DatePickerProps) => {
   return pagesData.end_year === pagesData.start_year &&
     pagesData.end_month === pagesData.start_month ? (
     <div className="text-blue-500 px-4 mt-1 text-sm">
       {text ? text + " " : ""}за{" "}
       <PickerButton
+        isNew={isNew}
+        index={index}
+        changeRecordDatesValues={changeRecordDatesValues}
+        printer_pages_no_sum={printer_pages_no_sum}
         setData={setData}
         pagesData={pagesData}
         isStarting={false}
@@ -134,6 +179,10 @@ const DatePicker = ({
     <div className="text-sm px-4 mt-1 text-blue-500">
       {text ? text + " " : ""}c{" "}
       <PickerButton
+        isNew={isNew}
+        index={index}
+        changeRecordDatesValues={changeRecordDatesValues}
+        printer_pages_no_sum={printer_pages_no_sum}
         setData={setData}
         pagesData={pagesData}
         isStarting={true}
@@ -143,6 +192,10 @@ const DatePicker = ({
       />
       по{" "}
       <PickerButton
+        isNew={isNew}
+        index={index}
+        changeRecordDatesValues={changeRecordDatesValues}
+        printer_pages_no_sum={printer_pages_no_sum}
         setData={setData}
         pagesData={pagesData}
         isStarting={false}

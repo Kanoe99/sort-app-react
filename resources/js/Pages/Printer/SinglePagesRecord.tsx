@@ -22,6 +22,7 @@ interface SinglePagesRecordProps {
   printerPagesNoSumReversed: PrinterPages[];
   setPrinterPagesNoSumReversed: (records: PrinterPages[]) => void;
   setData: (key: string, value: PrinterPages[]) => void;
+  printer_pages_no_sum: PrinterPages[];
 }
 
 const SinglePagesRecord = ({
@@ -32,6 +33,7 @@ const SinglePagesRecord = ({
   printerPagesNoSumReversed,
   setPrinterPagesNoSumReversed,
   setData,
+  printer_pages_no_sum,
 }: SinglePagesRecordProps) => {
   return (
     <div className="flex flex-col gap-1 h-fit max-h-[40rem] px-2 py-1 pb-2 rounded-md bg-white/5 border-[1px] border-black">
@@ -68,6 +70,8 @@ const SinglePagesRecord = ({
         />
       </div>
       <DatePicker
+        index={index}
+        printer_pages_no_sum={printer_pages_no_sum}
         setData={setData}
         pagesData={printer_pages}
         changeRecordDatesValues={changeRecordDatesValues}

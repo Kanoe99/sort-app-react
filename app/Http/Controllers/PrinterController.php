@@ -7,8 +7,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
-use Carbon\Carbon;
 use Inertia\Inertia;
+use DateTime;
 
 use \App\Http\Resources\PrinterResource;
 use \App\Http\Resources\PrinterPageResource;
@@ -18,10 +18,14 @@ use App\Models\Printer;
 use App\Models\PrinterPage;
 use App\Http\Controllers\PrinterPageController;
 use App\Models\Tag;
-use DateTime;
+use App\Http\Requests\UpdatePrinterRequest;
+use App\Services\PrinterTagService;
+use App\Services\DataRefreshService;
+use App\Services\PrinterPageService;
 
 class PrinterController extends Controller
 {
+
     public function index()
     {
         $perPage = 12;
@@ -235,20 +239,7 @@ class PrinterController extends Controller
             dd($e->errors());
           }
     
-        function lowercaseRussianOnly($text)
-        {
-            return preg_replace_callback('/[А-ЯЁ]+/u', function ($matches) {
-                return mb_strtolower($matches[0]);
-            }, $text);
-        }
-    
-        $attributes['type'] = lowercaseRussianOnly($attributes['type']);
-        $attributes['model'] = lowercaseRussianOnly($attributes['model']);
-        $attributes['location'] = lowercaseRussianOnly($attributes['location']);
-        $attributes['status'] = lowercaseRussianOnly($attributes['status']);
-        $attributes['comment'] = $request->filled('comment') ? lowercaseRussianOnly($attributes['comment']) : null;
-        $attributes['counter'] = lowercaseRussianOnly($attributes['counter']);
-        $attributes['department'] = (new DepartmentService)->getDepartment($attributes['department_head']);
+          $attributes = $printer->setAttributesLowercase($attributes, $request);
     
         if ($request->IPBool === 'Есть') {
             $request->validate([
@@ -325,224 +316,25 @@ class PrinterController extends Controller
 
   public function update(Request $request, Printer $printer)
     {
-        dd($request->all());
+        $refreshed = (new DataRefreshService)->refreshed($request, $printer->id);
 
-        $printerPages = $printer->printerPages;
-        $requestPages = $request->printer_pages_no_sum;
-        $fields = array_keys($request->all());
+        $updatePrinterRequest = new UpdatePrinterRequest();
     
-        $oldData = Printer::select($fields)->findOrFail($printer->id)->toArray();
-        $newData = $request->only($fields);
+        $attributes = $request->validate($updatePrinterRequest->rules(), $updatePrinterRequest->messages());
 
-        $refreshed = $newData != $oldData;
-
-        // dd($request->all());
+        $attributes = $printer->setAttributesLowercase($attributes, $request);
     
-      
-
-        //   try{
-        $attributes = $request->validate([
-            'department_head' => ['required', 'string', 'max:255'],
-            'network_capable' => ['required', 'string', 'max:255'],
-            'type' => ['required', 'string', 'max:255'],
-            'model' => ['required', 'string', 'max:255'],
-            'location' => ['required', 'string', 'max:255'],
-            'status' => ['required', 'string', 'max:255'],
-            'comment' => ['nullable', 'string', 'max:255'],
-            'tags' => ['nullable', 'string'],
-            'attention' => ['nullable'],
-            'logo.*' => ['nullable', 'mimes:jpg,jpeg,png'],
-            'isIPv4' => ['required', 'boolean'],
-            'printer_pages_no_sum' => ['required', 'array'],
-            'printer_pages_no_sum.*.print_pages' => ['numeric', 'nullable', 'max:999999999999999'],
-            'printer_pages_no_sum.*.scan_pages' => ['numeric', 'nullable', 'max:999999999999999']
-        ], [
-            'department_head.required' => 'Укажите ответственное лицо.',
-            'network_capable.required' => 'Есть ли возможность сделать сетевым?',
-            'type.required' => 'Укажите модель принтера.',
-            'model.required' => 'Укажите модель принтера.',
-            'location.required' => 'Укажите локацию принтера.',
-            'status.required' => 'Укажите статус принтера.',
-            'logo.*.mimes' => 'Только PNG, JPG или JPEG!',
-            'isIPv4.required' => 'Требуется указать тип IP адреса!',
-            'isIPv4.boolean' => 'Только IPv4 или IPv6!',
-            'printer_pages_no_sum.required' => 'printer_pages_no_sum[] куда делись?',
-            'printer_pages_no_sum.array' => 'почему datatype is not an array?',
-            'printer_pages_no_sum.*.print_pages.numeric' => 'Только цифры',
-            'printer_pages_no_sum.*.print_pages.max' => 'нельзя больше 999999999999999',
-            'printer_pages_no_sum.*.scan_pages.numeric' => 'Только цифры',
-            'printer_pages_no_sum.*.scan_pages.max' => 'нельзя больше 999999999999999',
-
-        ]);
-        //   }catch(\Illuminate\Validation\ValidationException $e){
-        //     dd($e->errors());
-        //   }
-
-        function lowercaseRussianOnly($text)
-        {
-            return preg_replace_callback('/[А-ЯЁ]+/u', function ($matches) {
-                return mb_strtolower($matches[0]);
-            }, $text);
-        }
-    
-        $attributes['type'] = lowercaseRussianOnly($attributes['type']);
-        $attributes['model'] = lowercaseRussianOnly($attributes['model']);
-        $attributes['location'] = lowercaseRussianOnly($attributes['location']);
-        $attributes['status'] = lowercaseRussianOnly($attributes['status']);
-        $attributes['comment'] = $request->filled('comment') ? lowercaseRussianOnly($attributes['comment']) : null;
-        $attributes['department'] = (new DepartmentService)->getDepartment($attributes['department_head']);
-    
-        if($request->hasNumber){
-            $request->validate([
-                'number' => ['required', 'numeric', 'min:1', 'max:999999999999999', 'unique:printers,number,' . $printer->id],
-            ],[
-                'number.required' => 'Укажите номер принтера.',
-                'number.max' => 'Номер поменьше надо (максимум: 999999999999999)',
-                'number.unique' => 'Инвентарный номер уже существует!',
-            ]);
-            $attributes['number'] = $request->number;
-        }
-        else{
-            $attributes['number'] = null;
-        }
-
-        if ($request->IP) {
-            $request->validate([
-                'IP' => ['required', 'unique:printers,IP,' . $printer->id, 'ip'],
-            ], [
-                'IP.required' => 'Укажите IP адрес принтера.',
-                'IP.unique' => 'Данный IP адрес уже занят.',
-                'IP.ip' => 'IP адрес должен быть верным.', 
-            ]);
-            $attributes['IP'] = $request->IP;
-        }
-        else{
-            $attributes['IP'] = null;
-        }
-        
-        if($request->PC_name){
-            $request->validate([
-                'PC_name' => ['required', 'string', 'max:255']
-            ],
-            [
-                'PC_name.required' => 'Укажите наименование компьютера.'
-            ]);
-            $attributes['PC_name'] = $request->PC_name;
-        }
-        else{
-            $attributes['PC_name'] = null;
-        }
-
-        
-        if ($request->filled('fixDate')) {
-            $fixDate = $request->input('fixDate');
-    
-            if (preg_match('/^\d{4}-\d{2}-\d{2}$/', $fixDate)) {
-                $attributes['fixDate'] = Carbon::createFromFormat('Y-m-d', $fixDate)->format('Y-m-d');
-            } else {
-                return back()->withErrors(['fixDate' => 'Некорректная дата.']);
-            }
-        }
-    
-        // $existingLogos = json_decode($printer->logo, true) ?? [];
-        // $logoPaths = $existingLogos;
-    
-        // if ($request->filled('removed_logos')) {
-        //     $removedLogos = json_decode($request->removed_logos, true);
-        //     foreach ($removedLogos as $removedLogo) {
-        //         if (in_array($removedLogo, $existingLogos)) {
-        //             Storage::disk('public')->delete($removedLogo);
-        //             $logoPaths = array_diff($logoPaths, [$removedLogo]);
-        //         }
-        //     }
-        // }
-    
-        // if ($request->file('logo')) {
-        //     $folderName = $request->IP ?? 'default';
-        //     foreach ($request->file('logo') as $file) {
-        //         $logoPaths[] = $file->store("logos/{$folderName}", 'public');
-        //     }
-        // }
-    
-        // $attributes['logo'] = json_encode($logoPaths);
+        $attributes = $printer->setOptionalAttributes($attributes, $request, $printer, $updatePrinterRequest);
 
 
-        $calculatedSum = ['print_pages' => 0, 'scan_pages' => 0];
-        foreach($requestPages as $page){
-            $calculatedSum['print_pages'] += $page['print_pages'];
-            $calculatedSum['scan_pages'] += $page['scan_pages'];
-        }
+        $printerPageService = new PrinterPageService();
+        $printerPageService->syncPrinterPages($printer, $request->printer_pages_no_sum);
 
-        $date = new DateTime();
-        $now = [
-            'year' => $date->format('Y'),
-            'month' => $date->format('n'),
-        ];
-        
-        $dbNonSumEntries = $printerPages->slice(1)->values();
-        $requestEntryCount = count($requestPages);
-        
-        foreach ($requestPages as $index => $pageData) {
-            $dbEntry = $dbNonSumEntries->get($index);
-            
-            if ($dbEntry) {
-                if ($pageData['print_pages'] !== null || $pageData['scan_pages'] !== null) {
-                    $dbEntry->update([
-                        'print_pages' => $pageData['print_pages'] ?? '',
-                        'scan_pages' => $pageData['scan_pages'] ?? '',
-                    ]);
-                } else {
-                    $dbEntry->delete();
-                }
-            } else {
-                // dd($pageData);
-                $lastValidEntry = $printerPages->last();
-                $requestLastEntry = collect($requestPages)->last();
-
-
-                //check for the overlapping or adding records for same month in here and add where edit too
-                
-              if($requestLastEntry['print_pages'] !== null || $requestLastEntry['scan_pages'] !== null){
-                $printer->printerPages()->create([
-                    'printer_id' => $printer->id,
-                    'start_month' => $lastValidEntry->end_month,
-                    'start_year' => $lastValidEntry->end_year,
-                    'end_month' => $pageData['end_month'],
-                    'end_year' => $pageData['end_year'],
-                    'isSum' => 0,
-                    'print_pages' => $pageData['print_pages'] ?? '',
-                    'scan_pages' => $pageData['scan_pages'] ?? '',
-                ]);
-              }
-            }
-        }
-        
-        if ($dbNonSumEntries->count() > $requestEntryCount) {
-            $dbNonSumEntries->slice($requestEntryCount)->each->delete();
-        }
-        
-        count($requestPages) === 0 ? 
-        $printerPages[0]->update([
-            'print_pages' => 0,
-            'scan_pages' => 0
-            ]):
-         $printerPages[0]->update([
-            'print_pages' => $calculatedSum['print_pages'],
-            'scan_pages' => $calculatedSum['scan_pages']
-            ]);
         
         $printer->update(Arr::except($attributes, 'tags'));
-    
-        if ($request->filled('tags')) {
-            $newTags = array_unique(array_map('trim', explode(',', $request->tags)));
-            $printer->tags()->sync([]);
-            foreach ($newTags as $tag) {
-                if (!empty($tag)) {
-                    $tagModel = Tag::firstOrCreate(['name' => $tag]);
-                    $printer->tags()->attach($tagModel);
-                }
-            }
-        }
+        $tagService = new PrinterTagService();
+        $tagService->syncTags($printer, $request->tags);
+        
     
         return redirect()->back()->with([
             'success' => 'Данные обновлены.',

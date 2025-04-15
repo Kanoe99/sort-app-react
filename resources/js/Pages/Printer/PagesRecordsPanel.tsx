@@ -137,6 +137,9 @@ const PagesRecordsPanel = ({
 
               {/* New Record Input */}
               <DatePicker
+                index={0}
+                isNew={true}
+                printer_pages_no_sum={printer_pages_no_sum}
                 setData={setData}
                 pagesData={newPagesNoSum}
                 changeRecordDatesValues={changeRecordDatesValues}
@@ -209,6 +212,8 @@ const PagesRecordsPanel = ({
                 </div>
               </div>
               <DatePicker
+                index={0}
+                printer_pages_no_sum={printer_pages_no_sum}
                 setData={setData}
                 pagesData={{
                   ...printerPagesNoSumReversed[0],
@@ -261,6 +266,7 @@ const PagesRecordsPanel = ({
           >
             {printerPagesNoSumReversed.map((printer_pages, index) => (
               <SinglePagesRecord
+                printer_pages_no_sum={printer_pages_no_sum}
                 changeRecordDatesValues={changeRecordDatesValues}
                 printer_pages={printer_pages}
                 key={`${printer_pages.start_year}-${printer_pages.start_month}-${index}`}
