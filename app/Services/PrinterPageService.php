@@ -53,4 +53,15 @@ class PrinterPageService
             'scan_pages' => $requestEntryCount === 0 ? 0 : $calculatedSum['scan_pages'],
         ]);
     }
+
+    public function resetSumNoRecords(Printer $printer){
+        $printerPages = $printer->printerPages;
+        if(count($printerPages) === 1){
+            $printerPages[0]->update([
+                'print_pages' => 0,
+                'scan_pages' => 0
+                ]);
+        }
+    }
+
 }

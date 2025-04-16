@@ -67,7 +67,7 @@ const TripleToggle = ({
       <div
         onClick={() => {
           if (!isYearOpen) {
-            console.log(yym_local + " changing yym_local");
+            // console.log(yym_local + " changing yym_local");
             handleIsMonthOpen(false);
             handleIsYearOpen(true);
             setPanels((prev) => ({

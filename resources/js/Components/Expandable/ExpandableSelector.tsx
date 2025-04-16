@@ -45,11 +45,11 @@ export const Expandable = ({
     const fetchData = async () => {
       const response = await fetch(url);
       const printedData = await response.json();
-      console.log(url);
+      // console.log(url);
       console.warn("isYearOpen: " + isYearOpen);
       console.warn("isMonthOpen: " + isMonthOpen);
       setPrintedData(printedData);
-      console.log("printedData: " + printedData);
+      // console.log("printedData: " + printedData);
     };
     fetchData();
   };

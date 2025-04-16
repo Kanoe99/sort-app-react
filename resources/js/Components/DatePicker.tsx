@@ -74,7 +74,7 @@ const PickerButton = ({
     setDate({ year, month });
   }, [year, month]);
 
-  console.log("pagesData:", pagesData);
+  // console.log("pagesData:", pagesData);
 
   return (
     <span
@@ -92,7 +92,7 @@ const PickerButton = ({
         onChange={(e) => {
           const dateStr = e.target.value;
           const date = new Date(dateStr);
-          console.log("date month: ", date.getMonth());
+          // console.log("date month: ", date.getMonth());
           if (isNaN(date.getTime())) {
             setDate({ year: year, month: month });
             setIsOpened(false);

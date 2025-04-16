@@ -1,16 +1,19 @@
 <?php
 
+use Illuminate\Support\Facades\Route;
+
 use App\Enum\PermissionsEnum;
 use App\Enum\RolesEnum;
-use App\Http\Controllers\CommentController;
-use App\Http\Controllers\FeatureController;
+
+###########################
+
 use App\Http\Controllers\PrinterController;
 use App\Http\Controllers\PrinterPageController;
+use App\Http\Controllers\PrinterSearchController;
+use App\Http\Controllers\PrinterGetController;
+
 use App\Http\Controllers\ProfileController;
-use App\Http\Controllers\UpvoteController;
 use App\Http\Controllers\UserController;
-// use Illuminate\Foundation\Application;
-use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\GraphController;
 
 Route::redirect('/', '/main');
@@ -39,11 +42,11 @@ Route::middleware('auth')->group(function () {
         )
     ])->group(function () {
         Route::get('/main', [PrinterController::class, 'index'])->name('main');
-        Route::get('/printers', [PrinterController::class, 'getPrinters']);
-        Route::get('/search', [PrinterController::class, 'searchPrinters']);
+        Route::get('/printers', PrinterGetController::class);
+        Route::get('/search', PrinterSearchController::class);
         Route::get('/printed', [PrinterPageController::class, 'printed']);
         Route::get('/scanned', [PrinterPageController::class, 'scanned']);
-        Route::get('/printer', [PrinterPageController::class, 'getPrinterPages']);
+        // Route::get('/printer', [PrinterPageController::class, 'getPrinterPages']);
 
 
         Route::resource('printer', PrinterController::class)

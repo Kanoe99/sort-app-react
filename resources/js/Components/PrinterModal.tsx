@@ -36,11 +36,11 @@ const PrinterModal = ({
 }: PrinterModalProps) => {
   const [printedData, setPrintedData] = useState<printedData>();
 
-  printer.id === 933
-    ? console.log(printer.sum_pages && printer.three_last_pages)
-    : "";
+  // printer.id === 933
+  //   ? console.log(printer.sum_pages && printer.three_last_pages)
+  //   : "";
 
-  console.log(printer);
+  // console.log(printer);
 
   return (
     <Modal
