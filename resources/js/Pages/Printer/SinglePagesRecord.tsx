@@ -1,6 +1,6 @@
-import PrintPagesInput from "@/Components/PrintPagesInput";
+import PrintPagesInput from "@/Pages/Printer/Components/PrintPagesInput";
 import { PrinterPages } from "@/types";
-import { DatePicker } from "@/Components/DatePicker";
+import { DatePicker } from "@/Pages/Printer/Components/DatePicker";
 
 interface SinglePagesRecordProps {
   changeRecordDatesValues: (

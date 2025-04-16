@@ -2,8 +2,8 @@ import { useState, ChangeEvent } from "react";
 import { useForm } from "@inertiajs/react";
 import { TripleToggle } from "@/Components/Expandable/TripleToggle";
 import MonthsDropdown from "./MonthsDropdown";
-import { printedData } from "@/Components/PrinterModal";
-import { usePrinterCardContext } from "@/Components/PrinterCardContext";
+import { printedData } from "@/Pages/Printer/Components/PrinterModal";
+import { usePrinterCardContext } from "@/Pages/Printer/contexts/PrinterCardContext";
 import YearsDropdown from "@/Components/Expandable/YearsDropdown";
 
 export const Expandable = ({

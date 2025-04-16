@@ -3,10 +3,10 @@ import { useState } from "react";
 import { PrinterModal } from "./PrinterModal";
 import { can } from "@/helpers";
 import { usePage } from "@inertiajs/react";
-import { IPView } from "./IPView";
+import { IPView } from "../../../Components/IPView";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faDesktop, faWifi } from "@fortawesome/free-solid-svg-icons";
-import { PrinterCardContextProvider } from "@/Components/PrinterCardContext";
+import { PrinterCardContextProvider } from "@/Pages/Printer/contexts/PrinterCardContext";
 
 const PrinterCard = ({ printer }: { printer: Printer }) => {
   const [isVisible, setIsVisible] = useState(false);

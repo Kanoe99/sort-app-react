@@ -1,9 +1,9 @@
 import { faDesktop, faWifi, faXmark } from "@fortawesome/free-solid-svg-icons";
-import Modal from "./Modal";
+import Modal from "../../../Components/Modal";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Printer } from "@/types";
-import { IPView } from "./IPView";
-import { Expandable } from "./Expandable/ExpandableSelector";
+import { IPView } from "../../../Components/IPView";
+import { Expandable } from "../../../Components/Expandable/ExpandableSelector";
 import { useState } from "react";
 import { DateSearchResults } from "@/Components/Expandable/DateSearchResults";
 import { can } from "@/helpers";

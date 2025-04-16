@@ -1,9 +1,9 @@
 import { useState, useEffect } from "react";
 import { PrinterCard } from "./PrinterCard";
-import { Pagination } from "./Pagination";
+import { Pagination } from "../../../Components/Pagination";
 import { Printer } from "@/types";
-import { NotFound } from "./NotFound";
-import { PrinterCardContextProvider } from "./PrinterCardContext";
+import { NotFound } from "../../../Components/NotFound";
+import { PrinterCardContextProvider } from "../contexts/PrinterCardContext";
 
 const PrintersMain = ({
   isSearchMode,

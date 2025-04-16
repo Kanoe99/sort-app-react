@@ -1,4 +1,4 @@
-import { usePrinterCardContext } from "@/Components/PrinterCardContext";
+import { usePrinterCardContext } from "@/Pages/Printer/contexts/PrinterCardContext";
 
 const TripleToggle = ({
   isYearOpen,

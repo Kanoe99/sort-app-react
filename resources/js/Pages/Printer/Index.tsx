@@ -1,9 +1,9 @@
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
 import { Head } from "@inertiajs/react";
 import { PageProps } from "@/types";
-import { Placeholder } from "./Partials/Placeholder";
+import { Placeholder } from "./Placeholder";
 import { Tags } from "@/Components/Tags";
-import { PrintersMain } from "@/Components/PrintersMain";
+import { PrintersMain } from "@/Pages/Printer/Components/PrintersMain";
 import { Search } from "@/Components/Search";
 import { useState } from "react";
 

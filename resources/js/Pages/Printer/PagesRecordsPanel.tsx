@@ -1,9 +1,9 @@
 import { FormEventHandler, useEffect, useRef, useState } from "react";
 import PrimaryButton from "@/Components/PrimaryButton";
-import PrintPagesInput from "@/Components/PrintPagesInput";
+import PrintPagesInput from "@/Pages/Printer/Components/PrintPagesInput";
 import { PrinterPages } from "@/types";
 import { SinglePagesRecord } from "@/Pages/Printer/SinglePagesRecord";
-import { DatePicker } from "@/Components/DatePicker";
+import { DatePicker } from "@/Pages/Printer/Components/DatePicker";
 
 interface PagesRecordsPanelProps {
   printer_pages_no_sum: PrinterPages[];
