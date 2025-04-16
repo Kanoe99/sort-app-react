@@ -9,6 +9,7 @@ use \App\Http\Resources\PrinterResource;
 use \App\Http\Resources\PrinterPageResource;
 
 use App\Services\DepartmentService;
+use App\Services\PrinterPageService;
 
 class InertiaPrinterService{
 
@@ -29,6 +30,8 @@ class InertiaPrinterService{
 
     public function edit(Printer $printer):array
     {
+        (new PrinterPageService)->resetSumNoRecords($printer);
+
         return [
             'printer' => new PrinterResource($printer),
             'sums' => PrinterPageResource::collection($printer->printerPages->slice(0, 1))->toArray(request()),

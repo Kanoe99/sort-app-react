@@ -87,11 +87,11 @@ class Printer extends Model
         return $attributes;
     }
 
-    public function setOptionalAttributes(array $attributes, $request, $printer, $updatePrinterRequest){
+    public function setOptionalAttributes(array $attributes, $request, $printer){
         if($request->hasNumber){
             $request->validate([
                 'number' => ['required', 'numeric', 'min:1', 'max:999999999999999', 'unique:printers,number,' . $printer->id],
-            ], $updatePrinterRequest->messages());
+            ], $request->messages());
             $attributes['number'] = $request->number;
         }
         else{
@@ -101,7 +101,7 @@ class Printer extends Model
         if ($request->IP) {
             $request->validate([
                 'IP' => ['required', 'unique:printers,IP,' . $printer->id, 'ip'],
-            ], $updatePrinterRequest->messages());
+            ], $request->messages());
             $attributes['IP'] = $request->IP;
         }
         else{
@@ -109,10 +109,10 @@ class Printer extends Model
         }
         
         if($request->PC_name){
-            dd('im here');
+            // dd('im here');
             $request->validate([
                 'PC_name' => ['required', 'string', 'max:255']
-            ], $updatePrinterRequest->messages());
+            ], $request->messages());
             $attributes['PC_name'] = $request->PC_name;
         }
         else{
