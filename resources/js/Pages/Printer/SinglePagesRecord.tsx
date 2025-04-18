@@ -1,16 +1,9 @@
-import PrintPagesInput from "@/Pages/Printer/Components/PrintPagesInput";
 import { PrinterPages } from "@/types";
 import { DatePicker } from "@/Pages/Printer/Components/DatePicker";
+import PrintPagesInput from "@/Pages/Printer/Components/PrintPagesInput";
+import { usePagesRecordsContext } from "@/Pages/Printer/contexts/PagesRecordsContext";
 
 interface SinglePagesRecordProps {
-  changeRecordDatesValues: (
-    index: number,
-    records: PrinterPages[],
-    year: "end_year" | "start_year",
-    month: "end_month" | "start_month",
-    year_value: number,
-    month_value: number
-  ) => PrinterPages[];
   printer_pages: PrinterPages;
   index: number;
   changePrinterPagesValues: (
@@ -19,22 +12,16 @@ interface SinglePagesRecordProps {
     value: string,
     index: number
   ) => PrinterPages[];
-  printerPagesNoSumReversed: PrinterPages[];
-  setPrinterPagesNoSumReversed: (records: PrinterPages[]) => void;
-  setData: (key: string, value: PrinterPages[]) => void;
-  printer_pages_no_sum: PrinterPages[];
 }
 
 const SinglePagesRecord = ({
-  changeRecordDatesValues,
   printer_pages,
   index,
   changePrinterPagesValues,
-  printerPagesNoSumReversed,
-  setPrinterPagesNoSumReversed,
-  setData,
-  printer_pages_no_sum,
 }: SinglePagesRecordProps) => {
+  const { printerPagesNoSumReversed, setPrinterPagesNoSumReversed, setData } =
+    usePagesRecordsContext();
+
   return (
     <div className="flex flex-col gap-1 h-fit max-h-[40rem] px-2 py-1 pb-2 rounded-md bg-white/5 border-[1px] border-black">
       <div className="flex gap-2">
@@ -71,10 +58,7 @@ const SinglePagesRecord = ({
       </div>
       <DatePicker
         index={index}
-        printer_pages_no_sum={printer_pages_no_sum}
-        setData={setData}
         pagesData={printer_pages}
-        changeRecordDatesValues={changeRecordDatesValues}
         start_month={printer_pages.start_month}
         start_year={printer_pages.start_year}
         end_month={printer_pages.end_month}

@@ -396,12 +396,12 @@ export default function Edit({
         </form>
         <PagesRecordsContextProvider
           initialPages={[...printer_pages_no_sum].reverse()}
+          setData={setData}
         >
           <PagesRecordsPanel
+            hasRecords={printer_pages_no_sum.length > 0}
             printer_id={printer.id}
             sums={sums[0]}
-            printer_pages_no_sum={printer_pages_no_sum}
-            setData={setData}
             processing={processing}
             editPrinter={editPrinter}
           />

@@ -7,25 +7,23 @@ import { DatePicker } from "@/Pages/Printer/Components/DatePicker";
 import { usePagesRecordsContext } from "@/Pages/Printer/contexts/PagesRecordsContext";
 
 interface PagesRecordsPanelProps {
-  printer_pages_no_sum: PrinterPages[];
-  setData: (key: string, value: PrinterPages[]) => void;
   processing: boolean;
   editPrinter: FormEventHandler;
   sums: PrinterPages;
   printer_id: number;
+  hasRecords: boolean;
 }
 
 const PagesRecordsPanel = ({
-  printer_pages_no_sum,
+  hasRecords,
   sums,
-  setData,
   processing,
   editPrinter,
   printer_id,
 }: PagesRecordsPanelProps) => {
   const contentRef = useRef<HTMLDivElement>(null);
   const [isMaxHeightReached, setIsMaxHeightReached] = useState(false);
-  const { printerPagesNoSumReversed, setPrinterPagesNoSumReversed } =
+  const { printerPagesNoSumReversed, setPrinterPagesNoSumReversed, setData } =
     usePagesRecordsContext();
 
   const date = new Date();
@@ -52,12 +50,14 @@ const PagesRecordsPanel = ({
     getNewRecordDefaults()
   );
 
-  // Update reversed list when props change
+  //on backend change
+  //
+  // clear new page entry
   useEffect(() => {
     setNewPagesNoSum(getNewRecordDefaults());
-  }, [printer_pages_no_sum]);
+  }, [sums]);
 
-  // Check for overflow
+  //adjust scrollable area
   useEffect(() => {
     const checkOverflow = () => {
       const el = contentRef.current;
@@ -68,7 +68,7 @@ const PagesRecordsPanel = ({
     checkOverflow();
     window.addEventListener("resize", checkOverflow);
     return () => window.removeEventListener("resize", checkOverflow);
-  }, [printer_pages_no_sum]);
+  }, [sums]);
 
   const changePrinterPagesValues = (
     records: PrinterPages[],
@@ -78,19 +78,6 @@ const PagesRecordsPanel = ({
   ): PrinterPages[] => {
     return records.map((page, i) =>
       index === i ? { ...page, [pages]: value } : page
-    );
-  };
-
-  const changeRecordDatesValues = (
-    index: number,
-    records: PrinterPages[],
-    year: "end_year" | "start_year",
-    month: "end_month" | "start_month",
-    year_value: number,
-    month_value: number
-  ) => {
-    return records.map((page, i) =>
-      index === i ? { ...page, [year]: year_value, [month]: month_value } : page
     );
   };
 
@@ -115,8 +102,6 @@ const PagesRecordsPanel = ({
     editPrinter(e);
   };
 
-  const hasRecords = printer_pages_no_sum.length > 0;
-
   return (
     <div className="fixed right-5 lg:right-5 xl:right-20 2xl:right-20 3xl:right-60 z-40 pb-10">
       <div className="flex flex-col justify-between p-6 shadow-sm sm:rounded-lg bg-bg-main">
@@ -139,10 +124,7 @@ const PagesRecordsPanel = ({
               <DatePicker
                 index={0}
                 isNew={true}
-                printer_pages_no_sum={printer_pages_no_sum}
-                setData={setData}
                 pagesData={newPagesNoSum}
-                changeRecordDatesValues={changeRecordDatesValues}
                 text="новая запись"
                 end_year={newPagesNoSum.end_year}
                 end_month={newPagesNoSum.end_month}
@@ -162,7 +144,7 @@ const PagesRecordsPanel = ({
                       };
                       setNewPagesNoSum(updated);
                       setData("printer_pages_no_sum", [
-                        ...printer_pages_no_sum,
+                        ...[...printerPagesNoSumReversed].reverse(),
                         updated,
                       ]);
                     }}
@@ -181,7 +163,7 @@ const PagesRecordsPanel = ({
                       };
                       setNewPagesNoSum(updated);
                       setData("printer_pages_no_sum", [
-                        ...printer_pages_no_sum,
+                        ...[...printerPagesNoSumReversed].reverse(),
                         updated,
                       ]);
                     }}
@@ -213,8 +195,6 @@ const PagesRecordsPanel = ({
               </div>
               <DatePicker
                 index={0}
-                printer_pages_no_sum={printer_pages_no_sum}
-                setData={setData}
                 pagesData={{
                   ...printerPagesNoSumReversed[0],
                   start_month:
@@ -226,7 +206,6 @@ const PagesRecordsPanel = ({
                       printerPagesNoSumReversed.length - 1
                     ].start_year,
                 }}
-                changeRecordDatesValues={changeRecordDatesValues}
                 text="всего"
                 isSum={true}
                 end_year={
@@ -266,15 +245,10 @@ const PagesRecordsPanel = ({
           >
             {printerPagesNoSumReversed.map((printer_pages, index) => (
               <SinglePagesRecord
-                printer_pages_no_sum={printer_pages_no_sum}
-                changeRecordDatesValues={changeRecordDatesValues}
                 printer_pages={printer_pages}
                 key={`${printer_pages.start_year}-${printer_pages.start_month}-${index}`}
                 index={index}
                 changePrinterPagesValues={changePrinterPagesValues}
-                printerPagesNoSumReversed={printerPagesNoSumReversed}
-                setPrinterPagesNoSumReversed={setPrinterPagesNoSumReversed}
-                setData={setData}
               />
             ))}
           </div>

@@ -40,4 +40,13 @@ export interface PagesRecordsContextProps {
   setPrinterPagesNoSumReversed: React.Dispatch<
     React.SetStateAction<PrinterPages[]>
   >;
+  setData: (key: string, value: PrinterPages[]) => void;
+  changeRecordDatesValues: (
+    index: number,
+    records: PrinterPages[],
+    year: "end_year" | "start_year",
+    month: "end_month" | "start_month",
+    year_value: number,
+    month_value: number
+  ) => PrinterPages[];
 }

@@ -1,7 +1,10 @@
 import { useEffect, useRef, useState } from "react";
 
-import { months, startingMonths } from "@/utils/months";
+/////////////////////////////////////////////////////
+
 import { PrinterPages } from "@/types";
+import { months, startingMonths } from "@/utils/months";
+import { usePagesRecordsContext } from "@/Pages/Printer/contexts/PagesRecordsContext";
 
 interface DatePickerProps {
   end_year: number;
@@ -11,17 +14,7 @@ interface DatePickerProps {
   text?: string;
   isSum?: boolean;
   pagesData: PrinterPages;
-  printer_pages_no_sum: PrinterPages[];
   index: number;
-  changeRecordDatesValues: (
-    index: number,
-    records: PrinterPages[],
-    year: "end_year" | "start_year",
-    month: "end_month" | "start_month",
-    year_value: number,
-    month_value: number
-  ) => PrinterPages[];
-  setData: (key: string, value: PrinterPages[]) => void;
   isNew?: boolean;
 }
 
@@ -31,9 +24,6 @@ const PickerButton = ({
   isStarting,
   isSum,
   pagesData,
-  setData,
-  printer_pages_no_sum,
-  changeRecordDatesValues,
   index,
   isNew,
 }: {
@@ -44,16 +34,6 @@ const PickerButton = ({
   isStarting: boolean;
   isSum: boolean;
   pagesData: PrinterPages;
-  setData: (key: string, value: PrinterPages[]) => void;
-  printer_pages_no_sum: PrinterPages[];
-  changeRecordDatesValues: (
-    index: number,
-    records: PrinterPages[],
-    year: "end_year" | "start_year",
-    month: "end_month" | "start_month",
-    year_value: number,
-    month_value: number
-  ) => PrinterPages[];
 }) => {
   const calendrierRef = useRef<HTMLInputElement>(null);
   const handleCalendrier = (isSum: boolean) => {
@@ -69,6 +49,9 @@ const PickerButton = ({
     year: year,
     month: month,
   });
+
+  const { printerPagesNoSumReversed, setData, changeRecordDatesValues } =
+    usePagesRecordsContext();
 
   useEffect(() => {
     setDate({ year, month });
@@ -102,14 +85,14 @@ const PickerButton = ({
           setDate({ year: date.getFullYear(), month: date.getMonth() - 1 });
           const updated = changeRecordDatesValues(
             index,
-            [...printer_pages_no_sum].reverse(),
+            printerPagesNoSumReversed,
             isStarting ? "start_year" : "end_year",
             isStarting ? "start_month" : "end_month",
             date.getFullYear(),
             date.getMonth()
           );
           const new_updated = [
-            ...printer_pages_no_sum,
+            ...[...printerPagesNoSumReversed].reverse(),
             {
               ...pagesData,
               ...(isStarting
@@ -152,9 +135,6 @@ const DatePicker = ({
   pagesData,
   text,
   isSum = false,
-  changeRecordDatesValues,
-  setData,
-  printer_pages_no_sum,
   index,
   isNew = false,
 }: DatePickerProps) => {
@@ -165,9 +145,6 @@ const DatePicker = ({
       <PickerButton
         isNew={isNew}
         index={index}
-        changeRecordDatesValues={changeRecordDatesValues}
-        printer_pages_no_sum={printer_pages_no_sum}
-        setData={setData}
         pagesData={pagesData}
         isStarting={false}
         month={pagesData.end_month}
@@ -181,9 +158,6 @@ const DatePicker = ({
       <PickerButton
         isNew={isNew}
         index={index}
-        changeRecordDatesValues={changeRecordDatesValues}
-        printer_pages_no_sum={printer_pages_no_sum}
-        setData={setData}
         pagesData={pagesData}
         isStarting={true}
         month={pagesData.start_month}
@@ -194,9 +168,6 @@ const DatePicker = ({
       <PickerButton
         isNew={isNew}
         index={index}
-        changeRecordDatesValues={changeRecordDatesValues}
-        printer_pages_no_sum={printer_pages_no_sum}
-        setData={setData}
         pagesData={pagesData}
         isStarting={false}
         month={pagesData.end_month}
