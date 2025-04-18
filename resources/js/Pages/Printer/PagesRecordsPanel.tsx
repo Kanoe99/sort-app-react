@@ -4,6 +4,7 @@ import PrintPagesInput from "@/Pages/Printer/Components/PrintPagesInput";
 import { PrinterPages } from "@/types";
 import { SinglePagesRecord } from "@/Pages/Printer/SinglePagesRecord";
 import { DatePicker } from "@/Pages/Printer/Components/DatePicker";
+import { usePagesRecordsContext } from "@/Pages/Printer/contexts/PagesRecordsContext";
 
 interface PagesRecordsPanelProps {
   printer_pages_no_sum: PrinterPages[];
@@ -24,9 +25,8 @@ const PagesRecordsPanel = ({
 }: PagesRecordsPanelProps) => {
   const contentRef = useRef<HTMLDivElement>(null);
   const [isMaxHeightReached, setIsMaxHeightReached] = useState(false);
-  const [printerPagesNoSumReversed, setPrinterPagesNoSumReversed] = useState<
-    PrinterPages[]
-  >([...printer_pages_no_sum].reverse());
+  const { printerPagesNoSumReversed, setPrinterPagesNoSumReversed } =
+    usePagesRecordsContext();
 
   const date = new Date();
   const now = {

@@ -1,27 +1,9 @@
 import React, { createContext, useContext, useState } from "react";
-
-interface DateRange {
-  startMonth: number;
-  startYear: number;
-  endMonth: number;
-  endYear: number;
-}
-
-interface PS_dates {
-  print: DateRange;
-  scan: DateRange;
-}
-
-interface Panel {
-  ym: boolean;
-  ymm: boolean;
-  yym: boolean;
-}
-
-interface PS_panels {
-  print: Panel;
-  scan: Panel;
-}
+import {
+  PS_dates,
+  PS_panels,
+  PrinterCardContextProps,
+} from "@/Pages/Printer/utils/interfaces";
 
 const defaultDates: PS_dates = {
   print: {
@@ -51,12 +33,7 @@ const defaultPanels: PS_panels = {
   },
 };
 
-const PrinterCardContext = createContext<{
-  dates: PS_dates;
-  setDates: React.Dispatch<React.SetStateAction<PS_dates>>;
-  panels: PS_panels;
-  setPanels: React.Dispatch<React.SetStateAction<PS_panels>>;
-}>({
+const PrinterCardContext = createContext<PrinterCardContextProps>({
   dates: defaultDates,
   setDates: () => {},
   panels: defaultPanels,

@@ -1,22 +1,26 @@
-import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
+import { FormEventHandler, useEffect, useState } from "react";
 import { Head, router, useForm } from "@inertiajs/react";
-import InputLabel from "@/Components/InputLabel";
-import TextInput from "@/Components/TextInput";
-import InputError from "@/Components/InputError";
-import { FormEventHandler, useEffect } from "react";
-import PrimaryButton from "@/Components/PrimaryButton";
-import DateInput from "@/Components/DateInput";
-import IPBool from "@/Components/IPBool";
-import { useState } from "react";
+
+/////////////////////////////////////////////////////////
+
 import IP from "@/Components/IP";
+import IPBool from "@/Components/IPBool";
+import TextInput from "@/Components/TextInput";
+import DateInput from "@/Components/DateInput";
+import InputError from "@/Components/InputError";
+import InputLabel from "@/Components/InputLabel";
+import PrimaryButton from "@/Components/PrimaryButton";
 import TextAreaInput from "@/Components/TextAreaInput";
-import { Printer, PrinterPages } from "@/types";
-import IsNetworkCapableDropdown from "@/Components/IsNetworkCapableDropdown";
-import DepartmentDropdown from "@/Components/DepartmentDropdown";
 import IsLocalDropdown from "@/Components/IsLocalDropdown";
-import { PagesRecordsPanel } from "@/Pages/Printer/PagesRecordsPanel";
 import HasNumberDropdown from "@/Components/HasNumberDropdown";
-import { useMotionValueEvent } from "framer-motion";
+import DepartmentDropdown from "@/Components/DepartmentDropdown";
+import IsNetworkCapableDropdown from "@/Components/IsNetworkCapableDropdown";
+
+import { Printer, PrinterPages } from "@/types";
+import { PagesRecordsPanel } from "@/Pages/Printer/PagesRecordsPanel";
+
+import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
+import { PagesRecordsContextProvider } from "@/Pages/Printer/contexts/PagesRecordsContext";
 
 export default function Edit({
   printer,
@@ -390,14 +394,18 @@ export default function Edit({
             </PrimaryButton>
           </div>
         </form>
-        <PagesRecordsPanel
-          printer_id={printer.id}
-          sums={sums[0]}
-          printer_pages_no_sum={printer_pages_no_sum}
-          setData={setData}
-          processing={processing}
-          editPrinter={editPrinter}
-        />
+        <PagesRecordsContextProvider
+          initialPages={[...printer_pages_no_sum].reverse()}
+        >
+          <PagesRecordsPanel
+            printer_id={printer.id}
+            sums={sums[0]}
+            printer_pages_no_sum={printer_pages_no_sum}
+            setData={setData}
+            processing={processing}
+            editPrinter={editPrinter}
+          />
+        </PagesRecordsContextProvider>
       </div>
     </AuthenticatedLayout>
   );
