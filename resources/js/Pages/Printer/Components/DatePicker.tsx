@@ -82,7 +82,7 @@ const PickerButton = ({
             suppressNextFocus.current = true;
             return;
           }
-          setDate({ year: date.getFullYear(), month: date.getMonth() - 1 });
+          setDate({ year: date.getFullYear(), month: date.getMonth() });
           const updated = changeRecordDatesValues(
             index,
             printerPagesNoSumReversed,
@@ -138,21 +138,23 @@ const DatePicker = ({
   index,
   isNew = false,
 }: DatePickerProps) => {
-  return pagesData.end_year === pagesData.start_year &&
-    pagesData.end_month === pagesData.start_month ? (
-    <div className="text-blue-500 px-4 mt-1 text-sm">
-      {text ? text + " " : ""}за{" "}
-      <PickerButton
-        isNew={isNew}
-        index={index}
-        pagesData={pagesData}
-        isStarting={false}
-        month={pagesData.end_month}
-        year={pagesData.end_year}
-        isSum={isSum}
-      />
-    </div>
-  ) : (
+  // return;
+  // pagesData.end_year === pagesData.start_year &&
+  //   pagesData.end_month === pagesData.start_month ? (
+  //   <div className="text-blue-500 px-4 mt-1 text-sm">
+  //     {text ? text + " " : ""}за{" "}
+  //     <PickerButton
+  //       isNew={isNew}
+  //       index={index}
+  //       pagesData={pagesData}
+  //       isStarting={false}
+  //       month={pagesData.end_month}
+  //       year={pagesData.end_year}
+  //       isSum={isSum}
+  //     />
+  //   </div>
+  // ) :
+  return (
     <div className="text-sm px-4 mt-1 text-blue-500">
       {text ? text + " " : ""}c{" "}
       <PickerButton

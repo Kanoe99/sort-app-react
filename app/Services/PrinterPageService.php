@@ -12,6 +12,10 @@ class PrinterPageService
         $dbNonSumEntries = $printerPages->slice(1)->values();
         $requestEntryCount = count($requestPages);
 
+        dd($requestPages);
+
+        //somehow i get something here as reversed
+
         $calculatedSum = ['print_pages' => 0, 'scan_pages' => 0];
         foreach ($requestPages as $index => $pageData) {
             $calculatedSum['print_pages'] += $pageData['print_pages'];

@@ -29,7 +29,6 @@ class PrinterService
 
     public function update(UpdatePrinterRequest $request, Printer $printer): Printer
     {
-        
         $attributes = $request->validated();
         $attributes = $printer->setAttributesLowercase($attributes, $request);
         $attributes = $printer->setOptionalAttributes($attributes, $request, $printer);
