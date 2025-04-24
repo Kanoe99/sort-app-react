@@ -10,13 +10,25 @@ const PagesRecordsContext = createContext<PagesRecordsContextProps>({
   setPrinterPagesNoSumReversed: () => {},
   setData: () => {},
   changeRecordDatesValues: () => [],
+  setNewPagesNoSum: () => {},
+  newPagesNoSum: {
+    end_month: 0,
+    end_year: 0,
+    start_year: 0,
+    start_month: 0,
+    isSum: 0,
+    printer_id: 0,
+    print_pages: "",
+    scan_pages: "",
+  },
 });
 
 export const PagesRecordsContextProvider: React.FC<{
   children: React.ReactNode;
   initialPages: PrinterPages[];
   setData: (key: string, value: PrinterPages[]) => void;
-}> = ({ children, initialPages, setData }) => {
+  printer_id: number;
+}> = ({ children, initialPages, setData, printer_id }) => {
   const [printerPagesNoSumReversed, setPrinterPagesNoSumReversed] =
     useState<PrinterPages[]>(initialPages);
 
@@ -33,6 +45,30 @@ export const PagesRecordsContextProvider: React.FC<{
     );
   };
 
+  const date = new Date();
+  const now = {
+    year: date.getFullYear(),
+    month: date.getMonth(),
+  };
+
+  const getNewRecordDefaults = () => {
+    const lastRecord = printerPagesNoSumReversed[0];
+    return {
+      end_year: now.year,
+      end_month: now.month,
+      start_year: lastRecord?.end_year ?? now.year,
+      start_month: lastRecord?.end_month ?? now.month,
+      isSum: 0,
+      printer_id: printer_id,
+      print_pages: "",
+      scan_pages: "",
+    };
+  };
+
+  const [newPagesNoSum, setNewPagesNoSum] = useState<PrinterPages>(
+    getNewRecordDefaults()
+  );
+
   return (
     <PagesRecordsContext.Provider
       value={{
@@ -40,6 +76,8 @@ export const PagesRecordsContextProvider: React.FC<{
         setPrinterPagesNoSumReversed,
         setData,
         changeRecordDatesValues,
+        setNewPagesNoSum,
+        newPagesNoSum,
       }}
     >
       {children}

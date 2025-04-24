@@ -23,8 +23,13 @@ const PagesRecordsPanel = ({
 }: PagesRecordsPanelProps) => {
   const contentRef = useRef<HTMLDivElement>(null);
   const [isMaxHeightReached, setIsMaxHeightReached] = useState(false);
-  const { printerPagesNoSumReversed, setPrinterPagesNoSumReversed, setData } =
-    usePagesRecordsContext();
+  const {
+    printerPagesNoSumReversed,
+    setPrinterPagesNoSumReversed,
+    setData,
+    setNewPagesNoSum,
+    newPagesNoSum,
+  } = usePagesRecordsContext();
 
   const date = new Date();
   const now = {
@@ -46,9 +51,11 @@ const PagesRecordsPanel = ({
     };
   };
 
-  const [newPagesNoSum, setNewPagesNoSum] = useState<PrinterPages>(
-    getNewRecordDefaults()
-  );
+  // setNewPagesNoSum(getNewRecordDefaults());
+
+  // const [newPagesNoSum, setNewPagesNoSum] = useState<PrinterPages>(
+  //   getNewRecordDefaults()
+  // );
 
   //on backend change
   //
@@ -83,8 +90,8 @@ const PagesRecordsPanel = ({
 
   const handleSave = (e: React.FormEvent) => {
     if (
-      newPagesNoSum.scan_pages.length !== 0 ||
-      newPagesNoSum.print_pages.length !== 0
+      (newPagesNoSum !== undefined && newPagesNoSum.scan_pages.length !== 0) ||
+      (newPagesNoSum !== undefined && newPagesNoSum.print_pages.length !== 0)
     ) {
       setPrinterPagesNoSumReversed([
         newPagesNoSum,
@@ -101,6 +108,12 @@ const PagesRecordsPanel = ({
     }
     editPrinter(e);
   };
+
+  // useEffect(
+  //   () =>
+  //     setData("printer_pages_no_sum", [...printerPagesNoSumReversed].reverse()),
+  //   [printerPagesNoSumReversed]
+  // );
 
   return (
     <div className="fixed right-5 lg:right-5 xl:right-20 2xl:right-20 3xl:right-60 z-40 pb-10">
@@ -126,10 +139,26 @@ const PagesRecordsPanel = ({
                 isNew={true}
                 pagesData={newPagesNoSum}
                 text="новая запись"
-                end_year={newPagesNoSum.end_year}
-                end_month={newPagesNoSum.end_month}
-                start_year={newPagesNoSum.start_year}
-                start_month={newPagesNoSum.start_month}
+                end_year={
+                  newPagesNoSum !== undefined
+                    ? newPagesNoSum.end_year
+                    : now.year
+                }
+                end_month={
+                  newPagesNoSum !== undefined
+                    ? newPagesNoSum.end_month
+                    : now.month
+                }
+                start_year={
+                  newPagesNoSum !== undefined
+                    ? newPagesNoSum.start_year
+                    : printerPagesNoSumReversed[0].start_year
+                }
+                start_month={
+                  newPagesNoSum !== undefined
+                    ? newPagesNoSum.start_month
+                    : printerPagesNoSumReversed[0].start_month
+                }
               />
               <div className="flex gap-2 h-fit w-full px-2 py-1 pb-2">
                 <div className="w-1/2">

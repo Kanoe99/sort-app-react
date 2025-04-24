@@ -41,6 +41,7 @@ class PrinterController extends Controller
 
   public function update(UpdatePrinterRequest $request, Printer $printer)
     {
+        // dd($request->all());
         $refreshed = (new DataRefreshService)->refreshed($request, $printer->id);
         $printer = (new PrinterService)->update($request, $printer);
     

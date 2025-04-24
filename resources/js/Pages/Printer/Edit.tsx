@@ -395,6 +395,7 @@ export default function Edit({
           </div>
         </form>
         <PagesRecordsContextProvider
+          printer_id={printer.id}
           initialPages={[...printer_pages_no_sum].reverse()}
           setData={setData}
         >

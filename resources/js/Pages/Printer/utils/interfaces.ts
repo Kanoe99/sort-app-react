@@ -49,4 +49,6 @@ export interface PagesRecordsContextProps {
     year_value: number,
     month_value: number
   ) => PrinterPages[];
+  setNewPagesNoSum: (value: PrinterPages) => void;
+  newPagesNoSum: PrinterPages;
 }

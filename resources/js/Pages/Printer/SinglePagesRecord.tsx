@@ -1,3 +1,7 @@
+import { useEffect } from "react";
+
+/////////////////////////////////////////////////////////
+
 import { PrinterPages } from "@/types";
 import { DatePicker } from "@/Pages/Printer/Components/DatePicker";
 import PrintPagesInput from "@/Pages/Printer/Components/PrintPagesInput";
@@ -21,6 +25,12 @@ const SinglePagesRecord = ({
 }: SinglePagesRecordProps) => {
   const { printerPagesNoSumReversed, setPrinterPagesNoSumReversed, setData } =
     usePagesRecordsContext();
+
+  // useEffect(
+  //   () =>
+  //     setData("printer_pages_no_sum", [...printerPagesNoSumReversed].reverse()),
+  //   [printerPagesNoSumReversed]
+  // );
 
   return (
     <div className="flex flex-col gap-1 h-fit max-h-[40rem] px-2 py-1 pb-2 rounded-md bg-white/5 border-[1px] border-black">

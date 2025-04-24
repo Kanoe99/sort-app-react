@@ -11,8 +11,8 @@ class PrinterPageService
         $printerPages = $printer->printerPages;
         $dbNonSumEntries = $printerPages->slice(1)->values();
         $requestEntryCount = count($requestPages);
-
-        dd($requestPages);
+        
+        // dd($requestPages);
 
         //somehow i get something here as reversed
 
@@ -28,6 +28,10 @@ class PrinterPageService
                     $dbEntry->update([
                         'print_pages' => $pageData['print_pages'] ?? '',
                         'scan_pages' => $pageData['scan_pages'] ?? '',
+                        'start_month' => $pageData['start_month'],
+                        'start_year' => $pageData['start_year'],
+                        'end_month' => $pageData['end_month'],
+                        'end_year' => $pageData['end_year'],
                     ]);
                 } else {
                     $dbEntry->delete();

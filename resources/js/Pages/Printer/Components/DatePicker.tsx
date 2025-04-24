@@ -45,13 +45,17 @@ const PickerButton = ({
   };
   const suppressNextFocus = useRef(false);
   const [isOpened, setIsOpened] = useState<boolean>(false);
-  const [dates, setDate] = useState<{ year: number; month: number }>({
+  const [date, setDate] = useState<{ year: number; month: number }>({
     year: year,
     month: month,
   });
 
-  const { printerPagesNoSumReversed, setData, changeRecordDatesValues } =
-    usePagesRecordsContext();
+  const {
+    setNewPagesNoSum,
+    printerPagesNoSumReversed,
+    setData,
+    changeRecordDatesValues,
+  } = usePagesRecordsContext();
 
   useEffect(() => {
     setDate({ year, month });
@@ -68,14 +72,12 @@ const PickerButton = ({
         handleCalendrier(isSum);
       }}
     >
-      {isStarting ? startingMonths[dates.month] : months[dates.month]}{" "}
-      {dates.year}{" "}
+      {isStarting ? startingMonths[date.month] : months[date.month]} {date.year}{" "}
       <input
         tabIndex={-1}
         onChange={(e) => {
           const dateStr = e.target.value;
           const date = new Date(dateStr);
-          // console.log("date month: ", date.getMonth());
           if (isNaN(date.getTime())) {
             setDate({ year: year, month: month });
             setIsOpened(false);
@@ -83,15 +85,17 @@ const PickerButton = ({
             return;
           }
           setDate({ year: date.getFullYear(), month: date.getMonth() });
-          const updated = changeRecordDatesValues(
-            index,
-            printerPagesNoSumReversed,
-            isStarting ? "start_year" : "end_year",
-            isStarting ? "start_month" : "end_month",
-            date.getFullYear(),
-            date.getMonth()
-          );
-          const new_updated = [
+          const updated = [
+            ...changeRecordDatesValues(
+              index,
+              printerPagesNoSumReversed,
+              isStarting ? "start_year" : "end_year",
+              isStarting ? "start_month" : "end_month",
+              date.getFullYear(),
+              date.getMonth()
+            ),
+          ].reverse();
+          const new_entry = [
             ...[...printerPagesNoSumReversed].reverse(),
             {
               ...pagesData,
@@ -107,7 +111,22 @@ const PickerButton = ({
             },
           ];
 
-          const values: PrinterPages[] = isNew ? new_updated : updated;
+          isNew
+            ? setNewPagesNoSum({
+                ...pagesData,
+                ...(isStarting
+                  ? {
+                      start_year: date.getFullYear(),
+                      start_month: date.getMonth(),
+                    }
+                  : {
+                      end_year: date.getFullYear(),
+                      end_month: date.getMonth(),
+                    }),
+              })
+            : "";
+
+          const values: PrinterPages[] = isNew ? new_entry : updated;
           setData("printer_pages_no_sum", values);
           // const records = changeRecordDatesValues();
           setIsOpened(false);
