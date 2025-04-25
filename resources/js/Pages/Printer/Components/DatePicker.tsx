@@ -52,6 +52,7 @@ const PickerButton = ({
 
   const {
     setNewPagesNoSum,
+    setPrinterPagesNoSumReversed,
     printerPagesNoSumReversed,
     setData,
     changeRecordDatesValues,
@@ -124,7 +125,7 @@ const PickerButton = ({
                       end_month: date.getMonth(),
                     }),
               })
-            : "";
+            : setPrinterPagesNoSumReversed([...updated].reverse());
 
           const values: PrinterPages[] = isNew ? new_entry : updated;
           setData("printer_pages_no_sum", values);
