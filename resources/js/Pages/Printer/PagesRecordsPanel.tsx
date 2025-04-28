@@ -12,9 +12,11 @@ interface PagesRecordsPanelProps {
   sums: PrinterPages;
   printer_id: number;
   hasRecords: boolean;
+  errors: Record<string, string>;
 }
 
 const PagesRecordsPanel = ({
+  errors,
   hasRecords,
   sums,
   processing,
@@ -139,26 +141,6 @@ const PagesRecordsPanel = ({
                 isNew={true}
                 pagesData={newPagesNoSum}
                 text="новая запись"
-                end_year={
-                  newPagesNoSum !== undefined
-                    ? newPagesNoSum.end_year
-                    : now.year
-                }
-                end_month={
-                  newPagesNoSum !== undefined
-                    ? newPagesNoSum.end_month
-                    : now.month
-                }
-                start_year={
-                  newPagesNoSum !== undefined
-                    ? newPagesNoSum.start_year
-                    : printerPagesNoSumReversed[0].start_year
-                }
-                start_month={
-                  newPagesNoSum !== undefined
-                    ? newPagesNoSum.start_month
-                    : printerPagesNoSumReversed[0].start_month
-                }
               />
               <div className="flex gap-2 h-fit w-full px-2 py-1 pb-2">
                 <div className="w-1/2">
@@ -224,41 +206,11 @@ const PagesRecordsPanel = ({
               </div>
               <DatePicker
                 index={0}
-                pagesData={{
-                  ...printerPagesNoSumReversed[0],
-                  start_month:
-                    printerPagesNoSumReversed[
-                      printerPagesNoSumReversed.length - 1
-                    ].start_month,
-                  start_year:
-                    printerPagesNoSumReversed[
-                      printerPagesNoSumReversed.length - 1
-                    ].start_year,
-                }}
+                pagesData={sums}
                 text="всего"
                 isSum={true}
-                end_year={
-                  hasRecords ? printerPagesNoSumReversed[0].end_year : now.year
-                }
-                end_month={
-                  hasRecords
-                    ? printerPagesNoSumReversed[0].end_month
-                    : now.month
-                }
-                start_year={
-                  hasRecords
-                    ? printerPagesNoSumReversed[
-                        printerPagesNoSumReversed.length - 1
-                      ].start_year
-                    : now.year
-                }
-                start_month={
-                  hasRecords
-                    ? printerPagesNoSumReversed[
-                        printerPagesNoSumReversed.length - 1
-                      ].start_month
-                    : now.month
-                }
+                start_year={sums.start_year}
+                start_month={sums.start_month}
               />
             </div>
           </div>
@@ -274,6 +226,7 @@ const PagesRecordsPanel = ({
           >
             {printerPagesNoSumReversed.map((printer_pages, index) => (
               <SinglePagesRecord
+                errors={errors}
                 printer_pages={printer_pages}
                 key={`${printer_pages.start_year}-${printer_pages.start_month}-${index}`}
                 index={index}

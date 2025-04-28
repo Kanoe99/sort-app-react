@@ -394,13 +394,15 @@ export default function Edit({
             </PrimaryButton>
           </div>
         </form>
+
         <PagesRecordsContextProvider
           printer_id={printer.id}
           initialPages={[...printer_pages_no_sum].reverse()}
           setData={setData}
         >
           <PagesRecordsPanel
-            hasRecords={printer_pages_no_sum.length > 0}
+            errors={errors}
+            hasRecords={printer_pages_no_sum.length !== 0}
             printer_id={printer.id}
             sums={sums[0]}
             processing={processing}

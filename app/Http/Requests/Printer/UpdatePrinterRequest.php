@@ -21,7 +21,9 @@ class UpdatePrinterRequest extends FormRequest {
             'isIPv4' => ['required', 'boolean'],
             'printer_pages_no_sum' => ['required', 'array'],
             'printer_pages_no_sum.*.print_pages' => ['numeric', 'nullable', 'max:999999999999999'],
-            'printer_pages_no_sum.*.scan_pages' => ['numeric', 'nullable', 'max:999999999999999']
+            'printer_pages_no_sum.*.scan_pages' => ['numeric', 'nullable', 'max:999999999999999'],
+            'printer_pages_no_sum.*.start_year' => ['numeric', 'required', 'max:' . date('Y')],
+            'printer_pages_no_sum.*.end_year' => ['numeric', 'required', 'max:' . date('Y')],
         ];
     }
 
@@ -49,6 +51,8 @@ class UpdatePrinterRequest extends FormRequest {
             'number.required' => 'Укажите номер принтера.',
             'number.max' => 'Номер поменьше надо (максимум: 999999999999999)',
             'number.unique' => 'Инвентарный номер уже существует!',
+            'printer_pages_no_sum.*.start_year.max' => 'Год не может быть больше текущего!',
+            'printer_pages_no_sum.*.end_year.max' => 'Год не может быть больше текущего!',
         ];
     }
 }

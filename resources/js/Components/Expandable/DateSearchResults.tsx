@@ -64,8 +64,8 @@ const DateSearchResults = ({
               className="flex flex-col w-full gap-1 rounded-md px-2 py-1 outline outline-1 outline-neutral-muted"
             >
               <p>
-                c {startingMonths[startMonths[index] - 1]} {startYears[index]}{" "}
-                по {months[endMonths[index] - 1]} {endYears[index]}
+                c {startingMonths[startMonths[index]]} {startYears[index]} по{" "}
+                {months[endMonths[index]]} {endYears[index]}
               </p>
               <div className="flex gap-5 items-end">
                 <p className="bg-white/5 w-fit outline outline-1 px-2 py-1 rounded-md outline-neutral-muted">

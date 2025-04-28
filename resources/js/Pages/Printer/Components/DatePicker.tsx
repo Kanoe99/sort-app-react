@@ -7,10 +7,8 @@ import { months, startingMonths } from "@/utils/months";
 import { usePagesRecordsContext } from "@/Pages/Printer/contexts/PagesRecordsContext";
 
 interface DatePickerProps {
-  end_year: number;
-  end_month: number;
-  start_year: number;
-  start_month: number;
+  start_year?: number;
+  start_month?: number;
   text?: string;
   isSum?: boolean;
   pagesData: PrinterPages;
@@ -50,6 +48,10 @@ const PickerButton = ({
     month: month,
   });
 
+  const [errors, setErrors] = useState<string | null>(null);
+
+  //move this into context
+
   const {
     setNewPagesNoSum,
     setPrinterPagesNoSumReversed,
@@ -59,10 +61,16 @@ const PickerButton = ({
   } = usePagesRecordsContext();
 
   useEffect(() => {
-    setDate({ year, month });
+    year * (month + 1) > now.year * (now.month + 1)
+      ? setErrors("Дата не может быть больше текущей!")
+      : setDate({ year, month });
   }, [year, month]);
 
-  // console.log("pagesData:", pagesData);
+  const currentDate = new Date();
+  const now = {
+    year: currentDate.getFullYear(),
+    month: currentDate.getMonth(),
+  };
 
   return (
     <span
