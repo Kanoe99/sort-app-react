@@ -4,7 +4,8 @@ import { useEffect, useRef, useState } from "react";
 
 import { PrinterPages } from "@/types";
 import { months, startingMonths } from "@/utils/months";
-import { usePagesRecordsContext } from "@/Pages/Printer/contexts/PagesRecordsContext";
+import { useEditPagesRecordsContext } from "@/Pages/Printer/contexts/EditPagesRecordsContext";
+import { now } from "@/utils/currentDate";
 
 interface DatePickerProps {
   start_year?: number;
@@ -48,8 +49,6 @@ const PickerButton = ({
     month: month,
   });
 
-  const [errors, setErrors] = useState<string | null>(null);
-
   //move this into context
 
   const {
@@ -58,19 +57,18 @@ const PickerButton = ({
     printerPagesNoSumReversed,
     setData,
     changeRecordDatesValues,
-  } = usePagesRecordsContext();
+  } = useEditPagesRecordsContext();
 
   useEffect(() => {
-    year * (month + 1) > now.year * (now.month + 1)
-      ? setErrors("Дата не может быть больше текущей!")
-      : setDate({ year, month });
-  }, [year, month]);
+    const incomingDate = new Date(year, month);
+    const nowDate = new Date(now.year, now.month);
 
-  const currentDate = new Date();
-  const now = {
-    year: currentDate.getFullYear(),
-    month: currentDate.getMonth(),
-  };
+    if (incomingDate > nowDate) {
+      setDate({ year: now.year, month: now.month });
+    } else {
+      setDate({ year, month });
+    }
+  }, [year, month]);
 
   return (
     <span
@@ -87,35 +85,43 @@ const PickerButton = ({
         onChange={(e) => {
           const dateStr = e.target.value;
           const date = new Date(dateStr);
+
           if (isNaN(date.getTime())) {
-            setDate({ year: year, month: month });
+            setDate({ year, month });
             setIsOpened(false);
             suppressNextFocus.current = true;
             return;
           }
-          setDate({ year: date.getFullYear(), month: date.getMonth() });
+
+          const selectedYear = date.getFullYear();
+          const selectedMonth = date.getMonth();
+
+          // ✅ Passed validation, continue normally
+          setDate({ year: selectedYear, month: selectedMonth });
+
           const updated = [
             ...changeRecordDatesValues(
               index,
               printerPagesNoSumReversed,
               isStarting ? "start_year" : "end_year",
               isStarting ? "start_month" : "end_month",
-              date.getFullYear(),
-              date.getMonth()
+              selectedYear,
+              selectedMonth
             ),
           ].reverse();
+
           const new_entry = [
             ...[...printerPagesNoSumReversed].reverse(),
             {
               ...pagesData,
               ...(isStarting
                 ? {
-                    start_year: date.getFullYear(),
-                    start_month: date.getMonth(),
+                    start_year: selectedYear,
+                    start_month: selectedMonth,
                   }
                 : {
-                    end_year: date.getFullYear(),
-                    end_month: date.getMonth(),
+                    end_year: selectedYear,
+                    end_month: selectedMonth,
                   }),
             },
           ];
@@ -125,19 +131,19 @@ const PickerButton = ({
                 ...pagesData,
                 ...(isStarting
                   ? {
-                      start_year: date.getFullYear(),
-                      start_month: date.getMonth(),
+                      start_year: selectedYear,
+                      start_month: selectedMonth,
                     }
                   : {
-                      end_year: date.getFullYear(),
-                      end_month: date.getMonth(),
+                      end_year: selectedYear,
+                      end_month: selectedMonth,
                     }),
               })
             : setPrinterPagesNoSumReversed([...updated].reverse());
 
           const values: PrinterPages[] = isNew ? new_entry : updated;
           setData("printer_pages_no_sum", values);
-          // const records = changeRecordDatesValues();
+
           setIsOpened(false);
           suppressNextFocus.current = true;
         }}

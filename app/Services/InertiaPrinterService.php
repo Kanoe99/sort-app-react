@@ -42,7 +42,8 @@ class InertiaPrinterService{
 
     public function create(){
         return [
-            'department_heads' => (new DepartmentService)->getDepartmentHeads()
+            'department_heads' => (new DepartmentService)->getDepartmentHeads(),
+            'id'=> Printer::max('id') + 1,
         ];
     }
 }

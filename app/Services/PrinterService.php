@@ -17,6 +17,7 @@ class PrinterService
     public function store(StorPrinterRequest $request): Printer
     {
         $printer = new Printer();
+        $printer->id = Printer::max('id') + 1;
         $attributes = $request->validated();
         $attributes = $printer->setAttributesLowercase($attributes, $request);    
         $attributes = $printer->setOptionalAttributes($attributes, $request, $printer);

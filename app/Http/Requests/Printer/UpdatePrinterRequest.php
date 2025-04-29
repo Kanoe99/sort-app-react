@@ -3,6 +3,8 @@
 namespace App\Http\Requests\Printer;
 
 use Illuminate\Foundation\Http\FormRequest;
+use App\Rules\StartBeforeEnd;
+
 
 class UpdatePrinterRequest extends FormRequest {
 
@@ -24,6 +26,7 @@ class UpdatePrinterRequest extends FormRequest {
             'printer_pages_no_sum.*.scan_pages' => ['numeric', 'nullable', 'max:999999999999999'],
             'printer_pages_no_sum.*.start_year' => ['numeric', 'required', 'max:' . date('Y')],
             'printer_pages_no_sum.*.end_year' => ['numeric', 'required', 'max:' . date('Y')],
+            'printer_pages_no_sum.*' => [new StartBeforeEnd()],
         ];
     }
 

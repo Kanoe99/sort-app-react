@@ -17,10 +17,10 @@ import DepartmentDropdown from "@/Components/DepartmentDropdown";
 import IsNetworkCapableDropdown from "@/Components/IsNetworkCapableDropdown";
 
 import { Printer, PrinterPages } from "@/types";
-import { PagesRecordsPanel } from "@/Pages/Printer/PagesRecordsPanel";
+import { EditPagesRecordsPanel } from "@/Pages/Printer/EditPagesRecordsPanel";
 
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
-import { PagesRecordsContextProvider } from "@/Pages/Printer/contexts/PagesRecordsContext";
+import { EditPagesRecordsContextProvider } from "@/Pages/Printer/contexts/EditPagesRecordsContext";
 
 export default function Edit({
   printer,
@@ -395,20 +395,20 @@ export default function Edit({
           </div>
         </form>
 
-        <PagesRecordsContextProvider
+        <EditPagesRecordsContextProvider
           printer_id={printer.id}
           initialPages={[...printer_pages_no_sum].reverse()}
           setData={setData}
         >
-          <PagesRecordsPanel
+          <EditPagesRecordsPanel
             errors={errors}
             hasRecords={printer_pages_no_sum.length !== 0}
             printer_id={printer.id}
             sums={sums[0]}
             processing={processing}
-            editPrinter={editPrinter}
+            printerAction={editPrinter}
           />
-        </PagesRecordsContextProvider>
+        </EditPagesRecordsContextProvider>
       </div>
     </AuthenticatedLayout>
   );

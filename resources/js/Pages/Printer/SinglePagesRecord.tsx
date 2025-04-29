@@ -5,7 +5,7 @@ import { useEffect } from "react";
 import { PrinterPages } from "@/types";
 import { DatePicker } from "@/Pages/Printer/Components/DatePicker";
 import PrintPagesInput from "@/Pages/Printer/Components/PrintPagesInput";
-import { usePagesRecordsContext } from "@/Pages/Printer/contexts/PagesRecordsContext";
+import { useEditPagesRecordsContext } from "@/Pages/Printer/contexts/EditPagesRecordsContext";
 import InputError from "@/Components/InputError";
 
 interface SinglePagesRecordProps {
@@ -27,7 +27,7 @@ const SinglePagesRecord = ({
   changePrinterPagesValues,
 }: SinglePagesRecordProps) => {
   const { printerPagesNoSumReversed, setPrinterPagesNoSumReversed, setData } =
-    usePagesRecordsContext();
+    useEditPagesRecordsContext();
 
   // useEffect(
   //   () =>
@@ -61,7 +61,6 @@ const SinglePagesRecord = ({
               e.target.value,
               index
             );
-            onlyNumbers(e.target.value);
             setPrinterPagesNoSumReversed(records);
             setData("printer_pages_no_sum", [...records].reverse());
           }}
@@ -106,11 +105,7 @@ const SinglePagesRecord = ({
       <div className="px-2">
         <InputError
           className="mt-2 px-2"
-          message={errors[`printer_pages_no_sum.${errorIndex}.end_year`]}
-        />
-        <InputError
-          className="mt-2 px-2"
-          message={errors[`printer_pages_no_sum.${errorIndex}.start_year`]}
+          message={errors[`printer_pages_no_sum.${errorIndex}`]}
         />
       </div>
     </div>

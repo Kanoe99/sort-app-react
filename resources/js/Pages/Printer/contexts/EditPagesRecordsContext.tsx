@@ -4,8 +4,9 @@ import React, { createContext, useContext, useState } from "react";
 
 import { PrinterPages } from "@/types";
 import { PagesRecordsContextProps } from "@/Pages/Printer/utils/interfaces";
+import { now } from "@/utils/currentDate";
 
-const PagesRecordsContext = createContext<PagesRecordsContextProps>({
+const EditPagesRecordsContext = createContext<PagesRecordsContextProps>({
   printerPagesNoSumReversed: [],
   setPrinterPagesNoSumReversed: () => {},
   setData: () => {},
@@ -23,7 +24,7 @@ const PagesRecordsContext = createContext<PagesRecordsContextProps>({
   },
 });
 
-export const PagesRecordsContextProvider: React.FC<{
+export const EditPagesRecordsContextProvider: React.FC<{
   children: React.ReactNode;
   initialPages: PrinterPages[];
   setData: (key: string, value: PrinterPages[]) => void;
@@ -45,12 +46,6 @@ export const PagesRecordsContextProvider: React.FC<{
     );
   };
 
-  const date = new Date();
-  const now = {
-    year: date.getFullYear(),
-    month: date.getMonth(),
-  };
-
   const getNewRecordDefaults = () => {
     const lastRecord = printerPagesNoSumReversed[0];
     return {
@@ -70,7 +65,7 @@ export const PagesRecordsContextProvider: React.FC<{
   );
 
   return (
-    <PagesRecordsContext.Provider
+    <EditPagesRecordsContext.Provider
       value={{
         printerPagesNoSumReversed,
         setPrinterPagesNoSumReversed,
@@ -81,8 +76,9 @@ export const PagesRecordsContextProvider: React.FC<{
       }}
     >
       {children}
-    </PagesRecordsContext.Provider>
+    </EditPagesRecordsContext.Provider>
   );
 };
 
-export const usePagesRecordsContext = () => useContext(PagesRecordsContext);
+export const useEditPagesRecordsContext = () =>
+  useContext(EditPagesRecordsContext);

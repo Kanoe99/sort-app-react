@@ -4,25 +4,26 @@ import PrintPagesInput from "@/Pages/Printer/Components/PrintPagesInput";
 import { PrinterPages } from "@/types";
 import { SinglePagesRecord } from "@/Pages/Printer/SinglePagesRecord";
 import { DatePicker } from "@/Pages/Printer/Components/DatePicker";
-import { usePagesRecordsContext } from "@/Pages/Printer/contexts/PagesRecordsContext";
+import { useEditPagesRecordsContext } from "@/Pages/Printer/contexts/EditPagesRecordsContext";
+import { now } from "@/utils/currentDate";
 
-interface PagesRecordsPanelProps {
+interface EditPagesRecordsPanelProps {
   processing: boolean;
-  editPrinter: FormEventHandler;
+  printerAction: FormEventHandler;
   sums: PrinterPages;
   printer_id: number;
   hasRecords: boolean;
   errors: Record<string, string>;
 }
 
-const PagesRecordsPanel = ({
+const EditPagesRecordsPanel = ({
   errors,
   hasRecords,
   sums,
   processing,
-  editPrinter,
+  printerAction,
   printer_id,
-}: PagesRecordsPanelProps) => {
+}: EditPagesRecordsPanelProps) => {
   const contentRef = useRef<HTMLDivElement>(null);
   const [isMaxHeightReached, setIsMaxHeightReached] = useState(false);
   const {
@@ -31,13 +32,7 @@ const PagesRecordsPanel = ({
     setData,
     setNewPagesNoSum,
     newPagesNoSum,
-  } = usePagesRecordsContext();
-
-  const date = new Date();
-  const now = {
-    year: date.getFullYear(),
-    month: date.getMonth(),
-  };
+  } = useEditPagesRecordsContext();
 
   const getNewRecordDefaults = () => {
     const lastRecord = printerPagesNoSumReversed[0];
@@ -53,11 +48,11 @@ const PagesRecordsPanel = ({
     };
   };
 
-  // setNewPagesNoSum(getNewRecordDefaults());
-
-  // const [newPagesNoSum, setNewPagesNoSum] = useState<PrinterPages>(
-  //   getNewRecordDefaults()
-  // );
+  const onlyNumbers = (value: string) => {
+    const regex = /[^0-9]+/g;
+    const result = value.replace(regex, "");
+    return result;
+  };
 
   //on backend change
   //
@@ -108,7 +103,7 @@ const PagesRecordsPanel = ({
         ),
       ]);
     }
-    editPrinter(e);
+    printerAction(e);
   };
 
   // useEffect(
@@ -147,7 +142,7 @@ const PagesRecordsPanel = ({
                   <PrintPagesInput
                     type="text"
                     placeholder="5872"
-                    value={newPagesNoSum.print_pages}
+                    value={onlyNumbers(newPagesNoSum.print_pages)}
                     onChange={(e) => {
                       const updated = {
                         ...newPagesNoSum,
@@ -166,7 +161,7 @@ const PagesRecordsPanel = ({
                   <PrintPagesInput
                     type="text"
                     placeholder="5873"
-                    value={newPagesNoSum.scan_pages}
+                    value={onlyNumbers(newPagesNoSum.scan_pages)}
                     onChange={(e) => {
                       const updated = {
                         ...newPagesNoSum,
@@ -248,4 +243,4 @@ const PagesRecordsPanel = ({
   );
 };
 
-export { PagesRecordsPanel };
+export { EditPagesRecordsPanel };

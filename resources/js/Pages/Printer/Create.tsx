@@ -1,24 +1,33 @@
-import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
 import { Head, useForm } from "@inertiajs/react";
-import InputLabel from "@/Components/InputLabel";
-import TextInput from "@/Components/TextInput";
-import InputError from "@/Components/InputError";
-import { FormEventHandler, useEffect } from "react";
-import PrimaryButton from "@/Components/PrimaryButton";
-import DateInput from "@/Components/DateInput";
-import IPBool from "@/Components/IPBool";
-import { useState } from "react";
+import { FormEventHandler, useEffect, useState } from "react";
+
+///////////////////////////////////////////////////////////////
+
 import IP from "@/Components/IP";
-import TextAreaInput from "@/Components/TextAreaInput";
-import DepartmentDropdown from "@/Components/DepartmentDropdown";
-import IsLocalDropdown from "@/Components/IsLocalDropdown";
-import IsNetworkCapableDropdown from "@/Components/IsNetworkCapableDropdown";
+import IPBool from "@/Components/IPBool";
+import TextInput from "@/Components/TextInput";
+import DateInput from "@/Components/DateInput";
+import InputError from "@/Components/InputError";
+import InputLabel from "@/Components/InputLabel";
 import NumberInput from "@/Components/NumberInput";
+import TextAreaInput from "@/Components/TextAreaInput";
+import PrimaryButton from "@/Components/PrimaryButton";
+import IsLocalDropdown from "@/Components/IsLocalDropdown";
 import HasNumberDropdown from "@/Components/HasNumberDropdown";
+import DepartmentDropdown from "@/Components/DepartmentDropdown";
+import IsNetworkCapableDropdown from "@/Components/IsNetworkCapableDropdown";
+
+import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
+import { CreatePagesRecordsPanel } from "@/Pages/Printer/CreatePagesRecordsPanel";
+import { CreatePagesRecordsContextProvider } from "@/Pages/Printer/contexts/CreatePagesRecordsContext";
+
+import { now } from "@/utils/currentDate";
 
 export default function Show({
   department_heads,
+  id,
 }: {
+  id: number;
   department_heads: string[];
 }) {
   const { data, setData, processing, errors, post } = useForm<{
@@ -80,6 +89,32 @@ export default function Show({
       preserveScroll: true,
     });
   };
+  const [sums, printer_pages_no_sum] = [
+    [
+      {
+        end_month: now.month,
+        end_year: now.year,
+        start_year: now.year,
+        start_month: now.month,
+        isSum: 0,
+        printer_id: id,
+        print_pages: "0",
+        scan_pages: "0",
+      },
+    ],
+    [
+      {
+        end_month: now.month,
+        end_year: now.year,
+        start_year: now.year,
+        start_month: now.month,
+        isSum: 0,
+        printer_id: id,
+        print_pages: "0",
+        scan_pages: "0",
+      },
+    ],
+  ];
 
   return (
     <AuthenticatedLayout
@@ -339,6 +374,20 @@ export default function Show({
             </PrimaryButton>
           </div>
         </form>
+        <CreatePagesRecordsContextProvider
+          printer_id={id}
+          initialPages={[...printer_pages_no_sum].reverse()}
+          setData={setData}
+        >
+          <CreatePagesRecordsPanel
+            errors={errors}
+            hasRecords={printer_pages_no_sum.length !== 0}
+            printer_id={9001}
+            sums={sums[0]}
+            processing={processing}
+            printerAction={createPrinter}
+          />
+        </CreatePagesRecordsContextProvider>
       </div>
     </AuthenticatedLayout>
   );
