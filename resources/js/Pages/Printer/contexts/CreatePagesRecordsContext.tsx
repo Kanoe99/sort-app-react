@@ -26,12 +26,12 @@ const CreatePagesRecordsContext = createContext<PagesRecordsContextProps>({
 
 export const CreatePagesRecordsContextProvider: React.FC<{
   children: React.ReactNode;
-  initialPages: PrinterPages[];
   setData: (key: string, value: PrinterPages[]) => void;
   printer_id: number;
-}> = ({ children, initialPages, setData, printer_id }) => {
-  const [printerPagesNoSumReversed, setPrinterPagesNoSumReversed] =
-    useState<PrinterPages[]>(initialPages);
+}> = ({ children, setData, printer_id }) => {
+  const [printerPagesNoSumReversed, setPrinterPagesNoSumReversed] = useState<
+    PrinterPages[]
+  >([]);
 
   const changeRecordDatesValues = (
     index: number,

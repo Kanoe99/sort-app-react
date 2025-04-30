@@ -37,25 +37,31 @@ export default function Edit({
     useForm<{
       type: string;
       model: string;
+      hasNumber: boolean;
       number: number | null;
+      network_capable: string;
+      department_head: string;
       location: string;
+      isLocal: boolean;
+
       status: string;
       fixDate: string;
       IP: string;
       comment: string;
       isIPv4: boolean;
-      network_capable: string;
-      department_head: string;
       PC_name: string;
       printer_pages_no_sum: PrinterPages[];
     }>({
-      PC_name: printer.PC_name,
-      department_head: printer.department_head,
-      network_capable: printer.network_capable,
       type: printer.type,
       model: printer.model,
+      hasNumber: printer.number !== null,
       number: printer.number,
+      network_capable: printer.network_capable,
+      department_head: printer.department_head,
       location: printer.location,
+      isLocal: printer.PC_name ? true : false,
+
+      PC_name: printer.PC_name,
       status: printer.status,
       IP: printer.IP,
       comment: printer.comment,

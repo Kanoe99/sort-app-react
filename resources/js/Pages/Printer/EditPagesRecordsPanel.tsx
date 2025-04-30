@@ -18,7 +18,6 @@ interface EditPagesRecordsPanelProps {
 
 const EditPagesRecordsPanel = ({
   errors,
-  hasRecords,
   sums,
   processing,
   printerAction,

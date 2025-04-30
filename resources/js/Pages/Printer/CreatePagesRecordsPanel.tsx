@@ -1,24 +1,21 @@
-import { FormEventHandler, useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import PrimaryButton from "@/Components/PrimaryButton";
 import PrintPagesInput from "@/Pages/Printer/Components/PrintPagesInput";
 import { PrinterPages } from "@/types";
 import { SinglePagesRecord } from "@/Pages/Printer/SinglePagesRecord";
 import { DatePicker } from "@/Pages/Printer/Components/DatePicker";
 import { useCreatePagesRecordsContext } from "@/Pages/Printer/contexts/CreatePagesRecordsContext";
+import { now } from "@/utils/currentDate";
 // import { now } from "@/utils/currentDate";
 
 interface CreatePagesRecordsPanelProps {
   processing: boolean;
-  printerAction: FormEventHandler;
-  sums: PrinterPages;
   printer_id: number;
-  hasRecords: boolean;
   errors: Record<string, string>;
 }
 
 const CreatePagesRecordsPanel = ({
   errors,
-  sums,
   processing,
 }: CreatePagesRecordsPanelProps) => {
   const contentRef = useRef<HTMLDivElement>(null);
@@ -37,7 +34,24 @@ const CreatePagesRecordsPanel = ({
     return result;
   };
 
-  //on backend change
+  const sums: PrinterPages = {
+    end_month: 0,
+    end_year: 0,
+    start_year: 0,
+    start_month: 0,
+    isSum: 0,
+    printer_id: 0,
+    print_pages: "",
+    scan_pages: "",
+  };
+
+  useEffect(() => {
+    printerPagesNoSumReversed.forEach((item) => {
+      sums.print_pages += item.print_pages;
+      sums.scan_pages += item.scan_pages;
+    });
+  }, [printerPagesNoSumReversed]);
+
   //
   // clear new page entry
 
@@ -83,6 +97,17 @@ const CreatePagesRecordsPanel = ({
         ),
       ]);
     }
+    console.log("handleAdd was clicked");
+    setNewPagesNoSum({
+      end_year: now.year,
+      end_month: now.month,
+      start_year: printerPagesNoSumReversed[0].end_year,
+      start_month: printerPagesNoSumReversed[0].end_year,
+      isSum: 0,
+      printer_id: 0,
+      print_pages: "",
+      scan_pages: "",
+    });
   };
 
   return (

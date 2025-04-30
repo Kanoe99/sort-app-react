@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 
 use App\Models\Printer;
 
+use App\Http\Requests\Printer\StorePrinterRequest;
 use App\Http\Requests\Printer\UpdatePrinterRequest;
 
 use App\Services\PrinterService;
@@ -34,6 +35,7 @@ class PrinterController extends Controller
 
   public function store(StorePrinterRequest $request)
     {
+      dd($request->all());
       $printer = (new PrinterService)->store($request);
     
       return redirect('/main')->with(['success' => 'Принтер добавлен.', 'refreshed' => true, 'time'=>time()]);
@@ -41,6 +43,8 @@ class PrinterController extends Controller
 
   public function update(UpdatePrinterRequest $request, Printer $printer)
     {
+        // dd($request->all());
+
         $refreshed = (new DataRefreshService)->refreshed($request, $printer->id);
         $printer = (new PrinterService)->update($request, $printer);
     

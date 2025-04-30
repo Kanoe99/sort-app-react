@@ -89,32 +89,6 @@ export default function Show({
       preserveScroll: true,
     });
   };
-  const [sums, printer_pages_no_sum] = [
-    [
-      {
-        end_month: now.month,
-        end_year: now.year,
-        start_year: now.year,
-        start_month: now.month,
-        isSum: 0,
-        printer_id: id,
-        print_pages: "0",
-        scan_pages: "0",
-      },
-    ],
-    [
-      {
-        end_month: now.month,
-        end_year: now.year,
-        start_year: now.year,
-        start_month: now.month,
-        isSum: 0,
-        printer_id: id,
-        print_pages: "0",
-        scan_pages: "0",
-      },
-    ],
-  ];
 
   return (
     <AuthenticatedLayout
@@ -374,20 +348,13 @@ export default function Show({
             </PrimaryButton>
           </div>
         </form>
-        <CreatePagesRecordsContextProvider
-          printer_id={id}
-          initialPages={[...printer_pages_no_sum].reverse()}
-          setData={setData}
-        >
+        {/* <CreatePagesRecordsContextProvider printer_id={id} setData={setData}>
           <CreatePagesRecordsPanel
             errors={errors}
-            hasRecords={printer_pages_no_sum.length !== 0}
-            printer_id={9001}
-            sums={sums[0]}
+            printer_id={id}
             processing={processing}
-            printerAction={createPrinter}
           />
-        </CreatePagesRecordsContextProvider>
+        </CreatePagesRecordsContextProvider> */}
       </div>
     </AuthenticatedLayout>
   );

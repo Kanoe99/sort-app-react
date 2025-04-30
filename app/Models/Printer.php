@@ -108,7 +108,7 @@ class Printer extends Model
             $attributes['IP'] = null;
         }
         
-        if($request->PC_name){
+        if($request->isLocal){
             // dd('im here');
             $request->validate([
                 'PC_name' => ['required', 'string', 'max:255']

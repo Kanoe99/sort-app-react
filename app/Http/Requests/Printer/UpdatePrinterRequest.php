@@ -10,11 +10,12 @@ class UpdatePrinterRequest extends FormRequest {
 
     public function rules(): array {
         return [
-            'department_head' => ['required', 'string', 'max:255'],
-            'network_capable' => ['required', 'string', 'max:255'],
             'type' => ['required', 'string', 'max:255'],
             'model' => ['required', 'string', 'max:255'],
+            'network_capable' => ['required', 'string', 'max:255'],
+            'department_head' => ['required', 'string', 'max:255'],
             'location' => ['required', 'string', 'max:255'],
+
             'status' => ['required', 'string', 'max:255'],
             'comment' => ['nullable', 'string', 'max:255'],
             'tags' => ['nullable', 'string'],
@@ -32,11 +33,16 @@ class UpdatePrinterRequest extends FormRequest {
 
     public function messages(): array {
         return [
-            'department_head.required' => 'Укажите ответственное лицо.',
+            'type.required' => 'Укажите тип оборудования.',
+            'model.required' => 'Укажите модель оборудования.',
+            'number.required' => 'Укажите номер принтера.',
+            'number.max' => 'Номер поменьше надо (максимум: 999999999999999)',
+            'number.unique' => 'Инвентарный номер уже существует!',
             'network_capable.required' => 'Есть ли возможность сделать сетевым?',
-            'type.required' => 'Укажите модель принтера.',
-            'model.required' => 'Укажите модель принтера.',
+            'department_head.required' => 'Укажите ответственное лицо.',
             'location.required' => 'Укажите локацию принтера.',
+            'PC_name.required' => 'Укажите наименование компьютера.',
+
             'status.required' => 'Укажите статус принтера.',
             'logo.*.mimes' => 'Только PNG, JPG или JPEG!',
             'isIPv4.required' => 'Требуется указать тип IP адреса!',
@@ -50,10 +56,6 @@ class UpdatePrinterRequest extends FormRequest {
             'IP.required' => 'Укажите IP адрес принтера.',
             'IP.unique' => 'Данный IP адрес уже занят.',
             'IP.ip' => 'IP адрес должен быть верным.',
-            'PC_name.required' => 'Укажите наименование компьютера.',
-            'number.required' => 'Укажите номер принтера.',
-            'number.max' => 'Номер поменьше надо (максимум: 999999999999999)',
-            'number.unique' => 'Инвентарный номер уже существует!',
             'printer_pages_no_sum.*.start_year.max' => 'Год не может быть больше текущего!',
             'printer_pages_no_sum.*.end_year.max' => 'Год не может быть больше текущего!',
         ];
