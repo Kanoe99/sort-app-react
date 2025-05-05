@@ -48,7 +48,7 @@ export type Printer = {
   network_capable: string;
   type: string;
   model: string;
-  number: number;
+  number: number | null;
   location: string;
   IP: string;
   status: string;

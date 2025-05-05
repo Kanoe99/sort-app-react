@@ -89,6 +89,7 @@ export default function Show({
 
       <div className="flex 3xl:ml-[20rem] 2xl:ml-[10rem] xl:ml-[5rem] justify-start gap-8">
         <CreateMainForm
+          data={data}
           createPrinter={createPrinter}
           clearErrors={clearErrors}
           reset={reset}

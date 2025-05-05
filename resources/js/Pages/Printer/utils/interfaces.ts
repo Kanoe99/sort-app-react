@@ -134,7 +134,25 @@ export interface CreateMainFormContextProps {
 
 export interface EditMainFormProps {
   editPrinter: FormEventHandler;
-  printer: Printer;
+  data: {
+    type: string;
+    model: string;
+    hasNumber: boolean;
+    number: number | null;
+    network_capable: string;
+    department_head: string;
+    location: string;
+    isLocal: boolean;
+    PC_name: string;
+    IP: string;
+    hasIP: boolean;
+    isIPv4: boolean;
+
+    status: string;
+    fixDate: string;
+    comment: string;
+    printer_pages_no_sum: PrinterPages[];
+  };
   clearErrors: () => void;
   reset: () => void;
   processing: boolean;
@@ -165,9 +183,27 @@ export interface EditMainFormProps {
 
 //CreateMainForm.tsx
 
-export interface EditMainFormProps {
-  editPrinter: FormEventHandler;
+export interface CreateMainFormProps {
+  createPrinter: FormEventHandler;
   clearErrors: () => void;
+  data: {
+    type: string;
+    model: string;
+    counter: undefined | number;
+    number: undefined | number;
+    location: string;
+    status: string;
+    fixDate: string;
+    IPBool: string;
+    IP: string;
+    comment: string;
+    isIPv4: boolean;
+    isLocal: boolean;
+    department_head: string;
+    PC_name: string;
+    network_capable: string;
+    hasNumber: boolean;
+  };
   reset: () => void;
   processing: boolean;
   department_heads: string[];

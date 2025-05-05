@@ -17,8 +17,8 @@ import DateInput from "@/Components/DateInput";
 import PrimaryButton from "@/Components/PrimaryButton";
 
 const EditMainForm = ({
+  data,
   editPrinter,
-  printer,
   clearErrors,
   reset,
   processing,
@@ -26,17 +26,17 @@ const EditMainForm = ({
   errors,
   setData,
 }: EditMainFormProps) => {
-  const [hasIP, setHasIP] = useState(printer.IP !== null);
-  const [isLocal, setIsLocal] = useState(printer.PC_name !== null);
-  const [isIPv4, setIsIPv4] = useState(printer.isIPv4);
-  const [hasNumber, setHasNumber] = useState(printer.number !== null);
+  const [hasIP, setHasIP] = useState(data.IP !== null);
+  const [isLocal, setIsLocal] = useState(data.PC_name !== null);
+  const [isIPv4, setIsIPv4] = useState(data.isIPv4);
+  const [hasNumber, setHasNumber] = useState(data.number !== null);
   const [IPData, setIPData] = useState({
-    IPv4Data: printer.isIPv4 ? printer.IP : "",
-    IPv6Data: !printer.isIPv4 ? printer.IP : "",
+    IPv4Data: data.isIPv4 ? data.IP : "",
+    IPv6Data: !data.isIPv4 ? data.IP : "",
   });
   const [isModalVisible, setIsModalVisible] = useState(false);
-  const [number, setNumber] = useState(printer.number ?? "");
-  const [PC_name, setPC_name] = useState(printer.PC_name ?? "");
+  const [number, setNumber] = useState(data.number ?? "");
+  const [PC_name, setPC_name] = useState(data.PC_name ?? "");
 
   const closeModal = ({
     clearErrors,
@@ -82,7 +82,7 @@ const EditMainForm = ({
           id="type"
           placeholder="Принтер"
           className=""
-          value={printer.type}
+          value={data.type}
           onChange={(e) => setData("type", e.target.value)}
           isFocused
           autoComplete="type"
@@ -98,7 +98,7 @@ const EditMainForm = ({
           id="model"
           placeholder="Samsung 400"
           className=""
-          value={printer.model}
+          value={data.model}
           onChange={(e) => setData("model", e.target.value)}
           isFocused
           autoComplete="model"
@@ -158,7 +158,7 @@ const EditMainForm = ({
           id="network_capable"
           className=""
           isFocused
-          network_capable={printer.network_capable}
+          network_capable={data.network_capable}
           autoComplete="network_capable"
           setData={setData}
         />
@@ -170,7 +170,7 @@ const EditMainForm = ({
         <InputLabel htmlFor="department_head" value="Ответственный" />
 
         <DepartmentDropdown
-          db_head={printer.department_head}
+          db_head={data.department_head}
           id="department_head"
           className=""
           department_heads={department_heads}
@@ -189,7 +189,7 @@ const EditMainForm = ({
           id="location"
           placeholder="318"
           className=""
-          value={printer.location}
+          value={data.location}
           onChange={(e) => setData("location", e.target.value)}
           isFocused
           autoComplete="location"
@@ -219,7 +219,7 @@ const EditMainForm = ({
             id="PC_name"
             placeholder="p66-computer"
             className=""
-            value={printer.PC_name}
+            value={data.PC_name}
             onChange={(e) => {
               setPC_name(e.target.value);
               setData("PC_name", e.target.value);
@@ -284,7 +284,7 @@ const EditMainForm = ({
         <TextAreaInput
           id="comment"
           className="block w-full"
-          value={printer.comment}
+          value={data.comment}
           onChange={(e) => setData("comment", e.target.value)}
         />
 
@@ -302,7 +302,7 @@ const EditMainForm = ({
           id=""
           placeholder="В эксплуатации"
           className=""
-          value={printer.fixDate}
+          value={data.fixDate}
           onChange={(e) => setData("fixDate", e.target.value)}
           isFocused
           autoComplete="fixDate"

@@ -1,46 +1,74 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
-//////////////////////////////////////////////
+/////////////////////////////////////////////////
 
-import DateInput from "@/Components/DateInput";
-import DepartmentDropdown from "@/Components/DepartmentDropdown";
-import HasNumberDropdown from "@/Components/HasNumberDropdown";
-import InputError from "@/Components/InputError";
-import InputLabel from "@/Components/InputLabel";
-import IP from "@/Components/IP";
-import IPBool from "@/Components/IPBool";
-import IsLocalDropdown from "@/Components/IsLocalDropdown";
-import IsNetworkCapableDropdown from "@/Components/IsNetworkCapableDropdown";
-import NumberInput from "@/Components/NumberInput";
-import PrimaryButton from "@/Components/PrimaryButton";
-import TextAreaInput from "@/Components/TextAreaInput";
-import TextInput from "@/Components/TextInput";
 import { CreateMainFormProps } from "@/Pages/Printer/utils/interfaces";
+import InputLabel from "@/Components/InputLabel";
+import TextInput from "@/Components/TextInput";
+import InputError from "@/Components/InputError";
+import HasNumberDropdown from "@/Components/HasNumberDropdown";
+import IsNetworkCapableDropdown from "@/Components/IsNetworkCapableDropdown";
+import DepartmentDropdown from "@/Components/DepartmentDropdown";
+import IsLocalDropdown from "@/Components/IsLocalDropdown";
+import IPBool from "@/Components/IPBool";
+import IP from "@/Components/IP";
+import TextAreaInput from "@/Components/TextAreaInput";
+import DateInput from "@/Components/DateInput";
+import PrimaryButton from "@/Components/PrimaryButton";
 
 const CreateMainForm = ({
   createPrinter,
+  data,
   clearErrors,
   reset,
   processing,
-  type,
-  model,
   department_heads,
-  location,
   errors,
-  data_PC_name,
-  status,
-  fixDate,
   setData,
-  comment,
 }: CreateMainFormProps) => {
-  const [hasIP, setHasIP] = useState(true);
-  const [hasNumber, setHasNumber] = useState(true);
-  const [number, setNumber] = useState("");
-  const [isLocal, setIsLocal] = useState(true);
+  const [hasIP, setHasIP] = useState(data.IP !== null);
+  const [isLocal, setIsLocal] = useState(data.PC_name !== null);
+  const [isIPv4, setIsIPv4] = useState(data.isIPv4);
+  const [hasNumber, setHasNumber] = useState(data.number !== null);
+  const [IPData, setIPData] = useState({
+    IPv4Data: data.isIPv4 ? data.IP : "",
+    IPv6Data: !data.isIPv4 ? data.IP : "",
+  });
+  const [isModalVisible, setIsModalVisible] = useState(false);
+  const [number, setNumber] = useState(data.number ?? "");
+  const [PC_name, setPC_name] = useState(data.PC_name ?? "");
 
-  //TODO: make into 1
-  const [isIPv4, setIsIPv4] = useState(true);
-  const [IPData, setIPData] = useState({ IPv4Data: "", IPv6Data: "" });
+  const closeModal = ({
+    clearErrors,
+    reset,
+  }: {
+    clearErrors: () => void;
+    reset: () => void;
+  }) => {
+    setIsModalVisible(false);
+
+    clearErrors();
+    reset();
+  };
+  useEffect(() => {
+    setData("IP", isIPv4 ? IPData.IPv4Data : IPData.IPv6Data);
+  }, [IPData]);
+
+  useEffect(() => {
+    hasNumber ? setData("number", number) : setData("number", null);
+  }, [hasNumber]);
+
+  useEffect(() => {
+    isLocal ? setData("PC_name", PC_name) : setData("PC_name", "");
+  }, [isLocal]);
+
+  useEffect(() => {
+    hasIP
+      ? //goes into IP.tsx
+        setData("IP", isIPv4 ? IPData.IPv4Data : IPData.IPv6Data)
+      : //goes into IPBool.tsx
+        setData("IP", "");
+  }, [hasIP]);
 
   return (
     <form
@@ -54,7 +82,7 @@ const CreateMainForm = ({
           id="type"
           placeholder="Принтер"
           className=""
-          value={type}
+          value={data.type}
           onChange={(e) => setData("type", e.target.value)}
           isFocused
           autoComplete="type"
@@ -62,6 +90,7 @@ const CreateMainForm = ({
 
         <InputError className="mt-2" message={errors.type} />
       </div>
+
       <div>
         <InputLabel htmlFor="model" value="Модель" />
 
@@ -69,7 +98,7 @@ const CreateMainForm = ({
           id="model"
           placeholder="Samsung 400"
           className=""
-          value={model}
+          value={data.model}
           onChange={(e) => setData("model", e.target.value)}
           isFocused
           autoComplete="model"
@@ -97,17 +126,18 @@ const CreateMainForm = ({
         <div>
           <InputLabel htmlFor="number" value="Номер" />
 
-          <NumberInput
+          <TextInput
+            type="number"
             id="number"
             placeholder="5873"
             className=""
-            value={number || ""}
+            pattern="\d*"
+            value={number}
             onChange={(e) => {
-              const value = parseInt(e.target.value);
-              if (!isNaN(value)) {
+              {
+                const value = parseInt(e.target.value);
+                setNumber(value);
                 setData("number", value);
-              } else {
-                setData("number", null);
               }
             }}
             isFocused
@@ -128,6 +158,7 @@ const CreateMainForm = ({
           id="network_capable"
           className=""
           isFocused
+          network_capable={data.network_capable}
           autoComplete="network_capable"
           setData={setData}
         />
@@ -139,7 +170,7 @@ const CreateMainForm = ({
         <InputLabel htmlFor="department_head" value="Ответственный" />
 
         <DepartmentDropdown
-          db_head={null}
+          db_head={data.department_head}
           id="department_head"
           className=""
           department_heads={department_heads}
@@ -158,7 +189,7 @@ const CreateMainForm = ({
           id="location"
           placeholder="318"
           className=""
-          value={location}
+          value={data.location}
           onChange={(e) => setData("location", e.target.value)}
           isFocused
           autoComplete="location"
@@ -171,15 +202,13 @@ const CreateMainForm = ({
         <InputLabel htmlFor="isLocal" value="Локальный?" />
 
         <IsLocalDropdown
-          setData={setData}
-          id="isLocal"
           isLocal={isLocal}
           setIsLocal={setIsLocal}
+          setData={setData}
+          id="isLocal"
           className="mt-1 block w-full py-3 rounded-xl"
           isFocused
         />
-
-        <InputError className="mt-2" message={errors.isLocal} />
       </div>
 
       {isLocal && (
@@ -190,8 +219,11 @@ const CreateMainForm = ({
             id="PC_name"
             placeholder="p66-computer"
             className=""
-            value={PC_name}
-            onChange={(e) => setData("PC_name", e.target.value)}
+            value={data.PC_name}
+            onChange={(e) => {
+              setPC_name(e.target.value);
+              setData("PC_name", e.target.value);
+            }}
             isFocused
             autoComplete="PC_name"
           />
@@ -201,30 +233,28 @@ const CreateMainForm = ({
       )}
 
       <div>
-        <InputLabel htmlFor="IPBool" value="Есть IP?" />
+        <InputLabel htmlFor="hasIP" value="Есть IP?" />
 
         <IPBool
-          setData={setData}
-          id="IPBool"
-          className="mt-1 block w-full py-3 rounded-xl"
-          isFocused
-          autoComplete="IPBool"
           hasIP={hasIP}
           setHasIP={setHasIP}
+          setData={setData}
+          id="hasIP"
+          className="mt-1 block w-full py-3 rounded-xl"
+          isFocused
+          autoComplete="hasIP"
         />
-
-        <InputError className="mt-2" message={errors.IPBool} />
       </div>
 
       {hasIP && (
         <div>
           <InputLabel htmlFor="IP" value={`${isIPv4 ? "IPv4" : "IPv6"}`} />
           <IP
+            isIPv4={isIPv4}
+            setIsIPv4={setIsIPv4}
             onChange={() => {
               setData("isIPv4", isIPv4);
             }}
-            isIPv4={isIPv4}
-            setIsIPv4={setIsIPv4}
             IPData={isIPv4 ? IPData.IPv4Data : IPData.IPv6Data}
             setIPData={setIPData}
           />
@@ -239,7 +269,7 @@ const CreateMainForm = ({
           id="status"
           placeholder="В эксплуатации"
           className=""
-          value={data.status}
+          value={status}
           onChange={(e) => setData("status", e.target.value)}
           isFocused
           autoComplete="status"

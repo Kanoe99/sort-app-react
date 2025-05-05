@@ -102,9 +102,9 @@ export default function Edit({
 
       <div className="flex 3xl:ml-[20rem] 2xl:ml-[10rem] xl:ml-[5rem] justify-start gap-8">
         <EditMainForm
+          data={data}
           editPrinter={editPrinter}
           clearErrors={clearErrors}
-          printer={printer}
           reset={reset}
           processing={processing}
           department_heads={department_heads}
