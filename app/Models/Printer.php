@@ -98,7 +98,7 @@ class Printer extends Model
             $attributes['number'] = null;
         }
 
-        if ($request->IP) {
+        if ($request->hasIP) {
             $request->validate([
                 'IP' => ['required', 'unique:printers,IP,' . $printer->id, 'ip'],
             ], $request->messages());
@@ -109,7 +109,6 @@ class Printer extends Model
         }
         
         if($request->isLocal){
-            // dd('im here');
             $request->validate([
                 'PC_name' => ['required', 'string', 'max:255']
             ], $request->messages());

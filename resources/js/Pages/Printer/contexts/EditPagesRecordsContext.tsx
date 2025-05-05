@@ -3,10 +3,10 @@ import React, { createContext, useContext, useState } from "react";
 /////////////////////////////////////////////////////////////////
 
 import { PrinterPages } from "@/types";
-import { PagesRecordsContextProps } from "@/Pages/Printer/utils/interfaces";
+import { EditPagesRecordsContextProps } from "@/Pages/Printer/utils/interfaces";
 import { now } from "@/utils/currentDate";
 
-const EditPagesRecordsContext = createContext<PagesRecordsContextProps>({
+const EditPagesRecordsContext = createContext<EditPagesRecordsContextProps>({
   printerPagesNoSumReversed: [],
   setPrinterPagesNoSumReversed: () => {},
   setData: () => {},

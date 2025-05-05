@@ -12,8 +12,8 @@ export default forwardRef(function TextInput(
   {
     isFocused = false,
     setData,
-    setIsLocal,
     isLocal,
+    setIsLocal,
   }: InputHTMLAttributes<HTMLInputElement> & {
     isLocal: boolean;
     setIsLocal: (isLocal: boolean) => void;

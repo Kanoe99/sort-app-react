@@ -10,26 +10,27 @@ import DropdownForm from "./DropDownForm";
 
 export default forwardRef(function TextInput(
   {
-    type = "text",
-    className = "",
-    setHasIP,
-    hasIP,
     isFocused = false,
     setData,
+    hasIP,
+    setHasIP,
   }: InputHTMLAttributes<HTMLInputElement> & {
+    isFocused?: boolean;
+    setData: (key: string, value: boolean) => void;
     hasIP: boolean;
     setHasIP: (hasIP: boolean) => void;
-    isFocused?: boolean;
-    setData: (key: string, value: string) => void;
   },
   ref
 ) {
-  const [value, setValue] = useState<string>(hasIP ? "Есть" : "Нету");
+  const [localStringValue, setLocalStringValue] = useState<string>(
+    hasIP ? "Есть" : "Нету"
+  );
   const localRef = useRef<HTMLInputElement>(null);
 
-  const handleClick = (value: string) => {
-    setValue(value);
-    setData("IPBool", value);
+  const handleClick = (value: boolean) => {
+    setLocalStringValue(value ? "Есть" : "Нету");
+    setHasIP(value);
+    setData("hasIP", value);
   };
 
   useImperativeHandle(ref, () => ({
@@ -50,7 +51,7 @@ export default forwardRef(function TextInput(
             type="button"
             className="inline-flex items-center border border-transparent text-sm font-medium leading-4 transition duration-150 ease-in-out  focus:outline-none text-white py-3 px-3 hover:bg-black rounded-xl w-full justify-between"
           >
-            {value}
+            {localStringValue}
             <svg
               className="-me-0.5 ms-2 h-4 w-4"
               xmlns="http://www.w3.org/2000/svg"
@@ -69,16 +70,14 @@ export default forwardRef(function TextInput(
       <DropdownForm.Content>
         <DropdownForm.Option
           onClick={() => {
-            handleClick("Есть");
-            setHasIP(true);
+            handleClick(true);
           }}
         >
           Есть
         </DropdownForm.Option>
         <DropdownForm.Option
           onClick={() => {
-            handleClick("Нету");
-            setHasIP(false);
+            handleClick(false);
           }}
         >
           Нету

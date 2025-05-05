@@ -267,15 +267,13 @@ export default forwardRef(function TextInput(
     type = "text",
     className = "",
     isFocused = false,
-    isIPv4,
-    setIsIPv4,
     IPData,
     setIPData,
+    isIPv4,
+    setIsIPv4,
     ...props
   }: InputHTMLAttributes<HTMLInputElement> & {
     isFocused?: boolean;
-    isIPv4: boolean;
-    setIsIPv4: (isIPv4: boolean) => void;
     IPData: string;
     setIPData: (
       data:
@@ -285,6 +283,8 @@ export default forwardRef(function TextInput(
             IPv6Data: string;
           })
     ) => void;
+    isIPv4: boolean;
+    setIsIPv4: (isIPv4: boolean) => void;
   },
   ref
 ) {

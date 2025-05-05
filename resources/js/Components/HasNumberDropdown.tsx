@@ -12,13 +12,13 @@ export default forwardRef(function TextInput(
   {
     isFocused = false,
     setData,
-    setHasNumber,
     hasNumber,
+    setHasNumber,
   }: InputHTMLAttributes<HTMLInputElement> & {
-    hasNumber: boolean;
-    setHasNumber: (isLocal: boolean) => void;
     isFocused?: boolean;
     setData: (key: string, value: boolean) => void;
+    hasNumber: boolean;
+    setHasNumber: (hasNumber: boolean) => void;
   },
   ref
 ) {
