@@ -7,7 +7,8 @@ import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
 
 import { CreateMainForm } from "@/Pages/Printer/CreateMainForm";
 import { CreatePagesRecordsPanel } from "@/Pages/Printer/CreatePagesRecordsPanel";
-import { CreatePagesRecordsContextProvider } from "@/Pages/Printer/contexts/CreatePagesRecordsContext";
+import { EditPagesRecordsContextProvider } from "@/Pages/Printer/contexts/EditPagesRecordsContext";
+import { PrinterPages } from "@/types";
 
 export default function Show({
   department_heads,
@@ -34,7 +35,10 @@ export default function Show({
       PC_name: string;
       network_capable: string;
       hasNumber: boolean;
+      hasIP: boolean;
+      printer_pages_no_sum: PrinterPages[];
     }>({
+      printer_pages_no_sum: [],
       hasNumber: true,
       network_capable: "Нет возможности",
       PC_name: "",
@@ -51,23 +55,8 @@ export default function Show({
       IP: "",
       comment: "",
       isIPv4: true,
+      hasIP: false,
     });
-
-  const [hasIP, setHasIP] = useState(true);
-  const [hasNumber, setHasNumber] = useState(true);
-  const [isLocal, setIsLocal] = useState(true);
-
-  //TODO: make into 1
-  const [isIPv4, setIsIPv4] = useState(true);
-  const [IPData, setIPData] = useState({ IPv4Data: "", IPv6Data: "" });
-
-  useEffect(() => {
-    data.IPBool === "Есть" ? setHasIP(true) : setHasIP(false);
-  }, [data.IPBool]);
-
-  useEffect(() => {
-    setData("IP", isIPv4 ? IPData.IPv4Data : IPData.IPv6Data);
-  }, [IPData]);
 
   const createPrinter: FormEventHandler = (ev) => {
     ev.preventDefault();
@@ -81,7 +70,7 @@ export default function Show({
     <AuthenticatedLayout
       header={
         <h2 className="text-2xl mx-auto w-[40%] font-semibold leading-tight text-gray-200">
-          Новый принтер
+          Новый
         </h2>
       }
     >
@@ -98,13 +87,17 @@ export default function Show({
           errors={errors}
           setData={setData}
         />
-        <CreatePagesRecordsContextProvider printer_id={id} setData={setData}>
+        <EditPagesRecordsContextProvider
+          printer_id={id}
+          setData={setData}
+          initialPages={[]}
+        >
           <CreatePagesRecordsPanel
             errors={errors}
             printer_id={id}
             processing={processing}
           />
-        </CreatePagesRecordsContextProvider>
+        </EditPagesRecordsContextProvider>
       </div>
     </AuthenticatedLayout>
   );

@@ -105,6 +105,7 @@ export default function Edit({
           data={data}
           editPrinter={editPrinter}
           clearErrors={clearErrors}
+          handleDelete={handleDelete}
           reset={reset}
           processing={processing}
           department_heads={department_heads}
@@ -123,7 +124,6 @@ export default function Edit({
             printer_id={printer.id}
             sums={sums[0]}
             processing={processing}
-            printerAction={editPrinter}
           />
         </EditPagesRecordsContextProvider>
       </div>

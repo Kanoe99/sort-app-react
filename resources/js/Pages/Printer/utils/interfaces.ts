@@ -134,6 +134,7 @@ export interface CreateMainFormContextProps {
 
 export interface EditMainFormProps {
   editPrinter: FormEventHandler;
+  handleDelete: FormEventHandler;
   data: {
     type: string;
     model: string;

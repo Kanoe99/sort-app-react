@@ -49,8 +49,6 @@ const PickerButton = ({
     month: month,
   });
 
-  //move this into context
-
   const {
     setNewPagesNoSum,
     setPrinterPagesNoSumReversed,
@@ -96,7 +94,6 @@ const PickerButton = ({
           const selectedYear = date.getFullYear();
           const selectedMonth = date.getMonth();
 
-          // ✅ Passed validation, continue normally
           setDate({ year: selectedYear, month: selectedMonth });
 
           const updated = [

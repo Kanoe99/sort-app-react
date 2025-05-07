@@ -30,7 +30,6 @@ export default forwardRef(function TextInput(
     <>
       <input
         {...props}
-        value=""
         type="date"
         className={
           "text-white rounded-xl mt-1 block w-full py-3 shadow-sm border-gray-700 bg-bg-input-black focus:border-accent-main focus:ring-accent-main " +

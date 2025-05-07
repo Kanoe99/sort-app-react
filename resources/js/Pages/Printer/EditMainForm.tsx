@@ -15,10 +15,12 @@ import IP from "@/Components/IP";
 import TextAreaInput from "@/Components/TextAreaInput";
 import DateInput from "@/Components/DateInput";
 import PrimaryButton from "@/Components/PrimaryButton";
+import DangerButton from "@/Components/DangerButton";
 
 const EditMainForm = ({
   data,
   editPrinter,
+  handleDelete,
   clearErrors,
   reset,
   processing,
@@ -269,7 +271,7 @@ const EditMainForm = ({
           id="status"
           placeholder="В эксплуатации"
           className=""
-          value={status}
+          value={data.status}
           onChange={(e) => setData("status", e.target.value)}
           isFocused
           autoComplete="status"
@@ -284,7 +286,7 @@ const EditMainForm = ({
         <TextAreaInput
           id="comment"
           className="block w-full"
-          value={data.comment}
+          value={data.comment ?? ""}
           onChange={(e) => setData("comment", e.target.value)}
         />
 
@@ -302,7 +304,7 @@ const EditMainForm = ({
           id=""
           placeholder="В эксплуатации"
           className=""
-          value={data.fixDate}
+          value={data.fixDate ?? ""}
           onChange={(e) => setData("fixDate", e.target.value)}
           isFocused
           autoComplete="fixDate"
@@ -313,11 +315,20 @@ const EditMainForm = ({
 
       <div className="flex items-center gap-4 justify-center">
         <PrimaryButton
+          type="submit"
           disabled={processing}
           className="w-[calc(100%_-_0.2rem)] !py-4"
         >
           сохранить
         </PrimaryButton>
+        <DangerButton
+          type="button"
+          onClick={handleDelete}
+          disabled={processing}
+          className="w-[calc(100%_-_0.2rem)] !py-4"
+        >
+          Удалить
+        </DangerButton>
       </div>
     </form>
   );

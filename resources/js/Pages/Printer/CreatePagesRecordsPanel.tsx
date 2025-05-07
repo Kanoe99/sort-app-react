@@ -1,10 +1,10 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, useMemo } from "react";
 import PrimaryButton from "@/Components/PrimaryButton";
 import PrintPagesInput from "@/Pages/Printer/Components/PrintPagesInput";
 import { PrinterPages } from "@/types";
 import { SinglePagesRecord } from "@/Pages/Printer/SinglePagesRecord";
 import { DatePicker } from "@/Pages/Printer/Components/DatePicker";
-import { useCreatePagesRecordsContext } from "@/Pages/Printer/contexts/CreatePagesRecordsContext";
+import { useEditPagesRecordsContext } from "@/Pages/Printer/contexts/EditPagesRecordsContext";
 import { now } from "@/utils/currentDate";
 // import { now } from "@/utils/currentDate";
 
@@ -26,7 +26,7 @@ const CreatePagesRecordsPanel = ({
     setData,
     setNewPagesNoSum,
     newPagesNoSum,
-  } = useCreatePagesRecordsContext();
+  } = useEditPagesRecordsContext();
 
   const onlyNumbers = (value: string) => {
     const regex = /[^0-9]+/g;
@@ -34,23 +34,40 @@ const CreatePagesRecordsPanel = ({
     return result;
   };
 
-  const sums: PrinterPages = {
-    end_month: 0,
-    end_year: 0,
-    start_year: 0,
-    start_month: 0,
-    isSum: 0,
-    printer_id: 0,
-    print_pages: "",
-    scan_pages: "",
-  };
+  const sums = useMemo(() => {
+    const records = printerPagesNoSumReversed;
+    const total = {
+      end_month: now.month,
+      end_year: now.year,
+      start_year: now.year,
+      start_month: now.month,
+      isSum: 1,
+      printer_id: 0,
+      print_pages: 0,
+      scan_pages: 0,
+    };
 
-  useEffect(() => {
-    printerPagesNoSumReversed.forEach((item) => {
-      sums.print_pages += item.print_pages;
-      sums.scan_pages += item.scan_pages;
-    });
+    if (records.length === 0) return total;
+
+    total.start_year = records[records.length - 1].start_year;
+    total.start_month = records[records.length - 1].start_month;
+    total.end_year = records[0].end_year;
+    total.end_month = records[0].end_month;
+
+    for (const item of records) {
+      total.print_pages += parseInt(item.print_pages || "0", 10);
+      total.scan_pages += parseInt(item.scan_pages || "0", 10);
+    }
+
+    return total;
   }, [printerPagesNoSumReversed]);
+
+  // useEffect(() => {
+  //   printerPagesNoSumReversed.forEach((item: any) => {
+  //     sums.print_pages += item.print_pages;
+  //     sums.scan_pages += item.scan_pages;
+  //   });
+  // }, [printerPagesNoSumReversed]);
 
   //
   // clear new page entry
@@ -80,34 +97,38 @@ const CreatePagesRecordsPanel = ({
   };
 
   const handleAdd = (e: React.FormEvent) => {
-    if (
-      (newPagesNoSum !== undefined && newPagesNoSum.scan_pages.length !== 0) ||
-      (newPagesNoSum !== undefined && newPagesNoSum.print_pages.length !== 0)
-    ) {
-      setPrinterPagesNoSumReversed([
-        newPagesNoSum,
-        ...printerPagesNoSumReversed.filter(
-          (item) => item.print_pages !== "" || item.scan_pages !== ""
-        ),
-      ]);
+    e.preventDefault();
+
+    const isValid =
+      (newPagesNoSum && newPagesNoSum.print_pages.length > 0) ||
+      (newPagesNoSum && newPagesNoSum.scan_pages.length > 0);
+
+    const cleanedRecords = printerPagesNoSumReversed.filter(
+      (item: any) => item.print_pages !== "" || item.scan_pages !== ""
+    );
+
+    // Step 1: Add only if valid
+    if (isValid) {
+      setPrinterPagesNoSumReversed([newPagesNoSum, ...cleanedRecords]);
     } else {
-      setPrinterPagesNoSumReversed([
-        ...printerPagesNoSumReversed.filter(
-          (item) => item.print_pages !== "" || item.scan_pages !== ""
-        ),
-      ]);
+      setPrinterPagesNoSumReversed([...cleanedRecords]);
     }
-    console.log("handleAdd was clicked");
+
+    // Step 2: Reset cleanly
     setNewPagesNoSum({
       end_year: now.year,
       end_month: now.month,
-      start_year: printerPagesNoSumReversed[0].end_year,
-      start_month: printerPagesNoSumReversed[0].end_year,
+      start_year:
+        cleanedRecords.length > 0 ? cleanedRecords[0].end_year : now.year,
+      start_month:
+        cleanedRecords.length > 0 ? cleanedRecords[0].end_month : now.month,
       isSum: 0,
       printer_id: 0,
       print_pages: "",
       scan_pages: "",
     });
+
+    console.log("handleAdd was clicked");
   };
 
   return (
@@ -217,7 +238,7 @@ const CreatePagesRecordsPanel = ({
               isMaxHeightReached ? "pr-3" : ""
             }`}
           >
-            {printerPagesNoSumReversed.map((printer_pages, index) => (
+            {printerPagesNoSumReversed.map((printer_pages: any, index: any) => (
               <SinglePagesRecord
                 errors={errors}
                 printer_pages={printer_pages}

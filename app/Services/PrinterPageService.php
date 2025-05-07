@@ -14,7 +14,52 @@ class PrinterPageService
             "year" => (int) date("Y"),
         ];
     }
+    public function createPrinterPages(Printer $printer, array $requestPages): void
+    {
+        // Make sure this printer exists in DB
+        if (!$printer->exists || !Printer::where('id', $printer->id)->exists()) {
+            throw new \Exception("Printer with ID {$printer->id} does not exist.");
+        }
     
+        // Calculate totals
+        $calculatedSum = ['print_pages' => 0, 'scan_pages' => 0];
+        foreach ($requestPages as $pageData) {
+            $calculatedSum['print_pages'] += $pageData['print_pages'] ?? 0;
+            $calculatedSum['scan_pages'] += $pageData['scan_pages'] ?? 0;
+        }
+    
+        $firstEntry = $requestPages[0] ?? null;
+        $lastEntry = $requestPages[count($requestPages) - 1] ?? null;
+    
+        // Create summary
+        $printer->printerPages()->create([
+            'start_month' => $firstEntry['start_month'] ?? $this->now['month'],
+            'start_year' => $firstEntry['start_year'] ?? $this->now['year'],
+            'end_month' => $lastEntry['end_month'] ?? $this->now['month'],
+            'end_year' => $lastEntry['end_year'] ?? $this->now['year'],
+            'isSum' => 1,
+            'print_pages' => $calculatedSum['print_pages'],
+            'scan_pages' => $calculatedSum['scan_pages'],
+        ]);
+    
+        // Create monthly entries
+        foreach ($requestPages as $pageData) {
+            if ($pageData['print_pages'] !== null || $pageData['scan_pages'] !== null) {
+                $printer->printerPages()->create([
+                    'start_month' => $pageData['start_month'],
+                    'start_year' => $pageData['start_year'],
+                    'end_month' => $pageData['end_month'],
+                    'end_year' => $pageData['end_year'],
+                    'isSum' => 0,
+                    'print_pages' => $pageData['print_pages'] ?? '',
+                    'scan_pages' => $pageData['scan_pages'] ?? '',
+                ]);
+            }
+        }
+    }
+    
+    
+
   
     public function syncPrinterPages($printer, array $requestPages): void
     {

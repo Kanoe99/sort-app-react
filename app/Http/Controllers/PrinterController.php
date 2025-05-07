@@ -33,9 +33,10 @@ class PrinterController extends Controller
         return Inertia::render('Printer/Create', (new InertiaPrinterService)->create());
     }
 
+    //change to StorePrinterRequest
   public function store(StorePrinterRequest $request)
-    {
-      dd($request->all());
+    {        
+      // dd($request->all());
       $printer = (new PrinterService)->store($request);
     
       return redirect('/main')->with(['success' => 'Принтер добавлен.', 'refreshed' => true, 'time'=>time()]);

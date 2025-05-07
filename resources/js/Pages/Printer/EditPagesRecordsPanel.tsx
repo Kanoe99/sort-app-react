@@ -9,7 +9,6 @@ import { now } from "@/utils/currentDate";
 
 interface EditPagesRecordsPanelProps {
   processing: boolean;
-  printerAction: FormEventHandler;
   sums: PrinterPages;
   printer_id: number;
   hasRecords: boolean;
@@ -20,7 +19,6 @@ const EditPagesRecordsPanel = ({
   errors,
   sums,
   processing,
-  printerAction,
   printer_id,
 }: EditPagesRecordsPanelProps) => {
   const contentRef = useRef<HTMLDivElement>(null);
@@ -84,7 +82,7 @@ const EditPagesRecordsPanel = ({
     );
   };
 
-  const handleSave = (e: React.FormEvent) => {
+  const handleSave = () => {
     if (
       (newPagesNoSum !== undefined && newPagesNoSum.scan_pages.length !== 0) ||
       (newPagesNoSum !== undefined && newPagesNoSum.print_pages.length !== 0)
@@ -102,7 +100,7 @@ const EditPagesRecordsPanel = ({
         ),
       ]);
     }
-    printerAction(e);
+    // printerAction(e);
   };
 
   // useEffect(

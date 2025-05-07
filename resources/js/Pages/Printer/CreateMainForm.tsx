@@ -38,6 +38,20 @@ const CreateMainForm = ({
   const [number, setNumber] = useState(data.number ?? "");
   const [PC_name, setPC_name] = useState(data.PC_name ?? "");
 
+  useEffect(() => {
+    if (data.IPBool === "Есть") {
+      setHasIP(true);
+      setData("hasIP", true);
+    } else {
+      setHasIP(false);
+      setData("hasIP", false);
+    }
+  }, [data.IPBool]);
+
+  useEffect(() => {
+    setData("IP", isIPv4 ? IPData.IPv4Data : IPData.IPv6Data);
+  }, [IPData]);
+
   const closeModal = ({
     clearErrors,
     reset,
@@ -69,6 +83,8 @@ const CreateMainForm = ({
       : //goes into IPBool.tsx
         setData("IP", "");
   }, [hasIP]);
+
+  useEffect(() => console.log(errors), [errors]);
 
   return (
     <form
@@ -269,7 +285,7 @@ const CreateMainForm = ({
           id="status"
           placeholder="В эксплуатации"
           className=""
-          value={status}
+          value={data.status}
           onChange={(e) => setData("status", e.target.value)}
           isFocused
           autoComplete="status"
@@ -299,7 +315,7 @@ const CreateMainForm = ({
         />
 
         <DateInput
-          id=""
+          id="fixDate"
           placeholder="В эксплуатации"
           className=""
           value={data.fixDate}
