@@ -119,6 +119,7 @@ export default function Edit({
           setData={setData}
         >
           <EditPagesRecordsPanel
+            printerAction={editPrinter}
             errors={errors}
             hasRecords={printer_pages_no_sum.length !== 0}
             printer_id={printer.id}

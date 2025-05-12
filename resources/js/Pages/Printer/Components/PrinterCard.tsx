@@ -7,6 +7,7 @@ import { IPView } from "../../../Components/IPView";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faDesktop, faWifi } from "@fortawesome/free-solid-svg-icons";
 import { PrinterCardContextProvider } from "@/Pages/Printer/contexts/PrinterCardContext";
+import { months, startingMonths } from "@/utils/months";
 
 const PrinterCard = ({ printer }: { printer: Printer }) => {
   const [isVisible, setIsVisible] = useState(false);
@@ -45,16 +46,18 @@ const PrinterCard = ({ printer }: { printer: Printer }) => {
                 <div className="flex justify-between my-1 text-xs">
                   <div className="flex gap-2 test-1/2 justify-between pr-8 w-1/2">
                     <div className="py-1">
-                      Всего напечатано (на {printer.sum_pages[0].end_month}.
+                      Всего напечатано <br /> (на{" "}
+                      {months[printer.sum_pages[0].end_month]}.
                       {printer.sum_pages[0].end_year}):{" "}
                     </div>
                     <div className="bg-black rounded-md px-3 py-1 test-fit">
                       {printer.sum_pages[0].print_pages}
                     </div>
                   </div>
-                  <div className="flex gap-2 border-l test-1/2 pl-8 justify-between w-1/2">
+                  <div className="flex gap-2 border-l test-1/2 pl-6 justify-between w-1/2">
                     <div className="py-1">
-                      отсканировано (на {printer.sum_pages[0].end_month}.
+                      отсканировано <br /> (на{" "}
+                      {months[printer.sum_pages[0].end_month]}.
                       {printer.sum_pages[0].end_year}):{" "}
                     </div>
                     <div className="bg-black rounded-md px-3 py-1 test-fit">
@@ -69,11 +72,12 @@ const PrinterCard = ({ printer }: { printer: Printer }) => {
                     {printer.three_last_pages.map((page, index) => (
                       <div
                         key={index}
-                        className="flex justify-between pr-8 pl-8 gap-2 mb-1"
+                        className="flex justify-between pr-8 pl-6 gap-2 mb-1"
                       >
                         <div className="text-xs py-1">
-                          с {page.start_month}.{page.start_year} по{" "}
-                          {page.end_month}.{page.end_year}
+                          с {startingMonths[page.start_month]}.{page.start_year}{" "}
+                          <br />
+                          по {months[page.end_month]}.{page.end_year}
                         </div>
                         <div className="text-xs bg-black test-fit px-3 py-1 rounded-md">
                           {page.print_pages ? (
@@ -92,11 +96,12 @@ const PrinterCard = ({ printer }: { printer: Printer }) => {
                     {printer.three_last_pages.map((page, index) => (
                       <div
                         key={index}
-                        className="flex gap-2 pl-8 mb-1 justify-between"
+                        className="flex gap-2 pl-6 mb-1 justify-between"
                       >
                         <div className="text-xs py-1">
-                          с {page.start_month}.{page.start_year} по{" "}
-                          {page.end_month}.{page.end_year}
+                          с {startingMonths[page.start_month]}.{page.start_year}{" "}
+                          <br />
+                          по {months[page.end_month]}.{page.end_year}
                         </div>
                         <div className="text-xs bg-black test-fit px-3 py-1 rounded-md">
                           {page.scan_pages ? (

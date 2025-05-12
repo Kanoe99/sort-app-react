@@ -57,7 +57,7 @@ class Printer extends Model
     }
   
     public function threeLastPages(){
-        return $this->printerPages()->where('isSum', 0)->orderBy('end_year', 'desc')->limit(3);
+        return $this->printerPages()->where('isSum', 0)->orderByRaw('end_year * 12 + start_month DESC')->limit(3);
     }
   
     
